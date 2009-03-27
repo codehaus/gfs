@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:utils="com.cubika.labs.utils.*"
+				xmlns:cubikalabs="http://cubikalabs.cub2k.com/2009/commons"
+				showCloseButton="true" close="cancel()" paddingTop="15" paddingBottom="15"
+				creationComplete="doInit()" title="Phone">
+	
+	<mx:Script>
+		<![CDATA[
+				
+			import mx.events.FlexEvent;	
+			import mx.validators.Validator;
+
+			import vo.phone.PhoneVO;	
+
+			[Bindable]
+			public var vo:PhoneVO;
+			
+			public var clickOk:Function;
+			public var cancel:Function;
+			
+			private function saveOrUpdate():void
+			{
+				if (validators.length >= 0 && Validator.validateAll(validators).length == 0)
+				{
+					clickOk.call();
+				}
+			}
+				
+			public function getVO():PhoneVO
+			{
+				var _vo:PhoneVO = vo;					
+
+					_vo.number = String(txtNumber.text);
+					_vo.type = !cbType.selectedItem ? null : String(cbType.selectedItem.label);
+
+				return _vo;
+			}
+				
+			private function doInit():void
+			{
+				txtNumber.setFocus();
+				
+				removeEventListener(FlexEvent.CREATION_COMPLETE,doInit);
+				addEventListener(KeyboardEvent.KEY_UP,keyboardHandler,false,0,true);
+			}
+			
+			private function keyboardHandler(e:KeyboardEvent):void
+			{
+				if (e.keyCode == Keyboard.ESCAPE)
+					cancel();
+					
+				if (e.keyCode == Keyboard.ENTER)
+					saveOrUpdate();
+			}
+				
+		]]>
+	</mx:Script>
+	
+	<mx:Array id="validators">
+	</mx:Array>
+	
+	
+	<mx:Form width="100%">
+	 <mx:FormItem label="Number" id="fiNumber" width="100%">
+		<mx:TextInput id="txtNumber" text="{vo.number}" width="217"/>
+
+	 </mx:FormItem>
+	 <mx:FormItem label="Type" id="fiType" width="100%">
+		<cubikalabs:CBKComboBox id="cbType" selectedItem="{vo.type}" prompt="Select ..">
+			<cubikalabs:dataProvider>
+				<mx:ArrayCollection>
+					<mx:Object data="Home" label="Home"/>
+					<mx:Object data="Movil" label="Movil"/>
+				</mx:ArrayCollection>
+			</cubikalabs:dataProvider>
+		</cubikalabs:CBKComboBox>
+
+	 </mx:FormItem>
+	</mx:Form>
+				
+	<mx:HBox width="100%" horizontalAlign="right" paddingRight="15">
+		<mx:Button label="Aceptar" click="saveOrUpdate()"/>
+		<mx:Button label="Cancelar (ESC)" click="cancel()"/>
+	</mx:HBox>
+	
+</mx:TitleWindow>

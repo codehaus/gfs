@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" verticalGap="2" verticalAlign="middle">
+	<mx:Script>
+			<![CDATA[
+				import mx.collections.ArrayCollection;
+
+				import mx.core.Application;
+				import mx.core.IFlexDisplayObject
+
+				import mx.managers.PopUpManager;
+
+				import vo.phone.PhoneVO;
+
+				[Bindable]
+				public var vo:PhoneVO;
+
+				private var editView:IFlexDisplayObject;
+
+				private function showEditView():void
+				{
+					editView = PopUpManager.createPopUp(DisplayObject(Application.application),view.customer.phone.PhoneRelationEditView,true)
+
+					Object(editView).clickOk = editOk;
+					Object(editView).cancel = cancel;
+					Object(editView).vo = vo;
+
+					PopUpManager.centerPopUp(editView);
+				}
+
+				private function showNewView():void
+				{
+					editView = PopUpManager.createPopUp(DisplayObject(Application.application),view.customer.phone.PhoneRelationEditView,true)
+
+					Object(editView).clickOk = newOk;
+					Object(editView).cancel = cancel;
+					Object(editView).vo = new PhoneVO;
+
+					PopUpManager.centerPopUp(editView);
+				}
+
+				private function newOk():void
+				{
+					PopUpManager.removePopUp(editView);
+
+					vo = Object(editView).getVO();
+				}
+
+				private function editOk():void
+				{
+					PopUpManager.removePopUp(editView);
+
+					vo = Object(editView).getVO();
+				}
+
+				private function cancel():void
+				{
+					PopUpManager.removePopUp(editView);
+				}
+
+				private function deleteItem():void
+				{
+					vo = null;
+				}
+
+				public function getVO():PhoneVO
+				{
+					return vo;
+				}
+			]]>
+		</mx:Script>
+	
+	<mx:Button toolTip="{(vo) ? 'edit' : 'create'}"
+		styleName="{(vo) ? 'editButton' : 'createButton'}"
+		click="{(vo) ? showEditView() : showNewView()}"/>
+	<mx:HBox styleName="oneTooneViewLabelContainer"
+		visible="{vo != null}"
+		>
+				<mx:Label text="number:"/>
+		<mx:Label text="{vo.number}" styleName="dataText"/>
+		<mx:Label text="type:"/>
+		<mx:Label text="{vo.type}" styleName="dataText"/>
+
+	</mx:HBox>
+</mx:HBox>
