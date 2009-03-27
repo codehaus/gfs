@@ -5,6 +5,7 @@
   <description>Provide scaffolding with flex</description>
   <documentation>http://grails.org/plugin/flex-scaffold</documentation>
   <resources>
+    <resource>BuildConfig</resource>
     <resource>DataSource</resource>
     <resource>UrlMappings</resource>
   </resources>
