@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:dinamictilelist="com.cubika.examples.containers.dinamictilelist.*"
+	horizontalAlign="center" verticalAlign="middle" layout="vertical"
+	xmlns:stickytabnavigator="com.cubika.examples.containers.stickytabnavigator.*">
+
+	<mx:Image source="@Embed(source='/assets/images/cubika-labs.jpg')" />
+	
+	<mx:TabNavigator width="100%" height="100%">
+	
+		<dinamictilelist:DinamicTileListExample label="Dinamic Tile List"/>
+		<stickytabnavigator:StickyTabNavigatorExample label="Sticky Tab Navigator"/>
+	
+	</mx:TabNavigator>
+
+</mx:Application>

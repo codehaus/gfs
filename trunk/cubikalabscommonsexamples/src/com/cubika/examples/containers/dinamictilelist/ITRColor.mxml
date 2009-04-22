@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Container xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="25" height="25" 
+	implements="com.cubika.labs.interfaces.IDinamicTileListRender"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.IList;
+			import com.cubika.examples.model.ModelLocator;
+			import mx.controls.Alert;
+
+			
+			private var _selected:Boolean = false;
+			
+			private var color:Object;
+			
+			
+			private function doInit():void
+			{
+		        graphics.lineStyle(3, backgroundColor, 1, true);
+
+	       		graphics.beginFill(backgroundColor);
+	       		graphics.drawRect(0, 0, width, height);
+				
+				addEventListener(MouseEvent.CLICK, mouseEventHandler, false, 0, true);
+			}
+			
+			private function mouseEventHandler(event:MouseEvent = null):void
+			{	
+				_selected = !_selected;
+
+				var selectedColors:IList = ModelLocator.getInstance().dinamicTileListModel.selectedColors; 
+
+				if (_selected)
+				{
+					selectedColors.addItem(color);
+				}
+				else
+				{
+					var index:uint = selectedColors.getItemIndex(color);
+					
+					if (index >= 0)
+					{
+						selectedColors.removeItemAt(index);											
+					} 
+				}
+
+				drawSelection();
+			}
+			
+			override public function set data(value:Object):void
+			{
+				super.data = color =  value;
+				doInit();
+			}
+			
+			public function get backgroundColor():uint
+			{				
+				return uint(Number(color.code));
+			}
+		
+			
+			//------------------------------------------------------------------------------------------------
+			// IDRTileListRenderer
+			//------------------------------------------------------------------------------------------------
+			
+			public function selectedRenderer(selected:Boolean, selectedObject:Object):void
+			{
+				_selected = selected;
+				
+				drawSelection();
+			}
+			
+			private function drawSelection():void
+			{
+				graphics.clear();
+				graphics.beginFill(backgroundColor);
+
+				if (_selected)
+				{
+
+					graphics.lineStyle(3, 0xFFA200, 1, true);
+				}
+				else
+				{
+					graphics.lineStyle(0, backgroundColor, 1, true);
+				}
+
+		        graphics.drawRect(0, 0, width, height);
+		        graphics.endFill();
+			}
+					
+		]]>
+	</mx:Script>
+
+</mx:Container>
