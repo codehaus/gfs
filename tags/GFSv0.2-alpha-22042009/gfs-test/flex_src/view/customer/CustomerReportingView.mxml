@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	creationComplete="doInit()" height="100%" width="100%"
+		xmlns:cubikalabs="http://cubikalabs.cub2k.com/2009/commons">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.cubika.labs.viewers.PDFViewer;
+			import flash.net.navigateToURL;
+			import com.cubika.labs.utils.MultipleRM;
+		    import com.cubika.labs.controls.reporting.column.ReportingColumnDescriptor;
+			import com.cubika.labs.controls.reporting.filter.IBaseFilterControl
+			import model.ApplicationModelLocator;
+			import model.customer.CustomerReportingModel;
+			
+			[Bindable]private var _model:CustomerReportingModel = ApplicationModelLocator.instance.customerReportingModel;
+			 
+			private var _reportUrl:String;
+			
+			private function doInit():void
+			{
+				initURLRequest();
+				addEventListener(KeyboardEvent.KEY_UP,doKeyBoardUp,false,0,true);	
+			}
+			
+			private function doKeyBoardUp(e:KeyboardEvent):void
+			{
+				if(e.keyCode == Keyboard.ENTER)
+					doReport(e);	
+			}
+
+			
+			private function doReport(e:Event):void
+			{
+				initURLRequest();
+				doFilterReport();
+				doColumnReport();
+				pdfViewer.source = _reportUrl;
+			}
+			
+			private function initURLRequest():void
+			{
+				reportUrl = "./gfsDjReport/?entity=customer&";
+			}
+			
+			private function doFilterReport():void
+			{
+				for each(var formChild:Object in customerReportingFilterForm.getChildren())
+				{
+					var filter:IBaseFilterControl = formChild as IBaseFilterControl;
+					if(filter)
+					{
+						_reportUrl += filter.buildRequest();
+					}
+				}
+			}
+
+			private function doColumnReport():void
+			{
+				var columns:String = "columns=";
+				var columnTitles:String = "columnTitles=";
+				for each(var columnDescriptor:ReportingColumnDescriptor in customerReportingColumnForm.dataProvider)
+				{
+					columns += columnDescriptor.getColumn();
+					columnTitles += columnDescriptor.getColumnTitle();
+				}
+				columns = columns.substr(0,columns.length-1);
+				columnTitles = columnTitles.substr(0,columnTitles.length-1);
+				_reportUrl += columns+"&"+columnTitles;
+	
+			}
+
+			private function doReset(e:Event):void
+			{
+				doResetFilter();
+				doResetColumn();
+			}
+			
+			private function doResetFilter():void
+			{
+				for each(var formChild:Object in customerReportingFilterForm.getChildren())
+				{
+					var filter:IBaseFilterControl = formChild as IBaseFilterControl;
+					if(filter)
+					{
+						filter.reset();
+					}						
+				}
+			}
+			
+			private function doResetColumn():void
+			{
+				for each(var columnDescriptor:ReportingColumnDescriptor in customerReportingColumnForm.dataProvider)
+				{
+					if(columnDescriptor)
+					{
+						columnDescriptor.reset();
+					}						
+				}
+			}
+			
+			private function savePdfHandler(e:Event):void
+			{
+				var pdfFileName:String = "CustomerReport.pdf";
+				reportUrl = "./djReport/?entity=customer&fileName="+pdfFileName;
+				doFilterReport();
+				doColumnReport();
+				navigateToURL(new URLRequest(reportUrl),"_blank");
+			}
+			
+			public function set reportUrl(value:String):void
+			{
+				_reportUrl = value;
+			}
+			
+			public function get reportUrl():String
+			{
+				return _reportUrl;
+			}
+		]]>		
+	</mx:Script>
+	
+	<mx:HDividedBox width="100%" height="100%">
+		<mx:VBox height="100%" styleName="reportingFiltersContainer">
+			<mx:Accordion id="tn" width="100%" height="100%" 
+				creationPolicy="all" styleName="repotingAccordion">
+				<mx:VBox id="customerReportingFilterForm" label="{MultipleRM.getString(MultipleRM.localePrefix, 'reporting.accordion.labels.filter')}" paddingLeft="10" width="100%" height="100%" styleName="reportingfiltersStringContainer">
+					<cubikalabs:StringFilterControl id="firstNameFilterItem" styleName="reportingStringFilters" mainLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'customer.firstName')}" requestParameter="firstName" textInputWidth="250"/>
+					<cubikalabs:StringFilterControl id="lastNameFilterItem" styleName="reportingStringFilters" mainLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'customer.lastName')}" requestParameter="lastName" textInputWidth="250"/>
+					<cubikalabs:DateFilterControl id="dateOfBirthFilterItem" styleName="reportingStringFilters" mainLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'customer.dateOfBirth')}" yearNavigationEnabled="true" fromLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'generic.from')}" toLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'generic.to')}" requestParameter="dateOfBirth"/>
+					<cubikalabs:NumberFilterControl id="ageFilterItem" styleName="reportingStringFilters" mainLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'customer.age')}" fromLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'generic.from')}" toLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'generic.to')}" requestParameter="age"/>
+					<cubikalabs:StringFilterControl id="emailFilterItem" styleName="reportingStringFilters" mainLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'customer.email')}" requestParameter="email" textInputWidth="250"/>
+					<cubikalabs:StringFilterControl id="maritalStatusFilterItem" styleName="reportingStringFilters" mainLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'customer.maritalStatus')}" requestParameter="maritalStatus" textInputWidth="250"/>
+					<cubikalabs:ManyToOneFilterControl id="companyFilterItem" styleName="reportingStringFilters" mainLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'customer.company')}" requestParameter="company.name" textInputWidth="250"/>
+					<cubikalabs:StringFilterControl id="blogFilterItem" styleName="reportingStringFilters" mainLabel="{MultipleRM.getString(MultipleRM.localePrefix, 'customer.blog')}" requestParameter="blog" textInputWidth="250"/>
+				</mx:VBox>
+	        
+				<mx:Box label="{MultipleRM.getString(MultipleRM.localePrefix, 'reporting.accordion.labels.columns')}" width="100%" height="100%" styleName="reportingfiltersListContainer">
+				<mx:List id="customerReportingColumnForm" styleName="reportingList" itemRenderer="com.cubika.labs.controls.reporting.column.ReportingColumnControl"
+					dataProvider="{_model.columnDataProvider}" dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" paddingLeft="20" width="100%" height="100%" backgroundAlpha="0"/>
+
+				</mx:Box>
+			</mx:Accordion>
+			<mx:HBox width="{tn.width}" horizontalAlign="right">
+				<mx:Button id="resetFilterButton" label="{MultipleRM.getString(MultipleRM.localePrefix, 'reporting.buttons.resetfilter')}" click="doReset(event)"/>
+				<mx:Button id="doReportButton" label="{MultipleRM.getString(MultipleRM.localePrefix, 'reporting.buttons.doreport')}" click="doReport(event)"/>	
+			</mx:HBox>
+		</mx:VBox>
+		<cubikalabs:PDFViewer id="pdfViewer" width="80%" height="100%" savePdf="savePdfHandler(event)" />
+	</mx:HDividedBox>
+</mx:VBox>

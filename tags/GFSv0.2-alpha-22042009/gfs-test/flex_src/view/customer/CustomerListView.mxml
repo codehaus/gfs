@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:cubikalabs="http://cubikalabs.cub2k.com/2009/commons"
+	creationComplete="doInit()"
+	clipContent="false"
+	>
+	<mx:Script>
+		<![CDATA[
+		
+			import mx.collections.ArrayCollection;
+			import mx.formatters.DateFormatter;
+			
+			import com.cubika.labs.utils.MultipleRM;
+			
+			import model.ApplicationModelLocator;
+			import model.customer.CustomerModel;
+			
+			import event.customer.CustomerCRUDEvent;
+			import event.customer.CustomerGetPaginationEvent;
+			
+			import vo.customer.CustomerVO;
+						
+			[Bindable]
+			public var appModel:ApplicationModelLocator = ApplicationModelLocator.instance;
+						
+			[Bindable]
+			private var _model:CustomerModel = ApplicationModelLocator.instance.customerModel;
+			
+			
+			private function doInit():void
+			{
+				tabEnabled = true;
+				new CustomerGetPaginationEvent(_model.page).dispatch();
+				
+				addEventListener(KeyboardEvent.KEY_UP,keyboardHandler,false,0,true);
+			}
+			
+			private function create():void
+			{
+				new CustomerCRUDEvent(CustomerCRUDEvent.CREATE_EVENT).dispatch()
+			}
+			
+			private function destroy():void
+			{
+				if (dg.selectedItem)
+					new CustomerCRUDEvent(CustomerCRUDEvent.DELETE_EVENT,dg.selectedItem as CustomerVO).dispatch();
+			}
+			
+			private function edit():void
+			{
+				if (dg.selectedItem)
+					new CustomerCRUDEvent(CustomerCRUDEvent.SELECT_EVENT,dg.selectedItem as CustomerVO).dispatch()
+			}
+			
+			private function keyboardHandler(e:KeyboardEvent):void
+			{
+				if (e.keyCode == Keyboard.F2)
+					create();
+				
+				if (e.keyCode == Keyboard.F3)
+					edit();
+				
+				if (e.keyCode == Keyboard.F4)
+					destroy();
+					
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:VBox
+		styleName="listContainer"
+		width="100%"
+		height="100%"
+		>
+		<cubikalabs:PaginationView width="100%"
+			pageFilter="{_model.page}"
+			event="{event.customer.CustomerGetPaginationEvent}"
+			/>	
+		<mx:Spacer height="0"/>
+		<mx:DataGrid dataProvider="{_model.page.list}"
+			width="100%" height="100%"
+			id="dg" 
+			itemDoubleClick="edit()"
+			doubleClickEnabled="true"
+			toolTip="Press F3 to edit or double click in the item of the grid">
+			
+			<mx:columns>
+				<mx:DataGridColumn dataField="firstName" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'customer.firstName')}" />
+				<mx:DataGridColumn dataField="lastName" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'customer.lastName')}" />
+				<cubikalabs:CBKDateFormatterDataGridColumn dataField="dateOfBirth" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'customer.dateOfBirth')}" />
+				<mx:DataGridColumn dataField="age" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'customer.age')}" />
+				<mx:DataGridColumn dataField="email" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'customer.email')}" />
+				<mx:DataGridColumn dataField="maritalStatus" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'customer.maritalStatus')}" />
+				<mx:DataGridColumn dataField="enabled" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'customer.enabled')}" />
+				<mx:DataGridColumn dataField="blog" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'customer.blog')}" />
+			</mx:columns>
+			
+		</mx:DataGrid>
+	</mx:VBox>
+	
+	<mx:HBox width="100%"
+		includeInLayout="false"
+		styleName="listContainerButtons"
+		y="-2">
+		<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.create')} (F2)" click="create()" styleName="orangeButton"/>
+		<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.delete')} (F4)" enabled="{dg.selectedItem}" click="destroy()" styleName="orangeButton"/>
+	</mx:HBox>
+	
+</mx:Canvas>

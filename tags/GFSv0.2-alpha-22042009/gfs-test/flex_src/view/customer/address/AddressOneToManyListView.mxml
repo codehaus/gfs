@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:cubikalabs="http://cubikalabs.cub2k.com/2009/commons"
+	paddingTop="5">
+	
+	<mx:Script>
+		<![CDATA[
+		
+			import mx.collections.ArrayCollection;
+			import mx.formatters.DateFormatter;
+			import com.cubika.labs.utils.MultipleRM;
+			
+			import mx.core.Application;
+			import mx.core.IFlexDisplayObject
+			
+			import mx.managers.PopUpManager;
+			
+			import model.ApplicationModelLocator;
+			
+			import vo.address.AddressVO;
+			
+			[Bindable]
+			public var dataProvider:ArrayCollection;
+			
+			[Bindable]
+			public var appModel:ApplicationModelLocator = ApplicationModelLocator.instance;
+			
+			private var editView:IFlexDisplayObject;
+			
+			private function showEditView():void
+			{
+				editView = PopUpManager.createPopUp(DisplayObject(Application.application),view.customer.address.AddressRelationEditView,true)
+				
+				Object(editView).clickOk = editOk;
+				Object(editView).cancel = cancel;
+				Object(editView).vo = dg.selectedItem as AddressVO;
+				
+				PopUpManager.centerPopUp(editView);
+			}
+			
+			private function showNewView():void
+			{
+				editView = PopUpManager.createPopUp(DisplayObject(Application.application),view.customer.address.AddressRelationEditView,true)
+				
+				Object(editView).clickOk = newOk;
+				Object(editView).cancel = cancel;
+				Object(editView).vo = new AddressVO;
+				
+				PopUpManager.centerPopUp(editView);
+			}
+			
+			private function newOk():void
+			{
+				PopUpManager.removePopUp(editView);
+				
+				if (!dataProvider)
+					dataProvider = new ArrayCollection();
+				
+				dataProvider.addItem(Object(editView).getVO());
+			}
+			
+			private function editOk():void
+			{
+				PopUpManager.removePopUp(editView);
+				
+				var _vo:AddressVO = Object(editView).getVO();
+				var i:int = 0;
+				
+				for each (var item:Object in dataProvider)
+				{
+					if (item.id == _vo.id)
+					{
+						dataProvider.removeItemAt(i);
+						dataProvider.addItemAt(_vo,i)
+						return
+					}	
+					i++;
+				}
+				
+			}
+			
+			private function cancel():void
+			{
+				PopUpManager.removePopUp(editView);
+			}
+			
+			private function deleteItem():void
+			{
+				dataProvider.removeItemAt(dg.selectedIndex);
+			}
+			
+			public function getVO():ArrayCollection
+			{
+				return dataProvider;
+			}
+
+				
+		]]>
+	</mx:Script>
+	
+	<mx:HBox width="100%">
+		<mx:Button toolTip="{MultipleRM.getString(MultipleRM.localePrefix,'generic.create')}" click="showNewView()" styleName="createButton"/>
+		<mx:Button toolTip="{MultipleRM.getString(MultipleRM.localePrefix,'generic.delete')}" enabled="{dg.selectedItem}" click="deleteItem()" styleName="deleteButton"/>
+		<mx:Label text="{MultipleRM.getString(MultipleRM.localePrefix,'generic.doubleClickEdit')}." styleName="commentsText" visible="{dg.height>38}"/>
+	</mx:HBox>
+		
+	<cubikalabs:CBKDataGrid dataProvider="{dataProvider}" width="100%" height="100%" id="dg" itemDoubleClick="showEditView()" 
+		doubleClickEnabled="true" variableHeight="true" rowCount="8">
+		<cubikalabs:columns>
+			<mx:DataGridColumn dataField="street" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'address.street')}" />
+			<mx:DataGridColumn dataField="number" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'address.number')}" />
+			<mx:DataGridColumn dataField="zip" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'address.zip')}" />
+			<mx:DataGridColumn dataField="observation" headerText="{MultipleRM.getString(MultipleRM.localePrefix,'address.observation')}" />
+		</cubikalabs:columns>
+	</cubikalabs:CBKDataGrid>
+	
+	
+</mx:VBox>
