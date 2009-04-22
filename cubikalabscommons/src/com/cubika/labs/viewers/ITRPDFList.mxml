@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright 2009 the original author or authors.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+	
+	Preview a BitMap in ByteArray format.  
+ 	@author Ariel Gimenez
+ 	@since 20-04-2009
+-->
+
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="80"
+	height="80"
+	styleName="pdfListITR"
+	horizontalAlign="center"
+	horizontalScrollPolicy="off">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.graphics.codec.JPEGEncoder;
+			import mx.effects.Resize;
+			
+			[Bindable]
+			private var imagen:Bitmap;
+			
+			private function initApp():void
+			{
+				img.width = uint(6*data.thumbnailImageSource.width/100);
+				img.height = uint(6*data.thumbnailImageSource.height/100);
+			}
+			
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+				if(data)
+				{
+					imagen = data.thumbnailImageSource;
+					initApp();					
+				}
+			}
+			
+			private function clickHandler(event:Event):void
+			{
+				
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Image id="img" source="{imagen}"
+		maintainAspectRatio="true"
+		click="clickHandler(event)"
+		/>
+		
+	<mx:Label text="{data.pageNumber}"/>
+	
+</mx:Box>
