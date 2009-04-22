@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:utils="com.cubika.labs.utils.*"
+	xmlns:cubikalabs="http://cubikalabs.cub2k.com/2009/commons"
+	creationComplete="doInit()"
+	paddingLeft="10" paddingTop="10" paddingRight="10"
+	horizontalAlign="center"
+	 
+xmlns:addresses="view.customer.address.*" 
+xmlns:company="view.customer.company.*" 
+xmlns:phone="view.customer.phone.*" >
+
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import mx.binding.utils.BindingUtils;
+			
+			import com.cubika.labs.utils.MultipleRM;
+			
+			import event.DefaultNavigationEvent;
+			import event.customer.CustomerCRUDEvent;
+				
+			import model.ApplicationModelLocator;
+			import model.customer.CustomerModel;
+				
+			import mx.validators.Validator;
+
+			import vo.customer.CustomerVO;	
+			import vo.company.CompanyVO
+			import vo.phone.PhoneVO
+
+			[Bindable]
+			public var appModel:ApplicationModelLocator = ApplicationModelLocator.instance;
+			
+			[Bindable]
+			private var _model:CustomerModel = ApplicationModelLocator.instance.customerModel;
+
+				
+			private function saveOrUpdate():void
+			{
+				if (validators.length >= 0 && Validator.validateAll(validators).length == 0)
+				{
+					var _vo:CustomerVO = _model.selected;					
+
+					_vo.firstName = txtFirstName.text;
+					_vo.lastName = txtLastName.text;
+					_vo.dateOfBirth = dfDateOfBirth.selectedDate;
+					_vo.age = nsAge.value;
+					_vo.email = txtEmail.text;
+					_vo.maritalStatus = !cbMaritalStatus.selectedItem ? null : String(cbMaritalStatus.selectedItem.data);
+					_vo.addresses = rAddresses.getVO();
+					_vo.company = rCompany.selectedItem;
+					_vo.enabled = chkEnabled.selected;
+					_vo.blog = txtBlog.text;
+					_vo.phone = rPhone.getVO();
+
+					new CustomerCRUDEvent(CustomerCRUDEvent.SAVE_OR_UPDATE_EVENT,_vo).dispatch();
+				}
+			}
+			
+			private function cancel():void
+			{
+				new DefaultNavigationEvent("customer.edit").dispatch();
+				//No es una buena practica, pero me resulta de mas generar un evento/comando para nullear el selected en el model
+				_model.selected = null;
+			}
+			
+			private function doInit():void
+			{		
+				addEventListener(KeyboardEvent.KEY_UP,keyboardHandler,false,0,true);
+				BindingUtils.bindSetter(changeState,_model,"editView");
+				setFocus();
+			}
+			
+			override public function setFocus():void
+			{
+				if (txtFirstName)
+					txtFirstName.setFocus();
+			}
+			
+			
+			private function keyboardHandler(e:KeyboardEvent):void
+			{
+				if (e.keyCode == Keyboard.ESCAPE)
+					cancel();
+				
+				if (e.keyCode == Keyboard.F8)
+					saveOrUpdate();
+			}
+				
+			private function changeState(editView:Boolean):void
+			{
+				currentState = _model.state;
+			}
+				
+		]]>
+	</mx:Script>
+	
+	<mx:states>
+		<mx:State name="createView">
+			<mx:RemoveChild target="{fiEnabled}"/>
+	
+		</mx:State>		
+		<mx:State name="editView">
+
+		</mx:State>
+	</mx:states>
+	
+	<mx:Array id="validators">
+		<mx:StringValidator source="{txtFirstName}" property="text" required="true" minLength="2"/>
+		<mx:StringValidator source="{txtLastName}" property="text" required="false" maxLength="20"/>
+		<mx:NumberValidator source="{nsAge}" property="value" required="false" minValue="18" maxValue="99"/>
+		<mx:EmailValidator source="{txtEmail}" property="text" required="true"/>
+		<cubikalabs:URLValidator source="{txtBlog}" property="text" required="false"/>
+	</mx:Array>
+	
+	<mx:VBox styleName="formContainer">
+		<mx:Label text="{MultipleRM.getString(MultipleRM.localePrefix,'customer.label')}" styleName="titleForm" width="100%"/>
+		<mx:Form width="100%">
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.firstName')}" id="fiFirstName" width="100%">
+		<mx:TextInput id="txtFirstName" text="{_model.selected.firstName}" width="217"/>
+
+	 </mx:FormItem>
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.lastName')}" id="fiLastName" width="100%">
+		<mx:TextInput id="txtLastName" text="{_model.selected.lastName}" width="217"/>
+
+	 </mx:FormItem>
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.dateOfBirth')}" id="fiDateOfBirth" width="100%">
+		<cubikalabs:CBKDateField id="dfDateOfBirth" selectedDate="{_model.selected.dateOfBirth}"/>
+
+	 </mx:FormItem>
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.age')}" id="fiAge" width="100%">
+		<mx:NumericStepper id="nsAge" value="{_model.selected.age}" minimum="18" maximum="99" />
+
+	 </mx:FormItem>
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.email')}" id="fiEmail" width="100%">
+		<mx:TextInput id="txtEmail" text="{_model.selected.email}" width="217"/>
+
+	 </mx:FormItem>
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.maritalStatus')}" id="fiMaritalStatus" width="100%">
+		<cubikalabs:CBKComboBox id="cbMaritalStatus" selectedItem="{_model.selected.maritalStatus}" prompt="{MultipleRM.getString(MultipleRM.localePrefix,'generic.select')} ..">
+			<cubikalabs:dataProvider>
+				<mx:ArrayCollection>
+					<mx:Object data="Single" label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.maritalStatus.Single')}"/>
+					<mx:Object data="Married" label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.maritalStatus.Married')}"/>
+					<mx:Object data="Divorce" label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.maritalStatus.Divorce')}"/>
+					<mx:Object data="Widower" label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.maritalStatus.Widower')}"/>
+				</mx:ArrayCollection>
+			</cubikalabs:dataProvider>
+		</cubikalabs:CBKComboBox>
+
+	 </mx:FormItem>
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.addresses')}" id="fiAddresses" width="100%">
+		<addresses:AddressOneToManyListView id="rAddresses" dataProvider="{_model.selected.addresses}"/>
+
+	 </mx:FormItem>
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.company')}" id="fiCompany" width="100%">
+		<company:CompanyManyToOneView id="rCompany" selectedItem="{_model.selected.company}"/>
+
+	 </mx:FormItem>
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.enabled')}" id="fiEnabled" width="100%">
+		<mx:CheckBox id="chkEnabled" selected="{_model.selected.enabled}"/>
+
+	 </mx:FormItem>
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.blog')}" id="fiBlog" width="100%">
+		<mx:TextInput id="txtBlog" text="{_model.selected.blog}" width="217"/>
+
+	 </mx:FormItem>
+	 <mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'customer.phone')}" id="fiPhone" width="100%">
+		<phone:PhoneOneToOneView id="rPhone" vo="{_model.selected.phone}"/>
+
+	 </mx:FormItem>
+		</mx:Form>
+				
+		<mx:HBox width="100%" horizontalAlign="right">
+			<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.submit')} (F8)" click="saveOrUpdate()"/>
+			<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.cancel')} (ESC)" click="cancel()"/>
+		</mx:HBox>
+	</mx:VBox>
+
+</mx:VBox>
