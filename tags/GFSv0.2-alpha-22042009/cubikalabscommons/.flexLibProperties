@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+<includeClasses>
+<classEntry path="com.adobe.flex.extras.controls.AutoComplete"/>
+<classEntry path="com.cubika.labs.containers.DinamicTileList"/>
+<classEntry path="com.cubika.labs.containers.StickyTabNavigator"/>
+<classEntry path="com.cubika.labs.controls.AddAutoComplete"/>
+<classEntry path="com.cubika.labs.controls.AddBase"/>
+<classEntry path="com.cubika.labs.controls.AddComboBox"/>
+<classEntry path="com.cubika.labs.controls.CBKColorPicker"/>
+<classEntry path="com.cubika.labs.controls.CBKComboBox"/>
+<classEntry path="com.cubika.labs.controls.CBKDataGrid"/>
+<classEntry path="com.cubika.labs.controls.CBKDataGridColumn"/>
+<classEntry path="com.cubika.labs.controls.CBKDateFormatterDataGridColumn"/>
+<classEntry path="com.cubika.labs.controls.reporting.ReportingConstants"/>
+<classEntry path="com.cubika.labs.controls.reporting.column.ReportingColumnControl"/>
+<classEntry path="com.cubika.labs.controls.reporting.column.ReportingColumnDescriptor"/>
+<classEntry path="com.cubika.labs.controls.reporting.filter.IBaseFilterControl"/>
+<classEntry path="com.cubika.labs.controls.reporting.filter.IFromToFilterControl"/>
+<classEntry path="com.cubika.labs.controls.reporting.filter.impl.AbstractBaseFilterControl"/>
+<classEntry path="com.cubika.labs.controls.reporting.filter.impl.AbstractFromToFilterControl"/>
+<classEntry path="com.cubika.labs.controls.reporting.filter.impl.DateFilterControl"/>
+<classEntry path="com.cubika.labs.controls.reporting.filter.impl.ManyToOneFilterControl"/>
+<classEntry path="com.cubika.labs.controls.reporting.filter.impl.NumberFilterControl"/>
+<classEntry path="com.cubika.labs.controls.reporting.filter.impl.StringFilterControl"/>
+<classEntry path="com.cubika.labs.date.CBKDateField"/>
+<classEntry path="com.cubika.labs.date.DateUtils"/>
+<classEntry path="com.cubika.labs.event.AddClickEvent"/>
+<classEntry path="com.cubika.labs.event.DataProviderEvent"/>
+<classEntry path="com.cubika.labs.interfaces.IDinamicTileListRender"/>
+<classEntry path="com.cubika.labs.pagination.PageFilter"/>
+<classEntry path="com.cubika.labs.pagination.PaginationView"/>
+<classEntry path="com.cubika.labs.utils.MultipleRM"/>
+<classEntry path="com.cubika.labs.validator.URLValidator"/>
+<classEntry path="com.cubika.labs.viewers.ITRPDFList"/>
+<classEntry path="com.cubika.labs.viewers.PDFList"/>
+<classEntry path="com.cubika.labs.viewers.PDFViewer"/>
+<classEntry path="com.ericfeminella.collections.HashMap"/>
+<classEntry path="com.ericfeminella.collections.HashMapEntry"/>
+<classEntry path="com.ericfeminella.collections.IHashMapEntry"/>
+<classEntry path="com.ericfeminella.collections.IMap"/>
+<classEntry path="com.thirdparty.iframe.IFrame"/>
+</includeClasses>
+<includeResources>
+<resourceEntry destPath="CubikalabsManifest.xml" sourcePath="CubikalabsManifest.xml"/>
+</includeResources>
+<namespaceManifests>
+<namespaceManifestEntry manifest="CubikalabsManifest.xml" namespace="http://cubikalabs.cub2k.com/2009/commons"/>
+</namespaceManifests>
+</flexLibProperties>

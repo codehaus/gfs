@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright 2009 the original author or authors.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+	
+	Preview a BitMap in ByteArray format.  
+ 	@author Ariel Gimenez
+ 	@since 20-04-2009
+-->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="90%"
+	height="100%" xmlns:viewers="viewers.*"
+	verticalScrollPolicy="off"
+	xmlns:viewers1="com.cubika.labs.viewers.*">
+	
+	<mx:Metadata>
+		[Event(name="savePdf", type="flash.events.Event")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.printing.FlexPrintJob;
+			import mx.rpc.http.mxml.HTTPService;
+			import mx.graphics.codec.JPEGEncoder;
+			import mx.events.ResizeEvent;
+			import mx.managers.CursorManager;
+			import mx.core.UIComponent;
+			import mx.controls.Image;
+			import mx.collections.ArrayCollection;
+			import mx.effects.easing.*;
+			
+			[Bindable]
+			private var datap:ArrayCollection = new ArrayCollection;
+			
+			[Embed(source="../assets/close_hand_ico.png")]
+			[Bindable]
+			public var closeCursor:Class;
+			
+			[Embed(source="../assets/open_hand_ico.png")]
+			[Bindable]
+			public var openCursor:Class;
+			
+			private var idOpenCursor:int;
+			private var idCloseCursor:int;
+			
+			private var imagenHeight:Number;
+			private var imagenWidth:Number;
+			
+			private var moreHeight:Boolean;
+			private var moreWidth:Boolean;
+			
+			private var _source:String; 
+			
+			private var _pdfFile:String;
+			
+			private var arrayDataLoaded:ByteArray;
+			
+			
+			
+			
+			private function initApp():void
+			{
+				// Mouse event listeners
+				container.addEventListener(MouseEvent.MOUSE_DOWN, clickContainerHandler);
+				container.addEventListener(MouseEvent.MOUSE_UP, upContainerHandler);
+				container.addEventListener(MouseEvent.MOUSE_OVER, overContainerHandler);
+				container.addEventListener(MouseEvent.MOUSE_OUT, outContainerHandler);
+				container.addEventListener(ResizeEvent.RESIZE, resizeContainerHandler);
+				//-
+				
+				pdfList.addEventListener("selectedPage", listChangeHandler);
+				var request:URLRequest = new URLRequest(encodeURI(source));
+				var loader:Loader = new Loader();
+				loader.load(request);
+				
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderImageCompleteHandler);//loaderCompleteHandler);
+			}
+			
+			private function loaderImageCompleteHandler(e:Event):void
+			{	
+				var obj:Object = new Object();
+				obj.thumbnailPage = "lapaja";
+				//obj.pageNumber = "3";
+				
+				var bmp:Bitmap = Bitmap(LoaderInfo(e.currentTarget).content);
+				bmp.pixelSnapping = PixelSnapping.ALWAYS;
+				bmp.smoothing = true;
+				
+				obj.thumbnailImageSource = bmp;
+				
+				// borrar
+				clearPages();
+				
+				datap.addItem(obj);
+			}
+			
+			private function listChangeHandler(e:Event):void
+			{
+				container.addChild(getPage(pdfList.selectedPage.thumbnailImageSource));
+				zoomChange();
+			}
+			
+			
+			private function loaderCompleteHandler(e:Event):void
+			{
+				var loader:Loader = e.target as Loader;
+				var bmp:Bitmap = Bitmap(loader.content);
+			}
+			
+			private function getPage(value:Object):DisplayObjectContainer
+			{
+				var bmp:Bitmap = new Bitmap(Bitmap(value).bitmapData);
+				imagenHeight = bmp.height;//Bitmap(value).bitmapData.height;
+				imagenWidth = bmp.width;//Bitmap(value).bitmapData.width;
+				var img:Image = new Image();
+				img.percentWidth = 100;
+				img.percentHeight = 100;
+				img.maintainAspectRatio = false;
+				img.source = bmp;//value;
+				return img;
+			}
+			
+			private function zoomChange():void
+			{
+				container.width = uint(zoomHs.value*imagenWidth/100);
+				container.height = uint(zoomHs.value*imagenHeight/100);
+				
+			}
+			
+			private function inputValueChange():void
+			{
+				zoomHs.value = Number(hsValue.text);
+				zoomChange();
+			}
+			
+			private function clearPages():void
+			{
+				container.removeAllChildren();
+				// borrar
+				datap = new ArrayCollection();
+			}
+			
+			
+			//--------------------------------------------------------------------
+			//	Handlers
+			//--------------------------------------------------------------------
+			
+			private function pdfListOverHandler(e:MouseEvent):void
+			{
+				UIComponent(e.currentTarget).y = this.height-pdfList.height;
+			}
+			
+			private function pdfListOutHandler(e:MouseEvent):void
+			{
+				UIComponent(e.currentTarget).y = this.height-20;
+			}
+			
+			private function printHandler(e:MouseEvent):void
+			{
+				var pj:FlexPrintJob = new FlexPrintJob();
+				pj.start();
+				pj.addObject(container)
+				pj.send();
+			}
+			
+			private function savePdfHandler(e:MouseEvent):void
+			{
+				dispatchEvent(new Event("savePdf"));
+			} 
+			
+			private function mouseMoveContainerHandler(e:MouseEvent):void
+			{
+				
+			}
+			
+			private function resizeContainerHandler(e:ResizeEvent):void
+			{
+				if(e.currentTarget.width > this.width)
+					moreWidth = true;
+				else
+					moreWidth = false;
+					
+				if(e.currentTarget.height > this.height)
+					moreHeight = true;
+				else
+					moreHeight = false;
+					
+			}
+			
+			private function dragPage(ui:UIComponent):void
+			{
+				var rectangle:Rectangle = new Rectangle(this.width-ui.width,this.height-ui.height,
+														ui.width-this.width, ui.height-this.height);
+				ui.startDrag(false, rectangle);
+			}
+			
+			private function overContainerHandler(e:MouseEvent):void
+			{
+				CursorManager.removeAllCursors();
+				idOpenCursor = CursorManager.setCursor(openCursor);
+				trace(e.type);
+			}
+			
+			private function clickContainerHandler(e:MouseEvent):void
+			{
+				UIComponent(e.currentTarget).removeEventListener(MouseEvent.MOUSE_OVER, overContainerHandler);
+				CursorManager.removeAllCursors();
+				idCloseCursor = CursorManager.setCursor(closeCursor);
+				
+				if(moreHeight || moreWidth)
+				{
+					container.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveContainerHandler);
+					dragPage(UIComponent(e.currentTarget));					
+				}
+				else
+					container.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveContainerHandler);
+			}
+			
+			private function upContainerHandler(e:MouseEvent):void
+			{
+				overContainerHandler(e);
+				container.addEventListener(MouseEvent.MOUSE_OVER, overContainerHandler);
+				if(moreHeight || moreWidth)
+					UIComponent(e.currentTarget).stopDrag();
+			}
+			
+			private function outContainerHandler(e:MouseEvent):void
+			{
+				CursorManager.removeAllCursors();
+				trace(e.type.toString());
+			}
+	
+			
+			//--------------------------------------------------------------------
+			//	Getters & Setters
+			//--------------------------------------------------------------------
+			
+			public function set source(src:String):void
+			{
+				_source = src;
+				if(src && src != '')
+					initApp();
+			}
+			
+			public function get source():String
+			{
+				return _source;
+			}
+
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Move id="effect" duration="400" easingFunction="{Circular.easeOut}"/>
+	
+	<mx:Canvas id="pdfContainer"
+		width="{this.width-10}"
+		height="{this.height-appCb.height}"
+		y="{appCb.height}"
+		backgroundColor="#efefef"
+		horizontalScrollPolicy="off"
+		x="0">
+		<mx:Box id="container" x="{pdfContainer.width/2-container.width/2}"
+			direction="vertical"
+			/>
+	</mx:Canvas>
+		
+	<mx:ApplicationControlBar id="appCb"
+		width="{this.width-10}"
+		styleName="pdfAppControlBar"
+		y="0" x="0">
+		
+		<mx:Image id="btnPrint"
+			source="@Embed(source='../assets/print_ico.png')"
+			buttonMode="true"
+			click="printHandler(event)"
+			rollOver="{btnPrint.alpha=0.7}"
+			rollOut="{btnPrint.alpha=1}"
+			/>
+		<mx:VRule height="20" strokeColor="#999999" shadowColor="#666666"/>
+		<mx:Image id="btnSave"
+			source="@Embed(source='../assets/save_ico.png')"
+			buttonMode="true"
+			click="savePdfHandler(event)"
+			rollOver="{btnSave.alpha=0.7}"
+			rollOut="{btnSave.alpha=1}"
+			/>
+		
+		<mx:Spacer width="100%"/>
+		
+		<mx:TextInput id="hsValue"
+			width="30"
+			styleName="zoomPdfInput"
+			text="{zoomHs.value}"
+			enter="inputValueChange()"
+			/>
+		<mx:HBox horizontalGap="-2">
+			<mx:Label id="lblDesde" text="{zoomHs.minimum}" width="18"/>
+			<mx:HSlider id="zoomHs"
+				minimum="25" maximum="250"
+				tickColor="white"
+				snapInterval="1" tickInterval="15" 
+	            value="50"
+	            allowTrackClick="true" 
+	            liveDragging="true"
+	            change="zoomChange()"/>
+	        <mx:Label id="lblHasta" text="{zoomHs.maximum}" width="25"/>
+		</mx:HBox>
+
+	</mx:ApplicationControlBar>
+	
+	<viewers1:PDFList id="pdfList" 
+		rollOver="pdfListOverHandler(event)"
+		rollOut="pdfListOutHandler(event)"
+		dataProvider="{datap}"
+		width="{this.width-10}"
+		moveEffect="{effect}"
+		height="142"
+		y="{this.height-20}"
+		/>
+	
+</mx:Canvas>
