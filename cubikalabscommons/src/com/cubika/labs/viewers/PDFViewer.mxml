@@ -31,6 +31,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.core.Application;
 			import mx.printing.FlexPrintJob;
 			import mx.rpc.http.mxml.HTTPService;
 			import mx.graphics.codec.JPEGEncoder;
@@ -91,7 +92,7 @@
 			private function loaderImageCompleteHandler(e:Event):void
 			{	
 				var obj:Object = new Object();
-				obj.thumbnailPage = "lapaja";
+				obj.thumbnailPage = "lapaginita";
 				//obj.pageNumber = "3";
 				
 				var bmp:Bitmap = Bitmap(LoaderInfo(e.currentTarget).content);
@@ -104,6 +105,9 @@
 				clearPages();
 				
 				datap.addItem(obj);
+				
+				pdfList.initPage();
+				cursorManager.removeBusyCursor();
 			}
 			
 			private function listChangeHandler(e:Event):void
@@ -251,7 +255,10 @@
 			{
 				_source = src;
 				if(src && src != '')
+				{
+					cursorManager.setBusyCursor();
 					initApp();
+				}
 			}
 			
 			public function get source():String

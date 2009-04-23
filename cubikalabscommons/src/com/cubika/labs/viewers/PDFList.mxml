@@ -48,10 +48,16 @@
 				_dataProvider = value;
 			}
 			
-			private function listHandler(e:ListEvent):void
+			private function listHandler():void
 			{
-				selectedPage = e.currentTarget.selectedItem;
+				selectedPage = hList.selectedItem
 				dispatchEvent(new Event("selectedPage"));
+			}
+			
+			public function initPage():void
+			{
+				hList.selectedIndex = 0;
+				listHandler();
 			}
 			
 		]]>
@@ -60,7 +66,7 @@
 	<mx:HorizontalList id="hList" width="100%"
 		borderStyle="none"
 		backgroundAlpha="0"
-		change="listHandler(event)"
+		change="listHandler()"
 		height="100%"
 		horizontalScrollPolicy="on"
 		dataProvider="{dataProvider}"
