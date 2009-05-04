@@ -9,6 +9,7 @@ class Company
 	String name
 	String address
 	String description
+	String logo
 	
 	//One-to-Many
 	static hasMany = [customers:Customer]
@@ -24,5 +25,6 @@ class Company
 		address(blank:false)
 		customers(display:false, i18n:[es:"cliente"])//Not view customer in Company's edit-view
 		description(widget:"richtext")
+		logo(widget:"imageupload")
 	}
 }
