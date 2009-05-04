@@ -26,21 +26,37 @@ package com.cubika.labs.controls
 			if ((data is String) || (data is Number) || (data is int))
 			{
 				itemLabel = data
+				dataField = "data"
 			}
 			else if (!data.hasOwnProperty("data"))
 			{
-				itemLabel = data[dataField]	
+				itemLabel = data[labelField]
+				dataField = labelField;	
 			}
 			else
 			{
 				itemLabel = data.data
+				dataField = "data";
 			}
 			var match:Boolean = false;
 			for each (var item:Object in dataProvider)
 			{
 				if (item)
 				{
-					if (!item.hasOwnProperty("data"))
+					if ((item is String) || (item is Number) || (item is int))
+					{
+						if (item == itemLabel)
+						{
+							super.selectedItem = item;
+							return
+						}	
+					}
+					else if (item[dataField] == itemLabel)
+					{
+						super.selectedItem = item;
+						return
+					}
+					/* if (!item.hasOwnProperty("data"))
 					{
 						match = (item[dataField] == itemLabel)
 					}
@@ -53,7 +69,7 @@ package com.cubika.labs.controls
 					{
 						super.selectedItem = item;
 						return
-					}
+					} */
 				}
 			}
 		}

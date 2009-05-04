@@ -732,14 +732,17 @@ public class AutoComplete extends ComboBox
 		if ((value is String) || (value is Number) || (value is int))
 		{
 			itemLabel = value
+			dataField = "data"
 		}
 		else if (!value.hasOwnProperty("data"))
 		{
-			itemLabel = value[dataField]	
+			itemLabel = value[labelField]
+			dataField = labelField;	
 		}
 		else
 		{
 			itemLabel = value.data
+			dataField = "data";
 		}
 			
   		var match:Boolean = false;
@@ -747,7 +750,20 @@ public class AutoComplete extends ComboBox
 		{
 			if (item)
 			{
-				if (!item.hasOwnProperty("data"))
+				if ((item is String) || (item is Number) || (item is int))
+				{
+					if (item == itemLabel)
+					{
+						super.selectedItem = item;
+						return
+					}	
+				}
+				else if (item[dataField] == itemLabel)
+				{
+					super.selectedItem = item;
+					return
+				}
+				/* if (!item.hasOwnProperty("data"))
 				{
 					match = (item[dataField] == itemLabel)
 				}
@@ -760,7 +776,7 @@ public class AutoComplete extends ComboBox
 				{
 					super.selectedItem = item;
 					return
-				}
+				} */
 			}
 		}
   	}
