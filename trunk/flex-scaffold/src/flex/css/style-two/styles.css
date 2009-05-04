@@ -329,6 +329,29 @@ ToolTip
 	disabled-skin: Embed(source="/./assets/skinStuff.swf", symbol="edit_disabled");	
 }
 
+.eliminateButton
+{
+	up-skin: Embed(source="/./assets/skinStuff.swf", symbol="eliminate_up");
+	over-skin: Embed(source="/./assets/skinStuff.swf", symbol="eliminate_over");
+	down-skin: Embed(source="/./assets/skinStuff.swf", symbol="eliminate_down");
+	disabled-skin: Embed(source="/./assets/skinStuff.swf", symbol="eliminate_disabled");	
+}
+
+.loadButton
+{
+	up-skin: Embed(source="/./assets/skinStuff.swf", symbol="load_up");
+	over-skin: Embed(source="/./assets/skinStuff.swf", symbol="load_over");
+	down-skin: Embed(source="/./assets/skinStuff.swf", symbol="load_down");
+	disabled-skin: Embed(source="/./assets/skinStuff.swf", symbol="load_disabled");	
+}
+
+.cameraButton
+{
+	up-skin: Embed(source="/./assets/skinStuff.swf", symbol="camera_up");
+	over-skin: Embed(source="/./assets/skinStuff.swf", symbol="camera_over");
+	down-skin: Embed(source="/./assets/skinStuff.swf", symbol="camera_down");
+	disabled-skin: Embed(source="/./assets/skinStuff.swf", symbol="camera_disabled");	
+}
 
 /*--------------------------------------------------------------------------------------*/
 /*	Form Items																			*/
