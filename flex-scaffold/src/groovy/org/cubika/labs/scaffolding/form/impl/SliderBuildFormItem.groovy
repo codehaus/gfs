@@ -20,7 +20,7 @@ import org.cubika.labs.scaffolding.form.BuildFormItem
 import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
 
 /**
- * Extends AbstractBuildFormItem adding numeric stepper building functionallity
+ * Extends AbstractBuildFormItem adding Slider building functionallity
  *
  * @author Ezequiel Martin Apfel
  * @since  16-Apr-2009
@@ -47,7 +47,7 @@ class SliderBuildFormItem  extends AbstractBuildFormItem
 		def sw = new StringWriter()
 		def pw = new PrintWriter(sw)
 		
-		pw.println	"		<mx:${direction}Slider id=\"${getID()}\" value=\"{${binding}}\" "+
+		pw.println	"				<mx:${direction}Slider id=\"${getID()}\" value=\"{${binding}}\" "+
 		"minimum=\"${constraint.min ? constraint.min : -999999}\" maximum=\"${constraint.max ? constraint.max : 999999}\" />"
 		
 		sw.toString()

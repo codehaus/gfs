@@ -16,24 +16,17 @@ package org.cubika.labs.scaffolding.form.impl
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////
 
-import org.cubika.labs.scaffolding.form.BuildFormItem
-
 import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
 
 /**
- * Extends AbstractBuildFormItem adding checkbox building functionallity
+ * Extends AbstractBuildFormItem adding CBKImageUpload building functionallity
  *
  * @author Ezequiel Martin Apfel
- * @since  3-Feb-2009
+ * @since  28-Apr-2009
  */
-class CheckBoxBuildFormItem extends AbstractBuildFormItem 
+class ImageUploadBuildFormItem  extends AbstractBuildFormItem 
 {
-	
-	/**
-	 * Constructor
-	 *
-	 */
-	CheckBoxBuildFormItem(property)
+	ImageUploadBuildFormItem(property)
 	{
 		super(property)
 	}
@@ -45,10 +38,10 @@ class CheckBoxBuildFormItem extends AbstractBuildFormItem
 	def buildFormItemComponent(binding)
 	{
 		def sw = new StringWriter()
-		def pw = new PrintWriter(sw)
+    def pw = new PrintWriter(sw)
 
-		pw.println	"				<mx:CheckBox id=\"${getID()}\" selected=\"{${binding}}\"/>"
-
+		pw.println	"				<cubikalabs:CBKImageUpload id=\"${getID()}\" url=\"fileUpload\" filePath=\"{${binding}}\" fileFilters=\"*.jpg;*.png;*.tiff\" />"
+		
 		sw.toString()
 	}
 	
@@ -58,7 +51,7 @@ class CheckBoxBuildFormItem extends AbstractBuildFormItem
 	 */
 	String getFormAttr()
 	{
-		"${getID()}.${value()}";
+		"${getID()}.${value()}"
 	}
 	
 	/**
@@ -67,7 +60,7 @@ class CheckBoxBuildFormItem extends AbstractBuildFormItem
 	 */
 	String getID()
 	{
-		"chk${FSU.capitalize(property.name)}";
+		"fu${FSU.capitalize(property.name)}"
 	}
 	
 	/**
@@ -76,6 +69,6 @@ class CheckBoxBuildFormItem extends AbstractBuildFormItem
 	 */
 	String value()
 	{
-		"selected"
+		"filePath"
 	}
 }

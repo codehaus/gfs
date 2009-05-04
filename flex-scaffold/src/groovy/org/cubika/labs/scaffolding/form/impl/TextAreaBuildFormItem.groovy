@@ -45,7 +45,7 @@ class TextAreaBuildFormItem extends AbstractBuildFormItem
 		def sw = new StringWriter()
 		def pw = new PrintWriter(sw)
 		
-		pw.println	"		<mx:TextArea id=\"${getID()}\" text=\"{${binding}}\" width=\"217\"/>"
+		pw.println	"				<mx:TextArea id=\"${getID()}\" text=\"{${binding}}\" width=\"217\"/>"
 		
 		sw.toString()
 	}

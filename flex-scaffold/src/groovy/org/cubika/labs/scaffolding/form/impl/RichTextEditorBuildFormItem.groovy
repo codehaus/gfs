@@ -44,7 +44,7 @@ class RichTextEditorBuildFormItem extends AbstractBuildFormItem
 		def sw = new StringWriter()
 		def pw = new PrintWriter(sw)
 		
-		pw.println	"		<mx:RichTextEditor id=\"${getID()}\" htmlText=\"{${binding}}\" width=\"320\" "+
+		pw.println	"				<mx:RichTextEditor id=\"${getID()}\" htmlText=\"{${binding}}\" width=\"320\" "+
 		"title=\"{resourceManager.getString(appModel.localePrefix,'${property.domainClass.propertyName}.${property.name}')}\"/>"
 		
 		sw.toString()

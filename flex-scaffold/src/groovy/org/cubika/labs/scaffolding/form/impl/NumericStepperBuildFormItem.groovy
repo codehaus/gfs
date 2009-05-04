@@ -45,7 +45,7 @@ class NumericStepperBuildFormItem  extends AbstractBuildFormItem
 		def sw = new StringWriter()
 		def pw = new PrintWriter(sw)
 		
-		pw.println	"		<mx:NumericStepper id=\"${getID()}\" value=\"{${binding}}\" "+
+		pw.println	"				<mx:NumericStepper id=\"${getID()}\" value=\"{${binding}}\" "+
 		"minimum=\"${constraint.min ? constraint.min : -999999}\" maximum=\"${constraint.max ? constraint.max : 999999}\" />"
 		
 		sw.toString()

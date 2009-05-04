@@ -32,6 +32,9 @@ class FormItemConstants
 	static final String COLOR_PICKER = "colorpicker"
 	static final String V_SLIDER = "vslider"
 	static final String H_SLIDER = "hslider"
+	static final String IMAGE_UPLOAD = "imageupload"
+	static final String FILE_UPLOAD = "fileupload"
+	static final String SNAP_UPLOAD = "snapshotupload"
 	
 	//constraints
 	static final String IN_PLACE = "inPlace"

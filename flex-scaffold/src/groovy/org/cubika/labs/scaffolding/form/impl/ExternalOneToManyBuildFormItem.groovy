@@ -44,7 +44,7 @@ class ExternalOneToManyBuildFormItem  extends AbstractRelationBuildFormItem
 		def sw = new StringWriter()
 		def pw = new PrintWriter(sw)
 		
-		pw.println	"		<${property.name}:${property.referencedDomainClass.shortName}OneToManyListView id=\"${getID()}\" "+
+		pw.println	"				<${property.name}:${property.referencedDomainClass.shortName}OneToManyListView id=\"${getID()}\" "+
 								"dataProvider=\"{${binding}}\"/>"
 		
 		generateViews(property)
