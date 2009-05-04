@@ -8,6 +8,7 @@
     <resource>DataSource</resource>
     <resource>GrailsFlexScaffoldFilters</resource>
     <resource>UrlMappings</resource>
+    <resource>FileUploadController</resource>
   </resources>
   <dependencies />
 </plugin>
