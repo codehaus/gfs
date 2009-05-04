@@ -39,19 +39,13 @@ package control
 		
 		public function registerCommand(eventName:String,command:Class):void
 		{
-			if (!isRegister(command))
+			if (!isRegister(eventName))
 				addCommand(eventName,command);
 		}
 		
-		private function isRegister(command:Class):Boolean
+		private function isRegister(eventName:String):Boolean
 		{
-			for each (var cmd:Class in commands)
-			{
-				if (cmd == command)
-					return true;	
-			}
-			
-			return false;
+			return commands[eventName] != null
 		}
 		
 		
