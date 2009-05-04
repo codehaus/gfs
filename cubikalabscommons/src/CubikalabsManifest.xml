@@ -11,6 +11,11 @@
 	<component id="AddComboBox" class="com.cubika.labs.controls.AddComboBox"/>
 	<component id="AddAutoComplete" class="com.cubika.labs.controls.AddAutoComplete"/>
 	<component id="URLValidator" class="com.cubika.labs.validator.URLValidator"/>
+	<component id="CBKFileUpload" class="com.cubika.labs.controls.CBKFileUpload"/>
+	<component id="CBKImageUpload" class="com.cubika.labs.controls.CBKImageUpload"/>
+	<component id="CBKCameraSnapshot" class="com.cubika.labs.controls.CBKCameraSnapshot"/>
+	<component id="CBKSnapshotUpload" class="com.cubika.labs.controls.CBKSnapshotUpload"/>
+	
 	
 	<!-- Containers Components -->
 	<component id="DinamicTileList" class="com.cubika.labs.containers.DinamicTileList"/>
