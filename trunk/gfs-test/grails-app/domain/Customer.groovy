@@ -1,5 +1,7 @@
 import org.cubika.labs.scaffolding.annotation.FlexScaffoldProperty
-
+import java.awt.Color
+import ar.com.fdvs.dj.domain.constants.Font
+import ar.com.fdvs.dj.domain.constants.Border
 //@FlexScaffoldProperty(labelField="name") is
 //The label field is displayed in edit-view
 //of the relation external
@@ -17,9 +19,13 @@ class Customer
 	Integer age
 	Boolean enabled
 	String blog
-	
-	
+	String favoriteColor
+	Integer salary
+	String contract
+	String personalPhoto
+		
 	static reportable = [:]
+
 	static hasMany = [addresses:Address]
 	static belongsTo = Company
 	
@@ -32,6 +38,7 @@ class Customer
 	
 	static constraints = 
 	{
+		personalPhoto(widget:"snapshotupload")
 		firstName(minSize:2,blank:false)
 		lastName(maxSize:20, i18n:[es:"Apellidos"])
 		dateOfBirth()
@@ -56,5 +63,8 @@ class Customer
 		
 		blog(url:true)
 		phone()
+		favoriteColor(widget:"colorpicker")
+		salary(widget:"hslider")
+		contract(widget:"fileupload")
 	}
 }
