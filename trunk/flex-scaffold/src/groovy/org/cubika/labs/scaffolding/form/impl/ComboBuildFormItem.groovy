@@ -45,18 +45,18 @@ class ComboBuildFormItem extends AbstractBuildFormItem
 		def sw = new StringWriter()
 		def pw = new PrintWriter(sw)
 
-		pw.println	"		<cubikalabs:CBKComboBox id=\"${getID()}\" selectedItem=\"{${binding}}\" prompt=\"{MultipleRM.getString(MultipleRM.localePrefix,'generic.select')} ..\">"
-		pw.println 	"			<cubikalabs:dataProvider>"
-		pw.println 	"				<mx:ArrayCollection>"
+		pw.println	"				<cubikalabs:CBKComboBox id=\"${getID()}\" selectedItem=\"{${binding}}\" prompt=\"{MultipleRM.getString(MultipleRM.localePrefix,'generic.select')} ..\">"
+		pw.println 	"					<cubikalabs:dataProvider>"
+		pw.println 	"						<mx:ArrayCollection>"
 		
 		constraint.inList.each
 		{
-			pw.println 	"					<mx:Object data=\"$it\" label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}.${it}')}\"/>"
+			pw.println 	"							<mx:Object data=\"$it\" label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}.${it}')}\"/>"
 		}
 		
-		pw.println 	"				</mx:ArrayCollection>"			
-		pw.println	"			</cubikalabs:dataProvider>"
-		pw.println	"		</cubikalabs:CBKComboBox>"
+		pw.println 	"						</mx:ArrayCollection>"			
+		pw.println	"					</cubikalabs:dataProvider>"
+		pw.println	"				</cubikalabs:CBKComboBox>"
 		
 		sw.toString()
 	}

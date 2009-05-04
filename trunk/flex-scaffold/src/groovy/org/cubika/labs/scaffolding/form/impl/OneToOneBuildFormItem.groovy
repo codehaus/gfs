@@ -40,7 +40,7 @@ class OneToOneBuildFormItem extends AbstractRelationBuildFormItem
 		def sw = new StringWriter()
     def pw = new PrintWriter(sw)
 		
-		pw.println	"		<${property.name}:${property.referencedDomainClass.shortName}OneToOneView id=\"${getID()}\" "+
+		pw.println	"				<${property.name}:${property.referencedDomainClass.shortName}OneToOneView id=\"${getID()}\" "+
 								"vo=\"{${binding}}\"/>"
 		
 		generateViews(property)

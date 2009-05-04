@@ -19,7 +19,7 @@ package org.cubika.labs.scaffolding.form.impl
 import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
 
 /**
- * Extends AbstractBuildFormItem adding textarea building functionallity
+ * Extends AbstractBuildFormItem adding CBKColorPicker building functionallity
  *
  * @author Ezequiel Martin Apfel
  * @since  16-Apr-2009
@@ -40,7 +40,7 @@ class ColorPickerBuildFormItem  extends AbstractBuildFormItem
 		def sw = new StringWriter()
     def pw = new PrintWriter(sw)
 
-		pw.println	"		<cubikalabs:CBKColorPicker id=\"${getID()}\" selectedColorHex=\"{${binding}}\"/>"
+		pw.println	"				<cubikalabs:CBKColorPicker id=\"${getID()}\" selectedColorHex=\"{${binding}}\"/>"
 		
 		sw.toString()
 	}

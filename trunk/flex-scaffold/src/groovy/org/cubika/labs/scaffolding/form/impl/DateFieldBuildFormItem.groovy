@@ -45,7 +45,7 @@ class DateFieldBuildFormItem  extends AbstractBuildFormItem
 		def sw = new StringWriter()
 		def pw = new PrintWriter(sw)
 		
-		pw.println	"		<cubikalabs:CBKDateField id=\"${getID()}\" selectedDate=\"{${binding}}\"/>"
+		pw.println	"				<cubikalabs:CBKDateField id=\"${getID()}\" selectedDate=\"{${binding}}\"/>"
 		
 		sw.toString()
 	}

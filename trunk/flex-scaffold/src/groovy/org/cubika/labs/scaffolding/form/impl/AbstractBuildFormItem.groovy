@@ -53,11 +53,11 @@ abstract class AbstractBuildFormItem implements BuildFormItem
 		def sw = new StringWriter()
 		def pw = new PrintWriter(sw)
 
-		pw.println 	"	 <mx:FormItem label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}')}\" id=\"${getFormItemID()}\" width=\"100%\">"
+		pw.println 	"	 		<mx:FormItem label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}')}\" id=\"${getFormItemID()}\" width=\"100%\">"
 		
-		pw.println	buildFormItemComponent(binding)
+		pw.print	buildFormItemComponent(binding)
 		
-		pw.println 	"	 </mx:FormItem>"
+		pw.println 	"	 		</mx:FormItem>"
 		
 		sw.toString()
 	}

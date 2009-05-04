@@ -40,18 +40,18 @@ class AutoCompleteBuildFormItem extends AbstractBuildFormItem
 	{	
 		def sw = new StringWriter()
 		def pw = new PrintWriter(sw)
-		pw.println	"		<cubikalabs:AutoComplete id=\"${getID()}\" selectedItem=\"{${binding}}\" prompt=\"{MultipleRM.getString(MultipleRM.localePrefix,'generic.select')} ..\" width=\"217\">"
-		pw.println 	"			<cubikalabs:dataProvider>"
-		pw.println 	"				<mx:ArrayCollection>"
+		pw.println	"				<cubikalabs:AutoComplete id=\"${getID()}\" selectedItem=\"{${binding}}\" prompt=\"{MultipleRM.getString(MultipleRM.localePrefix,'generic.select')} ..\" width=\"217\">"
+		pw.println 	"					<cubikalabs:dataProvider>"
+		pw.println 	"						<mx:ArrayCollection>"
 		
 		constraint.inList.each
 		{
-			pw.println 	"					<mx:Object data=\"$it\" label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}.${it}')}\"/>"
+			pw.println 	"							<mx:Object data=\"$it\" label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}.${it}')}\"/>"
 		}
 		
-		pw.println 	"				</mx:ArrayCollection>"			
-		pw.println	"			</cubikalabs:dataProvider>"
-		pw.println	"		</cubikalabs:AutoComplete>"
+		pw.println 	"						</mx:ArrayCollection>"			
+		pw.println	"					</cubikalabs:dataProvider>"
+		pw.println	"				</cubikalabs:AutoComplete>"
 		
 		sw.toString()
 	}
