@@ -141,10 +141,10 @@ class BuildFormItemFactory
 				return new ExternalOneToManyBuildFormItem(property) 
 		
 		if (property.isOneToOne())
-			//if (inPlace)
+			if (!inPlace && property.bidirectional) //La trato como una many-to-one inPlace:false
+                return new ExternalManyToOneBuildFormItem(property)
+			else
 				return new OneToOneBuildFormItem(property)
-			//else
-			//	return new ExternalOneToOneBuildFormItem(property)
 	}
 	
 	static private void validateWidget(type,clazz,widget)
