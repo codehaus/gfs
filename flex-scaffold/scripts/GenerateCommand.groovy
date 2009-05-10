@@ -55,6 +55,10 @@ generateCRUDCommands =
 	templateFile = "${flexScaffoldPluginDir}"+antProp.'command.paginationlistfile'
 	generateCommand(domainClass,templateFile,classNameFile)
 	
+	classNameFile = "${nameDir}/${domainClass.shortName}ExternalGetPaginationListCommand.as"
+	templateFile = "${flexScaffoldPluginDir}"+antProp.'command.paginationlistfile'
+	generateCommand(domainClass,templateFile,classNameFile,"External")
+	
 	classNameFile = "${nameDir}/${domainClass.shortName}SaveOrUpdateCommand.as"
 	templateFile = "${flexScaffoldPluginDir}"+antProp.'command.saveorupdatefile'
 	generateCommand(domainClass,templateFile,classNameFile)
@@ -64,8 +68,8 @@ generateCRUDCommands =
 	generateCommand(domainClass,templateFile,classNameFile)
 }
 
-private void generateCommand(domainClass,templateFile,classNameFile)
+private void generateCommand(domainClass,templateFile,classNameFile,typeName="")
 {	
-	dftg.generateTemplate(domainClass,templateFile,classNameFile)
+	dftg.generateTemplate(domainClass,templateFile,classNameFile,typeName)
 	println "${classNameFile} Done!"
 }

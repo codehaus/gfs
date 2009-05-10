@@ -129,6 +129,7 @@ class FlexScaffoldingUtils
 	 */
 	static String getDataGridColumn(DefaultGrailsDomainClassProperty property)
 	{
+		String result
 		def sw
 		def pw
 		
@@ -142,15 +143,7 @@ class FlexScaffoldingUtils
 				pw.println "<cubikalabs:CBKDateFormatterDataGridColumn dataField=\"${property.name}\" "+
 				"headerText=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}')}\" />"
 
-				return sw.toString()
-			}
-			
-			if (property.type == Date.class)
-			{
-				pw.println "<cubikalabs:CBKDateFormatterDataGridColumn dataField=\"${property.name}\" "+
-				"headerText=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}')}\" />"
-
-				return sw.toString()
+				result = sw.toString()
 			}
 			
 			if (CVU.richtext(property))
@@ -169,10 +162,10 @@ class FlexScaffoldingUtils
 			pw.println "<mx:DataGridColumn dataField=\"${property.name}\" "+
 			"headerText=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}')}\" />"
 			
-			return sw.toString()
+			result = sw.toString()
 		}
 		
-		sw
+		return result
 	}
 	
 	/**
@@ -190,14 +183,21 @@ class FlexScaffoldingUtils
 	 * @parm	domainClass - DefaultGrailsDomainClass
 	 * @return DefaultGrailsDomainClassProperty[] with id and version
 	 */
-	static DefaultGrailsDomainClassProperty[] getPropertiesWithIdentity(DefaultGrailsDomainClass domainClass)
+	static DefaultGrailsDomainClassProperty[] getPropertiesWithIdentity(DefaultGrailsDomainClass domainClass, Boolean inherited=true)
 	{
 		def excludedProps = [Events.ONLOAD_EVENT,
 	                       Events.BEFORE_DELETE_EVENT,
 	                       Events.BEFORE_INSERT_EVENT,
 	                       Events.BEFORE_UPDATE_EVENT]
+                       
+    def properties = domainClass.properties
 
-		domainClass.properties.findAll { !excludedProps.contains(it.name)}
+		if (inherited)
+			properties = properties.findAll { !excludedProps.contains(it.name)}
+		else
+			properties = properties.findAll { !excludedProps.contains(it.name) && !it.inherited}	
+			
+		properties
 	}
 	
 	/**
@@ -206,14 +206,19 @@ class FlexScaffoldingUtils
 	 * @param domainClass 		- DefaultGrailsDomainClass
 	 * @return DefaultGrailsDomainClassProperty[] without id and version
 	 */
-	static DefaultGrailsDomainClassProperty[] getPropertiesWithoutIdentity(DefaultGrailsDomainClass domainClass, order=false)
+	static DefaultGrailsDomainClassProperty[] getPropertiesWithoutIdentity(DefaultGrailsDomainClass domainClass, Boolean order=false, inherited=true)
 	{
 		def excludedProps = ['id', 'version',Events.ONLOAD_EVENT,
 	                       Events.BEFORE_DELETE_EVENT,
 	                       Events.BEFORE_INSERT_EVENT,
 	                       Events.BEFORE_UPDATE_EVENT]
-												
-		def properties = domainClass.properties.findAll { !excludedProps.contains(it.name)}
+		
+		def properties = domainClass.properties
+		
+		if (inherited)
+			properties = properties.findAll { !excludedProps.contains(it.name)}
+		else
+			properties = properties.findAll { !excludedProps.contains(it.name) && !it.inherited}
 		
 		if (order)
 		{
@@ -235,7 +240,7 @@ class FlexScaffoldingUtils
 		properties.each
 		{
 			if ((it.isOneToMany() || it.isOneToOne() || it.isManyToOne()) && CVU.display(it))
-				ns += "\nxmlns:${it.name}=\"view.${it.domainClass.propertyName}.${it.referencedDomainClass.propertyName}.*\" "
+				ns += "\nxmlns:${it.name}=\"view.${it.referencedDomainClass.propertyName}.external.*\" "
 		}
 		
 		ns
@@ -271,8 +276,17 @@ class FlexScaffoldingUtils
 			path
     	}
     	catch (Throwable e) 
-		{
-		throw new Exception("${BuildSettingsHolder.settings?.projectPluginsDir.canonicalFile}${pattern} Not Found $e")		
-		}
+			{
+				throw new Exception("${BuildSettingsHolder.settings?.projectPluginsDir.canonicalFile}${pattern} Not Found $e")		
+			}
   	}
+
+		static String getSuperClassName(domainClass)
+		{
+			Class superClass = domainClass.getClazz().getSuperclass()
+			
+			if (!superClass.equals(Object.class) && !superClass.equals(GroovyObject.class))
+				return superClass.getName()
+            
+		}
 }

@@ -92,30 +92,7 @@
 			public function getVO():ArrayCollection
 			{
 				return dataProvider;
-			}
-<%			
-			import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
-			import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
-
-			def props = FSU.getPropertiesWithoutIdentity(domainClass,true)
-
-			props.each
-			{
-				if (it.type == Date.class && CVU.display(it))
-				{
-
-					def format = CVU.dateFormat(it)
-
-					println "			private function ${it.name}Formatter(item:Object, column:DataGridColumn):String"
-					println "			{"
-					println "				var formatter:DateFormatter = new DateFormatter();"
-					println "				formatter.formatString = \"${format}\";"
-					println "				return formatter.format(${className}VO(item).${it.name});"
-					print		"			}"
-				}
-			}
-%>
-				
+			}				
 		]]>
 	</mx:Script>
 	
@@ -129,11 +106,15 @@
 		doubleClickEnabled="true" variableHeight="true" rowCount="8">
 		<cubikalabs:columns>
 <%		import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
+			import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
+
+			def props = FSU.getPropertiesWithoutIdentity(domainClass,true)
 			
 			props.each 
 			{
-					if (!it.isManyToOne())
-						print "			${FSU.getDataGridColumn(it)}"
+					def gridcolumn = FSU.getDataGridColumn(it)
+					if (gridcolumn)
+						print "			$gridcolumn"
 			}
 			%>		</cubikalabs:columns>
 	</cubikalabs:CBKDataGrid>

@@ -106,7 +106,7 @@ void addToNavigationModel(domainClass)
 	
 		file =  Ant.fileset(	dir: antProp.'flex.srcdir') {
 										include(name:antProp.'model.destfile')
-		          			contains(text: "defaultNavigationMap[\"${domainClass.propertyName}\"] ", casesensitive: false)
+		          			contains(text: "defaultNavigationMap[\"${domainClass.propertyName}\"]", casesensitive: false)
 							 		}
 
 		if (file.size() > 0)
@@ -116,7 +116,7 @@ void addToNavigationModel(domainClass)
 				
 		Ant.replace(file: antProp.'model.destfile',
 	          token: "//DefaultNavigationMap - Not Remove", value: "//DefaultNavigationMap - Not Remove\n	"+
-										"defaultNavigationMap[\"${propertyName}\"] = "+
+										"		defaultNavigationMap[\"${propertyName}\"] = "+
 										"{name:\"${propertyName}CRUDView\",list:\"${propertyName}List\","+
 										"edit:\"${propertyName}Edit\",nav:{list:\"edit\",edit:\"list\"}};")
 }

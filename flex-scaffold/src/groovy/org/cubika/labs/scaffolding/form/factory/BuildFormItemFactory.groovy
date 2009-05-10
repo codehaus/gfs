@@ -30,6 +30,7 @@ import org.cubika.labs.scaffolding.form.impl.OneToOneBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.ExternalOneToOneBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.ExternalOneToManyBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.ExternalManyToOneBuildFormItem
+import org.cubika.labs.scaffolding.form.impl.ExternalDataGridManyToOneBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.ColorPickerBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.SliderBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.FileUploadBuildFormItem
@@ -130,7 +131,10 @@ class BuildFormItemFactory
 		
 		if (property.isManyToOne())
 			//if (!inPlace)
-				return new ExternalManyToOneBuildFormItem(property)
+				if (constraint.widget == FIC.COMBO_BOX)
+					return new ExternalManyToOneBuildFormItem(property)
+				else
+					return new ExternalDataGridManyToOneBuildFormItem(property)
 			//else
 				//return new ManyToOneBuildFormItem(property)
 		
@@ -142,11 +146,14 @@ class BuildFormItemFactory
 		
 		if (property.isOneToOne())
 			if (!inPlace && !property.bidirectional) //La trato como una many-to-one inPlace:false
-                return new ExternalManyToOneBuildFormItem(property)
+				if (constraint.widget == FIC.COMBO_BOX)
+      		return new ExternalManyToOneBuildFormItem(property)
+				else
+					return new ExternalDataGridManyToOneBuildFormItem(property)
 			else if (inPlace)
 				return new OneToOneBuildFormItem(property)
-            else
-                throw new Exception("Not allow inPlace:false in one-to-one bidirectional, property ${property.name}")
+      else
+        throw new Exception("Not allow inPlace:false in one-to-one bidirectional, property ${property.name}")
 	}
 	
 	static private void validateWidget(type,clazz,widget)

@@ -26,11 +26,12 @@ import java.util.prefs.Base64
 
 class FileUploadController 
 {
-	String path = ""
 	
 	def index = 
-	{
-	  def file = request.getFile("uploadfile")
+	{	  
+		String path = grailsApplication.config.videopath ? "${grailsApplication.config.videopath}/" : "" 
+	
+		def file = request.getFile("uploadfile")
 		
     
 		if(!file.empty) 
@@ -50,7 +51,9 @@ class FileUploadController
 	
 	def snapshot = 
 	{
-		def filename = "${path}${params.name}".trim()
+		String path = grailsApplication.config.videopath ? "${grailsApplication.config.videopath}/" : "" 
+		
+		String filename = "${path}${params.name}".trim()
 
 		def image = Base64.base64ToByteArray(params.image)
 

@@ -19,7 +19,7 @@ package event.${domainClass.propertyName}
 	
 	import control.ApplicationController;
 	
-	import command.${domainClass.propertyName}.${className}GetPaginationListCommand;
+	import command.${domainClass.propertyName}.${className}${typeName}GetPaginationListCommand;
 	
 	import com.cubika.labs.pagination.PageFilter;
 	
@@ -29,18 +29,18 @@ package event.${domainClass.propertyName}
 	 * @author Ezequiel Martin Apfel
 	 * @since 23-Feb-2009
 	 */
-	public class ${className}GetPaginationEvent extends CairngormEvent
+	public class ${className}${typeName}GetPaginationEvent extends CairngormEvent
 	{
 		
-		static public const EVENT_NAME:String = "get${className}PaginationEvent";
+		static public const EVENT_NAME:String = "get${className}${typeName}PaginationEvent";
 		
 		public var page:PageFilter;
 		
-		public function ${className}GetPaginationEvent(_pageFilter:PageFilter)
+		public function ${className}${typeName}GetPaginationEvent(_pageFilter:PageFilter)
 		{
 			super(EVENT_NAME);
 			
-			ApplicationController.instance.registerCommand(EVENT_NAME,${className}GetPaginationListCommand);
+			ApplicationController.instance.registerCommand(EVENT_NAME,${className}${typeName}GetPaginationListCommand);
 			
 			page = _pageFilter;
 		}

@@ -42,11 +42,15 @@ generateEvents =
 
 	classNameFile = "${nameDir}/${domainClass.shortName}GetPaginationEvent.as"
 	templateFile = "${flexScaffoldPluginDir}"+antProp.'event.paginationfile'
-	generateEvent(domainClass,templateFile,classNameFile)	
+	generateEvent(domainClass,templateFile,classNameFile)
+	
+	classNameFile = "${nameDir}/${domainClass.shortName}ExternalGetPaginationEvent.as"
+	templateFile = "${flexScaffoldPluginDir}"+antProp.'event.paginationfile'
+	generateEvent(domainClass,templateFile,classNameFile,"External")	
 }
 
-private void generateEvent(domainClass,templateFile,classNameFile)
+private void generateEvent(domainClass,templateFile,classNameFile,typeName="")
 {	
-	dftg.generateTemplate(domainClass,templateFile,classNameFile)
+	dftg.generateTemplate(domainClass,templateFile,classNameFile,typeName)
 	println "${classNameFile} Done!"
 }

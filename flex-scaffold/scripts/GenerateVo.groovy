@@ -1,6 +1,7 @@
 import org.codehaus.groovy.grails.commons.GrailsClassUtils as GCU
 import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
 import org.cubika.labs.scaffolding.generator.DefaultFlexTemplateGenerator
+import org.codehaus.groovy.grails.commons.GrailsDomainClass
 
 grailsHome = Ant.project.properties."environment.GRAILS_HOME"
 
@@ -32,6 +33,7 @@ generateVo =
 	def domainClass = args["domainClass"]
   
 	mapVOGenerated = [:]
+	mapVOHierarchyGenerated = [:]
 	
 	generateVO(domainClass)
 }
@@ -55,11 +57,34 @@ void generateVO(domainClass)
 	println "${classNameDir} Done!"
 	
 	mapVOGenerated.put(domainClass,domainClass)
-	generateHierarchy(domainClass);
+	mapVOHierarchyGenerated.put(domainClass,domainClass)
+	
+	generateRelations(domainClass)
+	generateHierarchy(domainClass)
 }
 
-
 void generateHierarchy(domainClass)
+{
+	Class superClass = domainClass.getClazz().getSuperclass();
+
+	while (!superClass.equals(Object.class) && !superClass.equals(GroovyObject.class)) 
+	{
+  	GrailsDomainClass gdc = (GrailsDomainClass) grailsApp.getDomainClass(superClass.getName())
+
+    if (gdc == null || gdc.getSubClasses() == null)
+		{
+    	println "did not find superclass names when mapping inheritance...."	
+      break
+    }
+
+		if (!mapVOGenerated.containsKey(gdc))
+	 		generateVO(gdc)
+	
+		superClass = superClass.getSuperclass()	
+   }
+}
+
+void generateRelations(domainClass)
 {
 	domainClass.properties.each
 	{

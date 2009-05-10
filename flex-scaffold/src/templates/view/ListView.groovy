@@ -91,9 +91,9 @@
 			def props = FSU.getPropertiesWithoutIdentity(domainClass,true)
 			props.each 
 			{
-					def column = FSU.getDataGridColumn(it)
-					if (column)
-						print "				$column"
+					def gridcolumn = FSU.getDataGridColumn(it)
+					if (gridcolumn)
+						print "				$gridcolumn"
 			}
 			%>			</mx:columns>
 			
