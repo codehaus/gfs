@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:code="http://code.google.com/p/flexlib/"
+	verticalAlign="middle" 
+	>
+	
+	<mx:Script>
+		<![CDATA[
+			import com.cubika.labs.utils.MultipleRM;
+			
+			[Bindable]
+			public var pageFilter:PageFilter;
+			
+			[Embed("../assets/lupita_ico.png")]
+			[Bindable]
+			public var lupitaIcon:Class;
+			
+			public var event:Class
+			
+			private function execute():void
+			{
+				pageFilter.setQuery(txtQuery.text);
+				
+				if (!event)
+					return
+					
+				new event(pageFilter).dispatch();	
+			}
+			
+			private function nextPage():void
+			{
+				pageFilter.nextPage();
+				execute();
+			}
+			
+			private function prevPage():void
+			{
+				pageFilter.prevPage();
+				execute();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	
+		<mx:Button 
+			click="{prevPage()}" 
+			enabled="{pageFilter.currentPage > 1}"
+			styleName="leftPaginatorButton"
+			width="22"
+			height="22"
+			/>
+		<mx:HBox verticalAlign="middle" horizontalGap="0">
+			<mx:Text text="{MultipleRM.getSuppliedString(MultipleRM.localePrefix, 'paginator.page', 'Page')+'  '+pageFilter.currentPage}"/>
+			<mx:Text text="{MultipleRM.getSuppliedString(MultipleRM.localePrefix,'paginator.of', 'of')+'  '+pageFilter.totalPage}"/>
+		</mx:HBox>
+		<mx:Button click="{nextPage()}"
+			enabled="{pageFilter.totalPage > pageFilter.currentPage}"
+			styleName="rightPaginatorButton"
+			width="22"
+			height="22"
+			/>
+			
+		<mx:Spacer width="100%"/>
+		<mx:Image source="{lupitaIcon}"/>
+		<code:PromptingTextInput enter="execute()" id="txtQuery" prompt="{MultipleRM.getSuppliedString(MultipleRM.localePrefix, 'finder.tip', 'Enter text to find')}" styleName="promptingTextInput"/>
+
+</mx:HBox>

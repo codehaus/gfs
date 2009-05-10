@@ -13,8 +13,6 @@ package com.cubika.labs.controls
 		
 		override public function set selectedItem(data:Object):void
 		{
-			super.selectedItem = data;
-			
 			if (!data)
 				return
 			
@@ -72,6 +70,7 @@ package com.cubika.labs.controls
 					} */
 				}
 			}
+			super.selectedItem = data;
 		}
 	}
 }

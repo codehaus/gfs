@@ -4,6 +4,7 @@
 	<component id="CBKComboBox" class="com.cubika.labs.controls.CBKComboBox"/>
     <component id="CBKDateField" class="com.cubika.labs.date.CBKDateField"/>
     <component id="PaginationView" class="com.cubika.labs.pagination.PaginationView"/>
+	<component id="PaginationLightView" class="com.cubika.labs.pagination.PaginationLightView"/>
 	<component id="PageFilter" class="com.cubika.labs.pagination.PageFilter"/>
 	<component id="AutoComplete" class="com.adobe.flex.extras.controls.AutoComplete"/>
 	<component id="CBKColorPicker" class="com.cubika.labs.controls.CBKColorPicker"/>
@@ -36,6 +37,6 @@
 	<component id="CBKDateFormatterDataGridColumn" class="com.cubika.labs.controls.CBKDateFormatterDataGridColumn"/>
 	<component id="CBKDataGridColumn" class="com.cubika.labs.controls.CBKDataGridColumn"/>
 	
-	<component id="PDFViewer" class="com.cubika.labs.viewers.PDFViewer"></component>
+	<component id="PDFViewer" class="com.cubika.labs.viewers.PDFViewer"/>
 	
 </componentPackage>

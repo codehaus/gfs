@@ -18,6 +18,11 @@ package com.cubika.labs.pagination
 		public var totalChange:Boolean = true;		
 		public var max:int = 5;
 		
+		public function PageFilter(max:int = 5)
+		{
+			this.max = max;
+		}
+		
 		public function setMax(value:int):void
 		{
 			if (max != value)
@@ -61,6 +66,12 @@ package com.cubika.labs.pagination
 		private function resetOffset():void
 		{
 			offset = 0;	
+		}
+		
+		public function reset():void
+		{
+			resetOffset();
+			query = "";	
 		}
 		
 		private function setCurrentPage(value:int):void
