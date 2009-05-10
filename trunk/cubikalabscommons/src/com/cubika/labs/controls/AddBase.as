@@ -49,11 +49,17 @@ package com.cubika.labs.controls
 		[Bindable]
 		public function set dataProvider(value:Object):void
 		{
+			if (!value)
+				return
+				
+			if (control.dataProvider == value)
+				return
+					
 			control.dataProvider = value;
 			
 			if (value)
 			{
-				control.dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE,collectionChange,false,0,true);
+				control.dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE,collectionChange);
 				var event:CollectionEvent = new CollectionEvent(CollectionEvent.COLLECTION_CHANGE);
 				collectionChange(event);
 			}
@@ -127,9 +133,12 @@ package com.cubika.labs.controls
 			{
 				waitingSetItem = false;
 				selectedItem = waitingSelectedItem;
+				
+				control.dataProvider.removeEventListener(CollectionEvent.COLLECTION_CHANGE,collectionChange);
 			}
 			
 			dispatchEvent(new DataProviderEvent());
+			
 		}
 		
 		private function changeControl(event:Event):void
