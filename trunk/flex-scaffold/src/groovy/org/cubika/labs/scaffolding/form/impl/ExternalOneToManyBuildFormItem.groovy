@@ -44,7 +44,7 @@ class ExternalOneToManyBuildFormItem  extends AbstractRelationBuildFormItem
 		def sw = new StringWriter()
 		def pw = new PrintWriter(sw)
 		
-		pw.println	"				<${property.name}:${property.referencedDomainClass.shortName}OneToManyListView id=\"${getID()}\" "+
+		pw.println	"				<${property.name}:${property.referencedDomainClass.shortName}ExternalOneToManyListView id=\"${getID()}\" "+
 								"dataProvider=\"{${binding}}\"/>"
 		
 		generateViews(property)
@@ -65,7 +65,7 @@ class ExternalOneToManyBuildFormItem  extends AbstractRelationBuildFormItem
 	 */
 	String value()
 	{
-		"getVO()"
+		"selectedItems"
 	}
 	
 	/**
@@ -73,20 +73,29 @@ class ExternalOneToManyBuildFormItem  extends AbstractRelationBuildFormItem
 	 */
 	protected void generateInnerViews(property)
 	{
-		def nameDir = antProp.'view.destdir'+"/${property.domainClass.propertyName}/${property.referencedDomainClass.propertyName}"
-		def classNameDir = "${nameDir}/${property.referencedDomainClass.shortName}OneToManyListView.mxml"
-		def templateDir = FSU.resolveResources("/*"+antProp.'view.otmlistfile').toString()
+		def nameDir = antProp.'view.destdir'+"/${property.referencedDomainClass.propertyName}"
+		
+		if (!new File(nameDir).exists())
+			new File(nameDir).mkdir()
+		
+		nameDir = "$nameDir/external"
+		
+		if (!new File(nameDir).exists())
+			new File(nameDir).mkdir()
+		
+		def classNameDir = "${nameDir}/${property.referencedDomainClass.shortName}ExternalOneToManyListView.mxml"
+		def templateDir = FSU.resolveResources("/*"+antProp.'view.eotmlistfile').toString()
 
 		if (!new File(nameDir).exists())
 			new File(nameDir).mkdir()
 
-		defaultTemplateGenerator.generateTemplate(property.referencedDomainClass,templateDir,classNameDir,property.domainClass.propertyName)
+		defaultTemplateGenerator.generateRelationalTemplate(property.domainClass, property.referencedDomainClass,templateDir,classNameDir,property.domainClass.propertyName)
 		println "${classNameDir} Done!"
 		
-		classNameDir = "${nameDir}/${property.referencedDomainClass.shortName}RelationEditView.mxml"
-		templateDir = FSU.resolveResources("/*"+antProp.'view.externalrelationeditfile').toString()
+		classNameDir = "${nameDir}/${property.referencedDomainClass.shortName}PopSelect.mxml"
+		templateDir = FSU.resolveResources("/*"+antProp.'view.externalpopselectfile').toString()
 		
-		defaultTemplateGenerator.generateRelationalTemplate(property.domainClass, property.referencedDomainClass,templateDir,classNameDir,property.domainClass.propertyName)
+		defaultTemplateGenerator.generateRelationalTemplate(property.domainClass, property.referencedDomainClass,templateDir,classNameDir,property.naturalName)
 		println "${classNameDir} Done!"
 	}
 }

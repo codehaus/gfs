@@ -23,7 +23,7 @@ package command.${domainClass.propertyName}
 		
 	import service.${domainClass.propertyName}.${className}BusinessDelegate;
 	
-	import event.${domainClass.propertyName}.${className}GetPaginationEvent;
+	import event.${domainClass.propertyName}.${className}${typeName}GetPaginationEvent;
 	
 	import model.ApplicationModelLocator;
 	import model.${domainClass.propertyName}.${className}Model;
@@ -32,14 +32,14 @@ package command.${domainClass.propertyName}
 	 * @author Ezequiel Martin Apfel
 	 * @since 23-Feb-2009
 	 */
-	public class ${className}GetPaginationListCommand implements ICommand, IResponder
+	public class ${className}${typeName}GetPaginationListCommand implements ICommand, IResponder
 	{
 		
 		private var _model:${className}Model = ApplicationModelLocator.instance.${domainClass.propertyName}Model;
 
 		public function execute(event:CairngormEvent):void
 		{
-			var getEvent:${className}GetPaginationEvent = ${className}GetPaginationEvent(event); 
+			var getEvent:${className}${typeName}GetPaginationEvent = ${className}${typeName}GetPaginationEvent(event); 
 						
 			new ${className}BusinessDelegate(this).paginateList(getEvent.page);
 
@@ -48,7 +48,7 @@ package command.${domainClass.propertyName}
 		public function result(data:Object):void
 		{
 			_model.editView = false;
-			_model.page = data.result;
+			_model.${typeName.toLowerCase()}page = data.result;
 		}
 		
 		public function fault(info:Object):void

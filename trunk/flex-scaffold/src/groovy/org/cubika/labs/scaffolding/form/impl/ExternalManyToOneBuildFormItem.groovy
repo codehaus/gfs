@@ -72,7 +72,16 @@ class ExternalManyToOneBuildFormItem extends AbstractRelationBuildFormItem
 	 */
 	protected void generateInnerViews(property)
 	{
-		def nameDir = antProp.'view.destdir'+"/${property.domainClass.propertyName}/${property.referencedDomainClass.propertyName}"
+		nameDir = antProp.'view.destdir'+"/${property.referencedDomainClass.propertyName}"
+		
+		if (!new File(nameDir).exists())
+			new File(nameDir).mkdir()
+		
+		nameDir = "$nameDir/external"
+		
+		if (!new File(nameDir).exists())
+			new File(nameDir).mkdir()
+			
 		def classNameDir = "${nameDir}/${property.referencedDomainClass.shortName}ManyToOneView.mxml"
 		def templateDir = FSU.resolveResources("/*"+antProp.'view.eotolistfile').toString()
 

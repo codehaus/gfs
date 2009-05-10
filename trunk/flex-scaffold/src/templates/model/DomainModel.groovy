@@ -36,18 +36,11 @@ package model.${domainClass.propertyName}
 		public var editView:Boolean = false;
 		
 		public var page:PageFilter = new PageFilter();
+		public var externalpage:PageFilter = new PageFilter(10);
 		public var selected:${className}VO;
 		public var selectedIndexView:int = LIST_VIEW;
 		public var listNoPaged:ArrayCollection;
-//<%
-//import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
-//def props = FSU.getPropertiesWithoutIdentity(domainClass,true)																										
-//props.each 
-//{
-//	if (it.isOneToOne())
-//		println "		public var ${it.referencedDomainClass.propertyName}:ArrayCollection"	
-//}
-//%>
+
 		public function get list():ArrayCollection
 		{
 			return page.list;
@@ -56,6 +49,16 @@ package model.${domainClass.propertyName}
 		public function set list(value:ArrayCollection):void
 		{
 			page.list = value;
+		}
+		
+		public function get externallist():ArrayCollection
+		{
+			return externalpage.list;
+		}
+		
+		public function set externallist(value:ArrayCollection):void
+		{
+			externalpage.list = value;
 		}
 		
 		public function updateList(vo:${className}VO):void

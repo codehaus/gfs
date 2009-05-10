@@ -35,8 +35,8 @@ target('default': "Generates i18n messages for domain classes")
 {
 	depends( validateDomainClass, generateFlexDefaultStructure, generateFlexBuilder, createFlexProperties, generateDefaults )
   
-	def name = args.trim();
-	
+	def name = argsMap["params"][0]
+		
 	args = [:]
 	
 	args['name'] = name

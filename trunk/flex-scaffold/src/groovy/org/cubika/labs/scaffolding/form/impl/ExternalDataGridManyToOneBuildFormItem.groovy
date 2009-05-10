@@ -19,29 +19,32 @@ package org.cubika.labs.scaffolding.form.impl
 import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
 
 /**
- * TODO
- *
+ * Extends AbstractRelationBuildFormItem adding external many to one builder
+ * functionallity
  * @author Ezequiel Martin Apfel
  * @since  3-Feb-2009
  */
-class OneToOneBuildFormItem extends AbstractRelationBuildFormItem
+class ExternalDataGridManyToOneBuildFormItem extends AbstractRelationBuildFormItem
 {
-	
-	OneToOneBuildFormItem(property)
+	/**
+	 * Constructor
+	 *
+	 */
+	ExternalDataGridManyToOneBuildFormItem(property)
 	{
 		super(property)
 	}
 	
 	/**
-	 * @see #AbstractBuildFormItem
+	 * @see #AbstractRelationBuildFormItem
 	 */
-	def buildFormItemComponent(binding)
+	protected def buildFormItemComponent(binding)
 	{
 		def sw = new StringWriter()
-    def pw = new PrintWriter(sw)
+		def pw = new PrintWriter(sw)
 		
-		pw.println	"				<${property.name}:${property.referencedDomainClass.shortName}OneToOneView id=\"${getID()}\" "+
-								"vo=\"{${binding}}\"/>"
+		pw.println	"				<${property.name}:${property.referencedDomainClass.shortName}ExternalManyToOneView id=\"${getID()}\" "+
+								"selectedItem=\"{${binding}}\"/>"
 		
 		generateViews(property)
 		
@@ -49,7 +52,7 @@ class OneToOneBuildFormItem extends AbstractRelationBuildFormItem
 	}
 	
 	/**
-	 * @see #AbstractBuildFormItem
+	 * @see #AbstractRelationBuildFormItem
 	 */
 	String getID()
 	{
@@ -57,11 +60,11 @@ class OneToOneBuildFormItem extends AbstractRelationBuildFormItem
 	}
 	
 	/**
-	 * @see #AbstractBuildFormItem
+	 * @see #AbstractRelationBuildFormItem
 	 */
 	String value()
 	{
-		"getVO()"
+		"selectedItem"
 	}
 	
 	/**
@@ -69,7 +72,7 @@ class OneToOneBuildFormItem extends AbstractRelationBuildFormItem
 	 */
 	protected void generateInnerViews(property)
 	{
-		nameDir = antProp.'view.destdir'+"/${property.referencedDomainClass.propertyName}"
+		def nameDir = antProp.'view.destdir'+"/${property.referencedDomainClass.propertyName}"
 		
 		if (!new File(nameDir).exists())
 			new File(nameDir).mkdir()
@@ -78,21 +81,19 @@ class OneToOneBuildFormItem extends AbstractRelationBuildFormItem
 		
 		if (!new File(nameDir).exists())
 			new File(nameDir).mkdir()
-
-		def templateDir = FSU.resolveResources("/*"+antProp.'view.otolistfile').toString()
+			
+		def classNameDir = "${nameDir}/${property.referencedDomainClass.shortName}ExternalManyToOneView.mxml"
+		def templateDir = FSU.resolveResources("/*"+antProp.'view.edotolistfile').toString()
 
 		if (!new File(nameDir).exists())
 			new File(nameDir).mkdir()
 
-		defaultTemplateGenerator.generateTemplate(property.referencedDomainClass,templateDir,classNameDir,property.domainClass.propertyName)
-		println "${classNameDir} Done!"
+		defaultTemplateGenerator.generateRelationalTemplate(property.domainClass, property.referencedDomainClass,templateDir,classNameDir,property.domainClass.propertyName)
 		
-		classNameDir = "${nameDir}/${property.referencedDomainClass.shortName}RelationEditView.mxml"
-		templateDir = FSU.resolveResources("/*"+antProp.'view.relationeditfile').toString()
+		classNameDir = "${nameDir}/${property.referencedDomainClass.shortName}PopSelect.mxml"
+		templateDir = FSU.resolveResources("/*"+antProp.'view.externalpopselectfile').toString()
 		
-		defaultTemplateGenerator.generateTemplate(property.referencedDomainClass,templateDir,classNameDir,property.domainClass.propertyName)
+		defaultTemplateGenerator.generateRelationalTemplate(property.domainClass, property.referencedDomainClass,templateDir,classNameDir,property.naturalName)
 		println "${classNameDir} Done!"
 	}
-	
-
 }

@@ -6,8 +6,7 @@ def props = FSU.getPropertiesWithoutIdentity(domainClass,true)%>
 	xmlns:cubikalabs="http://cubikalabs.cub2k.com/2009/commons"
 	creationComplete="doInit()"
 	paddingLeft="10" paddingTop="10" paddingRight="10"
-	horizontalAlign="center"
-	<% println " ${FSU.getNameSpace(props)}>" %>
+	horizontalAlign="center"<% println " ${FSU.getNameSpace(props)}>" %>
 	
 	<mx:Script>
 		<![CDATA[
@@ -27,8 +26,10 @@ def props = FSU.getPropertiesWithoutIdentity(domainClass,true)%>
 			import vo.${domainClass.propertyName}.${className}VO;	
 <%												
 				props.each {
-					if (it.isOneToOne() || it.isManyToOne())
-						println "			${FSU.getImport4AS3(it)}"
+					def imp = FSU.getImport4AS3(it)
+					
+					if ((it.isOneToOne() || it.isManyToOne()) && imp)
+						println "			${imp}"
 				}	
 %>
 			[Bindable]
@@ -41,7 +42,10 @@ def props = FSU.getPropertiesWithoutIdentity(domainClass,true)%>
 			{
 				if (validators.length >= 0 && Validator.validateAll(validators).length == 0)
 				{
-					var _vo:${className}VO = _model.selected;					
+					var _vo:${className}VO = _model.selected;	
+					
+					if (!_vo)
+						_vo = new ${className}VO();				
 
 <%							import org.cubika.labs.scaffolding.form.factory.BuildFormItemFactory as BFIF
 								List builders = []
