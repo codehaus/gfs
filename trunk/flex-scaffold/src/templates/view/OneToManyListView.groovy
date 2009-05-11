@@ -29,7 +29,7 @@
 			
 			private function showEditView():void
 			{
-				editView = PopUpManager.createPopUp(DisplayObject(Application.application),view.${typeName}.${domainClass.propertyName}.${className}RelationEditView,true)
+				editView = PopUpManager.createPopUp(DisplayObject(Application.application),view.${domainClass.propertyName}.external.${className}RelationEditView,true)
 				
 				Object(editView).clickOk = editOk;
 				Object(editView).cancel = cancel;
@@ -40,7 +40,7 @@
 			
 			private function showNewView():void
 			{
-				editView = PopUpManager.createPopUp(DisplayObject(Application.application),view.${typeName}.${domainClass.propertyName}.${className}RelationEditView,true)
+				editView = PopUpManager.createPopUp(DisplayObject(Application.application),view.${domainClass.propertyName}.external.${className}RelationEditView,true)
 				
 				Object(editView).clickOk = newOk;
 				Object(editView).cancel = cancel;
