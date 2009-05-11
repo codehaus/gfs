@@ -143,7 +143,7 @@ class FlexScaffoldingUtils
 				pw.println "<cubikalabs:CBKDateFormatterDataGridColumn dataField=\"${property.name}\" "+
 				"headerText=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}')}\" />"
 
-				result = sw.toString()
+				return sw.toString()
 			}
 			
 			if (CVU.richtext(property))
