@@ -69,7 +69,7 @@ class OneToOneBuildFormItem extends AbstractRelationBuildFormItem
 	 */
 	protected void generateInnerViews(property)
 	{
-		nameDir = antProp.'view.destdir'+"/${property.referencedDomainClass.propertyName}"
+		def nameDir = antProp.'view.destdir'+"/${property.referencedDomainClass.propertyName}"
 		
 		if (!new File(nameDir).exists())
 			new File(nameDir).mkdir()
@@ -78,7 +78,8 @@ class OneToOneBuildFormItem extends AbstractRelationBuildFormItem
 		
 		if (!new File(nameDir).exists())
 			new File(nameDir).mkdir()
-
+			
+		def classNameDir = "${nameDir}/${property.referencedDomainClass.shortName}OneToOneView.mxml"		
 		def templateDir = FSU.resolveResources("/*"+antProp.'view.otolistfile').toString()
 
 		if (!new File(nameDir).exists())
