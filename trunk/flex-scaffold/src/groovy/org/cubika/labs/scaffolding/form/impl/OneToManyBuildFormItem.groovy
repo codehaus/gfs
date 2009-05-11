@@ -73,7 +73,7 @@ class OneToManyBuildFormItem  extends AbstractRelationBuildFormItem
 	 */
 	protected void generateInnerViews(property)
 	{		
-		nameDir = antProp.'view.destdir'+"/${property.referencedDomainClass.propertyName}"
+		def nameDir = antProp.'view.destdir'+"/${property.referencedDomainClass.propertyName}"
 		
 		if (!new File(nameDir).exists())
 			new File(nameDir).mkdir()
