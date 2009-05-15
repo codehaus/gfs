@@ -110,10 +110,9 @@ target(compile:'Compile Flex project into SWF file')
 				      	include(name:"libs")
 				        include(name:"../bundles/{locale}")
 				  		}
-							'compiler.include-libraries'(dir:"$basedir/flex_libs",append:"true")
+							'compiler.library-path'(dir:"$basedir",append:"true")
 							{
-								include(name:'Cairngorm.swc')
-								include(name:'cubikalabscommons.swc')
+								include(name:'flex_libs')
 							}
 							'source-path'('path-element':"$FLEX_HOME/frameworks")
 							'source-path'('path-element':"$basedir/grails-app/i18n")
