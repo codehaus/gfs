@@ -172,7 +172,7 @@ class I18nBuilder
 			if (messageProperty) //valido las constraint
 			{
 				propertiesNoTranslate += marshallProperty(it,messageProperty)
-				if (constraint.inList)
+				if (constraint?.inList)
 				{
 					constraint.inList.each
 					{item ->
@@ -183,7 +183,7 @@ class I18nBuilder
 			else
 			{
 				propertiesToTranslate.add(marshallProperty(it))
-				if (constraint.inList)
+				if (constraint?.inList)
 				{
 					constraint.inList.each
 					{item ->
