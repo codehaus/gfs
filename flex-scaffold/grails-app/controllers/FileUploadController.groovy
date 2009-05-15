@@ -29,7 +29,7 @@ class FileUploadController
 	
 	def index = 
 	{	  
-		String path = grailsApplication.config.videopath ? "${grailsApplication.config.videopath}/" : "" 
+		String path = grailsApplication.config.filepath ? "${grailsApplication.config.filepath}/" : "" 
 	
 		def file = request.getFile("uploadfile")
 		
@@ -51,7 +51,7 @@ class FileUploadController
 	
 	def snapshot = 
 	{
-		String path = grailsApplication.config.videopath ? "${grailsApplication.config.videopath}/" : "" 
+		String path = grailsApplication.config.filepath ? "${grailsApplication.config.filepath}/" : "" 
 		
 		String filename = "${path}${params.name}".trim()
 
