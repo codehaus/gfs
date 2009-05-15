@@ -38,8 +38,8 @@ class ConstraintValueUtils
 	 */
 	static def getInPlace(constraint)
 	{
-		def inPlace = constraint.getMetaConstraintValue(FIC.IN_PLACE)
-		if (inPlace == null)
+		def inPlace = constraint?.getMetaConstraintValue(FIC.IN_PLACE)
+		if (!inPlace)
 			inPlace = true
 		
 		inPlace
@@ -53,8 +53,8 @@ class ConstraintValueUtils
 	 */
 	static def getCreateView(constraint)
 	{
-		def createView = constraint.getMetaConstraintValue("createView")
-		if (createView == null)
+		def createView = constraint?.getMetaConstraintValue("createView")
+		if (!createView)
 			createView = true
 		
 		createView
@@ -68,8 +68,8 @@ class ConstraintValueUtils
 	 */
 	static def getEditView(constraint)
 	{
-		def editView = constraint.getMetaConstraintValue("editView")
-		if (editView == null)
+		def editView = constraint?.getMetaConstraintValue("editView")
+		if (!editView)
 			editView = true
 		
 		editView
@@ -122,9 +122,9 @@ class ConstraintValueUtils
 	{
 		def constraint = property.domainClass.getConstrainedProperties()[property.name]
 		
-		def defaultValue = constraint.getMetaConstraintValue("defaultValue")
+		def defaultValue = constraint?.getMetaConstraintValue("defaultValue")
 		
-		if (defaultValue == null)
+		if (!defaultValue)
 			defaultValue = ""
 		else
 			defaultValue = " = ${defaultValue}"	
@@ -141,9 +141,9 @@ class ConstraintValueUtils
 	{
 		def constraint = property.domainClass.getConstrainedProperties()[property.name]
 		
-		def dateFormat = constraint.getMetaConstraintValue("dateFormat")
+		def dateFormat = constraint?.getMetaConstraintValue("dateFormat")
 		
-		if (dateFormat == null)
+		if (!dateFormat)
 			dateFormat = "DD/MM/YYYY"
 			
 		dateFormat
@@ -160,7 +160,7 @@ class ConstraintValueUtils
 		
 		def isRichtext = false
 		
-		if (constraint.widget == FIC.RICH_TEXT)
+		if (constraint?.widget == FIC.RICH_TEXT)
 			isRichtext = true
 			
 		isRichtext
@@ -186,7 +186,7 @@ class ConstraintValueUtils
 	{
 		def message
 		def constraint = property.domainClass.getConstrainedProperties()[property.name]
-		def messages = constraint.getMetaConstraintValue("i18n")
+		def messages = constraint?.getMetaConstraintValue("i18n")
 		
 		if (messages && !(messages instanceof Map))
 			throw new Exception("i18n must be a Map eg: i18n:[us:\"message\"]")
