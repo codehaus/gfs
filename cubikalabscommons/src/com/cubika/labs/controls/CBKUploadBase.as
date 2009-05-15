@@ -234,7 +234,7 @@ package com.cubika.labs.controls
 			request.method = URLRequestMethod.POST;
 			request.url = url;
 			
-			_fileReference.upload(request,"uploadfile");
+			_fileReference.upload(request,url);
 
 			button.enabled = false;
 		}
