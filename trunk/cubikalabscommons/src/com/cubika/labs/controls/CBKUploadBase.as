@@ -234,7 +234,8 @@ package com.cubika.labs.controls
 			request.method = URLRequestMethod.POST;
 			request.url = url;
 			
-			_fileReference.upload(request,url);
+			//File upload es la variable en donde el controller recibe el file
+			_fileReference.upload(request,"uploadfile");
 
 			button.enabled = false;
 		}
