@@ -133,7 +133,7 @@ class FlexScaffoldingUtils
 		def sw
 		def pw
 		
-		if (!property.isOneToOne() && !property.isOneToMany() && !property.isManyToOne())
+		if (!property.isOneToOne() && !property.isOneToMany() && !property.isManyToOne() && CVU.display(property))
 		{
 			sw = new StringWriter()
 			pw = new PrintWriter(sw)
