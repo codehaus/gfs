@@ -24,6 +24,7 @@ import grails.util.BuildSettingsHolder
 
 import org.cubika.labs.scaffolding.form.FormItemConstants as FIC
 import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
+import org.codehaus.groovy.grails.commons.GrailsDomainClass
 
 /**
  * Utils used in flex templates  
@@ -38,6 +39,8 @@ class FlexScaffoldingUtils
 	static private Map typesAS3Map = new HashMap()
 	
 	static private def resolver = new PathMatchingResourcePatternResolver()
+
+    static public def grailsApplication
 	
 	static {
 		
@@ -50,7 +53,7 @@ class FlexScaffoldingUtils
 		typesAS3Map.put(Date.class,['class':"Date",'import':""]);
 		typesAS3Map.put(String.class,['class':"String",'import':"",'cast':"String"]);
 		typesAS3Map.put(Set.class,['class':"ArrayCollection",'import':"import mx.collections.ArrayCollection"]);
-	  typesAS3Map.put(List.class,['class':"ArrayCollection",'import':"import mx.collections.ArrayCollection"]);
+        typesAS3Map.put(List.class,['class':"ArrayCollection",'import':"import mx.collections.ArrayCollection"]);
 
 	}
 	
@@ -85,7 +88,7 @@ class FlexScaffoldingUtils
 		
 		//otherwise
 		if (CVU.display(property))
-			return "${property.type.propertyName}${CVU.defaultValue(property)}"
+        return "${property.type.propertyName}${CVU.defaultValue(property)}"
 	}
 	
 	/**
@@ -186,16 +189,16 @@ class FlexScaffoldingUtils
 	static DefaultGrailsDomainClassProperty[] getPropertiesWithIdentity(DefaultGrailsDomainClass domainClass, Boolean inherited=true)
 	{
 		def excludedProps = [Events.ONLOAD_EVENT,
-	                       Events.BEFORE_DELETE_EVENT,
-	                       Events.BEFORE_INSERT_EVENT,
-	                       Events.BEFORE_UPDATE_EVENT]
+            Events.BEFORE_DELETE_EVENT,
+            Events.BEFORE_INSERT_EVENT,
+            Events.BEFORE_UPDATE_EVENT]
                        
-    def properties = domainClass.properties
+        def properties = domainClass.properties
 
 		if (inherited)
-			properties = properties.findAll { !excludedProps.contains(it.name)}
+        properties = properties.findAll { !excludedProps.contains(it.name)}
 		else
-			properties = properties.findAll { !excludedProps.contains(it.name) && !it.inherited}	
+        properties = properties.findAll { !excludedProps.contains(it.name) && !it.inherited}
 			
 		properties
 	}
@@ -209,16 +212,16 @@ class FlexScaffoldingUtils
 	static DefaultGrailsDomainClassProperty[] getPropertiesWithoutIdentity(DefaultGrailsDomainClass domainClass, Boolean order=false, inherited=true)
 	{
 		def excludedProps = ['id', 'version',Events.ONLOAD_EVENT,
-	                       Events.BEFORE_DELETE_EVENT,
-	                       Events.BEFORE_INSERT_EVENT,
-	                       Events.BEFORE_UPDATE_EVENT]
+            Events.BEFORE_DELETE_EVENT,
+            Events.BEFORE_INSERT_EVENT,
+            Events.BEFORE_UPDATE_EVENT]
 		
 		def properties = domainClass.properties
 		
 		if (inherited)
-			properties = properties.findAll { !excludedProps.contains(it.name)}
+        properties = properties.findAll { !excludedProps.contains(it.name)}
 		else
-			properties = properties.findAll { !excludedProps.contains(it.name) && !it.inherited}
+        properties = properties.findAll { !excludedProps.contains(it.name) && !it.inherited}
 		
 		if (order)
 		{
@@ -240,7 +243,7 @@ class FlexScaffoldingUtils
 		properties.each
 		{
 			if ((it.isOneToMany() || it.isOneToOne() || it.isManyToOne()) && CVU.display(it))
-				ns += "\nxmlns:${it.name}=\"view.${it.referencedDomainClass.propertyName}.external.*\" "
+            ns += "\nxmlns:${it.name}=\"view.${it.referencedDomainClass.propertyName}.external.*\" "
 		}
 		
 		ns
@@ -261,32 +264,35 @@ class FlexScaffoldingUtils
 			def dir = resolver.getResources("file:${BuildSettingsHolder.settings?.projectPluginsDir.canonicalFile}${pattern}")
 			
 			if (dir)	
-				path = dir.file[0]
+            path = dir.file[0]
 			
 			if (!path)
 			{
 				//if is a globalplugin
 				if (BuildSettingsHolder.settings?.globalPluginsDir.exists())
-					dir = resolver.getResources("file:${BuildSettingsHolder.settings?.globalPluginsDir.canonicalFile}${pattern}")
+                dir = resolver.getResources("file:${BuildSettingsHolder.settings?.globalPluginsDir.canonicalFile}${pattern}")
 				
 				if (dir)	
-					path = dir.file[0]
+                path = dir.file[0]
 			}
 				
 			path
     	}
     	catch (Throwable e) 
-			{
-				throw new Exception("${BuildSettingsHolder.settings?.projectPluginsDir.canonicalFile}${pattern} Not Found $e")		
-			}
+        {
+            throw new Exception("${BuildSettingsHolder.settings?.projectPluginsDir.canonicalFile}${pattern} Not Found $e")
+        }
   	}
 
-		static String getSuperClassName(domainClass)
-		{
-			Class superClass = domainClass.getClazz().getSuperclass()
-			
-			if (!superClass.equals(Object.class) && !superClass.equals(GroovyObject.class))
-				return superClass.getName()
-            
-		}
+    static String getSuperClassName(domainClass)
+    {
+
+        Class superClass = domainClass.getClazz().getSuperclass()
+
+        if (!superClass.equals(Object.class) && !superClass.equals(GroovyObject.class))
+        {
+            GrailsDomainClass gdc = (GrailsDomainClass) grailsApplication.getDomainClass(superClass.getName())
+            return gdc.propertyName
+        }
+    }
 }
