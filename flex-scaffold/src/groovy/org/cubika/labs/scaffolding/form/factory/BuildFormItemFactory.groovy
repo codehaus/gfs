@@ -139,21 +139,31 @@ class BuildFormItemFactory
 				//return new ManyToOneBuildFormItem(property)
 		
 		if (property.isOneToMany())
+        {
 			if (inPlace)
 				return new OneToManyBuildFormItem(property)
 			else
 				return new ExternalOneToManyBuildFormItem(property) 
-		
+        }
+
 		if (property.isOneToOne())
+        {
 			if (!inPlace && !property.bidirectional) //La trato como una many-to-one inPlace:false
+            {
 				if (constraint.widget == FIC.COMBO_BOX)
-      		return new ExternalManyToOneBuildFormItem(property)
+                {
+                    return new ExternalManyToOneBuildFormItem(property)
+                }
 				else
+                {
 					return new ExternalDataGridManyToOneBuildFormItem(property)
+                }
+            }
 			else if (inPlace)
+            {
 				return new OneToOneBuildFormItem(property)
-      else
-        throw new Exception("Not allow inPlace:false in one-to-one bidirectional, property ${property.name}")
+            }
+        }
 	}
 	
 	static private void validateWidget(type,clazz,widget)
