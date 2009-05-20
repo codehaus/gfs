@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><%
+import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
+def props = FSU.getPropertiesWithoutIdentity(domainClass,true)%>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:utils="com.cubika.labs.utils.*"
 	xmlns:cubikalabs="http://cubikalabs.cub2k.com/2009/commons"
@@ -6,7 +8,7 @@
 	close="cancel()"
 	paddingTop="15"
 	paddingBottom="15"
-	creationComplete="doInit()">
+	creationComplete="doInit()" <% println " ${FSU.getNameSpace(props)}>" %>
 	
 	<mx:Script>
 		<![CDATA[
@@ -27,7 +29,7 @@
 			
 
 			[Bindable]
-			public var vo:${className}VO;
+			public var valueObject:${className}VO;
 			
 			[Bindable]
 			private var _model:${className}Model = ApplicationModelLocator.instance.${domainClass.propertyName}Model;
@@ -87,13 +89,13 @@ if (labelField)
 {
 	println "			<cubikalabs:AddComboBox id=\"addCombo\" dataProvider=\"{_model.listNoPaged}\""+
 						" addClick=\"addClickHandler()\" labelField=\"${labelField}\""+
-						" selectedItem=\"{vo}\"/>"
+						" selectedItem=\"{valueObject}\"/>"
 }
 else
 {
 	println "			<cubikalabs:AddComboBox id=\"addCombo\" dataProvider=\"{_model.listNoPaged}\""+
 						" addClick=\"addClickHandler()\""+
-						" selectedItem=\"{vo}\"/>"
+						" selectedItem=\"{valueObject}\"/>"
 }	
 %>
 		</mx:FormItem>
