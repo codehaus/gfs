@@ -39,7 +39,7 @@ class ConstraintValueUtils
 	static def getInPlace(constraint)
 	{
 		def inPlace = constraint?.getMetaConstraintValue(FIC.IN_PLACE)
-		if (!inPlace)
+		if (inPlace == null)
 			inPlace = true
 		
 		inPlace
@@ -54,7 +54,7 @@ class ConstraintValueUtils
 	static def getCreateView(constraint)
 	{
 		def createView = constraint?.getMetaConstraintValue("createView")
-		if (!createView)
+		if (createView == null)
 			createView = true
 		
 		createView
@@ -69,7 +69,7 @@ class ConstraintValueUtils
 	static def getEditView(constraint)
 	{
 		def editView = constraint?.getMetaConstraintValue("editView")
-		if (!editView)
+		if (editView == null)
 			editView = true
 		
 		editView
@@ -124,7 +124,7 @@ class ConstraintValueUtils
 		
 		def defaultValue = constraint?.getMetaConstraintValue("defaultValue")
 		
-		if (!defaultValue)
+		if (defaultValue == null)
 			defaultValue = ""
 		else
 			defaultValue = " = ${defaultValue}"	
@@ -143,7 +143,7 @@ class ConstraintValueUtils
 		
 		def dateFormat = constraint?.getMetaConstraintValue("dateFormat")
 		
-		if (!dateFormat)
+		if (dateFormat == null)
 			dateFormat = "DD/MM/YYYY"
 			
 		dateFormat
