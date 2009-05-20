@@ -66,12 +66,12 @@
 			
 			public function get selectedItem():${className}VO
 			{
-				var vo:${className}VO;
+				var valueObject:${className}VO;
 				
 				if (dg.dataProvider.length >= 1)
-					vo = dg.dataProvider.getItemAt(0)
+					valueObject = dg.dataProvider.getItemAt(0)
 
-				return vo;
+				return valueObject;
 			}
 			
 			public function set selectedItem(value:${className}VO):void

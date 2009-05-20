@@ -33,7 +33,7 @@
 				
 				Object(editView).clickOk = editOk;
 				Object(editView).cancel = cancel;
-				Object(editView).vo = dg.selectedItem as ${className}VO;
+				Object(editView).valueObject = dg.selectedItem as ${className}VO;
 				
 				PopUpManager.centerPopUp(editView);
 			}
