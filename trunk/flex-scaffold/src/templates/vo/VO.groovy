@@ -25,6 +25,16 @@ package vo.${domainClass.propertyName}
 <%//Generate Import
 import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
 
+def alias
+if(domainClass.packageName || domainClass.packageName != "")
+{
+    alias = domainClass.fullName
+}
+else
+{
+    alias = domainClass.propertyName
+}
+
 def props = FSU.getPropertiesWithoutIdentity(domainClass,false,false)
 props.each
 {
@@ -37,15 +47,15 @@ props = FSU.getPropertiesWithIdentity(domainClass,false)
 def superClassName = FSU.getSuperClassName(domainClass)
 if (superClassName)
 {
-	println "	import vo.${superClassName.toLowerCase()}.${superClassName}VO"
+	println "	import vo.${superClassName}.${FSU.capitalize(superClassName)}VO"
 }
 %>
 	[Bindable]	
-	[RemoteClass(alias='${className}')]
+	[RemoteClass(alias='${alias}')]
 <%	if (!superClassName)
 			print "	public class ${className}VO " 
 		else
-			print "	public class ${className}VO extends ${superClassName}VO"%>
+			print "	public class ${className}VO extends ${FSU.capitalize(superClassName)}VO"%>
 	{
 <%
 if (!superClassName)
