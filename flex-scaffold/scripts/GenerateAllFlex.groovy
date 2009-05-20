@@ -88,7 +88,7 @@ void generateAllFlex(name)
 			generateModel(domainClass:it,addToModel:true)
 			generateDelegate(domainClass:it)
 			generateService(domainClass:it)
-			generateI18nMessages(name:it.propertyName,runHierarchy:true)
+			generateI18nMessages(name:it.fullName,runHierarchy:true)
 			addToNavigationModel(it)
 			addToMain(it)
 			
