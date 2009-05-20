@@ -20,6 +20,12 @@
 import org.springframework.web.servlet.support.RequestContextUtils as RCU
 import org.springframework.web.context.request.RequestContextHolder as RCH
 
+<%
+if(domainClass.packageName || domainClass.packageName != "")
+{
+    println "import ${domainClass.fullName}"
+}
+%>
 class ${className}Service 
 {
 
