@@ -1,4 +1,3 @@
-import org.codehaus.groovy.grails.commons.GrailsClassUtils as GCU
 import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
 import org.cubika.labs.scaffolding.generator.DefaultFlexTemplateGenerator
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
