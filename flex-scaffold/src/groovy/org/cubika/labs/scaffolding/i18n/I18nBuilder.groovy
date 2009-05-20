@@ -392,14 +392,29 @@ class I18nBuilder
   private def replaceDomainClassProperty(message)
   {
 		def aux = [:]
-		
-		def domainClassTranslated = domainClass.naturalName
-		
+
+        String domainClassToTranslate = domainClass.naturalName
+		String domainClassTranslated
+
+
+        //Start workaround bug GRAILS-4164 open
+        String pkg = domainClass.packageName
+
+        if (pkg && pkg != "")
+        {
+            pkg = pkg.replace('.','')
+            pkg = pkg[0].toUpperCase()+pkg[1..-1]+" "
+            domainClassToTranslate = domainClassToTranslate.replace(pkg,"")
+        }
+        domainClassTranslated = domainClassToTranslate
+        //End workaround bug GRAILS-4164 open
+
+
 		if (defaultLocale != locale)
-			domainClassTranslated = translate(domainClass.naturalName)
+			domainClassTranslated = translate(domainClassToTranslate)
 		
 		if (domainClassTranslated=="")
-			domainClassTranslated = domainClass.naturalName
+			domainClassTranslated = domainClassToTranslate
 			
 		message.each 
 		{
