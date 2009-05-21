@@ -82,6 +82,7 @@ package com.cubika.labs.controls
 		public function set filePath(value:String):void
 		{
 			_filePath = value;		
+			
 			invalidateProperties();
 		}
 		
@@ -155,6 +156,8 @@ package com.cubika.labs.controls
 			_filePath = StringUtil.trim(String(event.data));
 			
 			changeButton(load);	
+			//Misterioso error con el foco y el commitproperties, por eso esto va aca	
+			callLater(deleteButton.setFocus);
 		}
 		
 		
@@ -166,7 +169,6 @@ package com.cubika.labs.controls
 				addChild(deleteButton);
 				load = false;
 				deleteButton.enabled = true;
-				deleteButton.setFocus();
 				_progress.setProgress(100,100);
 			}
 			else
@@ -174,7 +176,6 @@ package com.cubika.labs.controls
 				removeChildAt(1);
 				addChild(button);
 				button.enabled = true;
-				button.setFocus();
 				_progress.setProgress(0,100);
 			}
 			
@@ -200,8 +201,8 @@ package com.cubika.labs.controls
 			request.data = sendVars;
 			
 			
-			urlLoader.addEventListener(Event.COMPLETE,deleteCompleteHandler);
-			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, deleteErrorHandler);
+			urlLoader.addEventListener(Event.COMPLETE,deleteCompleteHandler,false,0,true);
+			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, deleteErrorHandler,false,0,true);
 			
 			urlLoader.load(request)
 			deleteButton.enabled = false;
@@ -213,6 +214,8 @@ package com.cubika.labs.controls
 			trace("deleteCompleteHandler")
 			load = false;
 			changeButton(load);
+			//Misterioso error con el foco y el commitproperties, por eso esto va aca
+			callLater(button.setFocus);
 		}
 		
 		private function deleteErrorHandler(event:IOErrorEvent):void

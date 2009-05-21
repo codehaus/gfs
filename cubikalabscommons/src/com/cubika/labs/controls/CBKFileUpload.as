@@ -51,7 +51,7 @@ package com.cubika.labs.controls
 			}
 			else
 			{
-				input.text = "";
+				input.text = null;
 				load = false;
 				changeButton(load);
 			}
@@ -110,6 +110,7 @@ package com.cubika.labs.controls
 		
 		override protected function commitProperties():void
 		{
+			super.commitProperties();
 			loadFile();
 		}
 	}
