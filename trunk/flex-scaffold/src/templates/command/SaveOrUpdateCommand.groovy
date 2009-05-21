@@ -27,38 +27,38 @@ package command.${domainClass.propertyName}
 	import event.${domainClass.propertyName}.${className}CRUDEvent;
 	
 	import model.ApplicationModelLocator;
-	import model.${domainClass.propertyName}.${className}Model;
+
+    import command.gfs.AbstractNavigationCommand;
 
 	/**
 	 * @author Ezequiel Martin Apfel
 	 * @since 23-Feb-2009
 	 */
-	public class ${className}SaveOrUpdateCommand implements ICommand, IResponder
+	public class ${className}SaveOrUpdateCommand extends AbstractNavigationCommand
 	{
-		
-		private var _model:${className}Model = ApplicationModelLocator.instance.${domainClass.propertyName}Model;
 
-		public function execute(event:CairngormEvent):void
+        public function ${className}SaveOrUpdateCommand()
+        {
+            _navigateKey = "${domainClass.propertyName}.edit";
+            _model = ApplicationModelLocator.instance.${domainClass.propertyName}Model
+        }
+
+		override public function execute(event:CairngormEvent):void
 		{
 			var crudEvent:${className}CRUDEvent = ${className}CRUDEvent(event); 
-			
+
 			new ${className}BusinessDelegate(this).save(crudEvent.vo);
 		}
 		
-		public function result(data:Object):void
+		override protected function doResult(data:Object):void
 		{
-			_model.updateList(data.result);
 			_model.editView = false;
-			new DefaultNavigationEvent("${domainClass.propertyName}.edit").dispatch();
+            _model.updateList(data.result);
 		}
 		
-		public function fault(info:Object):void
+		override protected function doFault(info:Object):void
 		{
-			if(info.fault.rootCause)
-				Alert.show(info.fault.rootCause.message,"Error");
-			else
-				Alert.show(info.fault.faultDetail,"Error");
+            //to implement if neccessary
 		}
-		
 	}
 }

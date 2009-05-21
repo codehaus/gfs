@@ -28,16 +28,21 @@ package command.${domainClass.propertyName}
 	import model.ApplicationModelLocator;
 	import model.${domainClass.propertyName}.${className}Model;
 
+    import command.gfs.AbstractNavigationCommand;
+
 	/**
 	 * @author Ezequiel Martin Apfel
 	 * @since 23-Feb-2009
 	 */
-	public class ${className}DeleteCommand implements ICommand, IResponder
+	public class ${className}DeleteCommand extends AbstractNavigationCommand
 	{
-		
-		private var _model:${className}Model = ApplicationModelLocator.instance.${domainClass.propertyName}Model;
 
-		public function execute(event:CairngormEvent):void
+        public function ${className}DeleteCommand()
+        {
+            _model = ApplicationModelLocator.instance.${domainClass.propertyName}Model
+        }
+
+		override public function execute(event:CairngormEvent):void
 		{
 			var crudEvent:${className}CRUDEvent = ${className}CRUDEvent(event); 
 			
@@ -45,21 +50,15 @@ package command.${domainClass.propertyName}
 
 		}
 		
-		public function result(data:Object):void
+		override protected function doResult(data:Object):void
 		{
 			_model.editView = false;
 			_model.removeItem(data.result);
 		}
 		
-		public function fault(info:Object):void
+		override protected function doFault(info:Object):void
 		{
 			_model.editView = false;
-			
-			if(info.fault.rootCause)
-				Alert.show(info.fault.rootCause.message,"Error");
-			else
-				Alert.show(info.fault.faultDetail,"Error");
 		}
-		
 	}
 }

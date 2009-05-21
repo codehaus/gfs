@@ -28,16 +28,14 @@ package command
 	 */
 	public class NavigationCommand implements ICommand
 	{
-		
-		private var _model:ApplicationModelLocator = ApplicationModelLocator.instance;
+        private var _model:ApplicationModelLocator = ApplicationModelLocator.instance;
 
-		public function execute(event:CairngormEvent):void
+        override public function execute(event:CairngormEvent):void
 		{
 			var navigationEvent:NavigationEvent = NavigationEvent(event); 
-			
 			var classModel:Object = _model[navigationEvent.model];
+            
 			classModel.selectedIndexView = classModel[navigationEvent.property]; 
 		}
-		
 	}
 }

@@ -89,7 +89,9 @@ class ExternalDataGridManyToOneBuildFormItem extends AbstractRelationBuildFormIt
 			new File(nameDir).mkdir()
 
 		defaultTemplateGenerator.generateRelationalTemplate(property.domainClass, property.referencedDomainClass,templateDir,classNameDir,property.domainClass.propertyName)
-		
+
+        println "${classNameDir} Done!"
+
 		classNameDir = "${nameDir}/${property.referencedDomainClass.shortName}PopSelect.mxml"
 		templateDir = FSU.resolveResources("/*"+antProp.'view.externalpopselectfile').toString()
 		

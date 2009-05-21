@@ -44,7 +44,7 @@
 				
 				Object(editView).clickOk = newOk;
 				Object(editView).cancel = cancel;
-				Object(editView).vo = new ${className}VO;
+				Object(editView).valueObject = new ${className}VO;
 				
 				PopUpManager.centerPopUp(editView);
 			}

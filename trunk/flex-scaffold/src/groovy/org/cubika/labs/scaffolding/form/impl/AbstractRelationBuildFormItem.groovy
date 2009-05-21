@@ -56,7 +56,7 @@ abstract class AbstractRelationBuildFormItem extends AbstractBuildFormItem
 		{
 			//Set DomainClass into map to avoid die cycle
 				
-			viewMaps.put("$key#this",property.referencedDomainClass)
+			//viewMaps.put("$key#this",property.referencedDomainClass)
 			
 			ant = new AntBuilder()
 			ant.property(environment: "env")

@@ -33,17 +33,20 @@ package command.${domainClass.propertyName}
 	 */
 	public class ${className}CreateCommand implements ICommand
 	{
-		
-		private var _model:${className}Model = ApplicationModelLocator.instance.${domainClass.propertyName}Model;
+        private var _model:${className}Model = ApplicationModelLocator.instance.${domainClass.propertyName}Model;
 
-		public function execute(event:CairngormEvent):void
+        public function execute(event:CairngormEvent):void
 		{
+            
 			var crudEvent:${className}CRUDEvent = ${className}CRUDEvent(event); 
 			
 			_model.selected = new ${className}VO();
 			_model.editView = false;
-			new DefaultNavigationEvent("${domainClass.propertyName}.list").dispatch();
+
+            _model.callFromPop = crudEvent.popUpName;
+
+			if (!_model.callFromPop)
+                new DefaultNavigationEvent("${domainClass.propertyName}.list").dispatch();
 		}
-		
 	}
 }

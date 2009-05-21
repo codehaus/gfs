@@ -65,17 +65,20 @@ def props = FSU.getPropertiesWithoutIdentity(domainClass,true)%>
 			
 			private function cancel():void
 			{
-				new DefaultNavigationEvent("${domainClass.propertyName}.edit").dispatch();
-				//No es una buena practica, pero me resulta de mas generar un evento/comando para nullear el selected en el model
-				_model.selected = null;
+				new ${className}CRUDEvent(${className}CRUDEvent.CANCEL_EVENT).dispatch();
 			}
-			
+
 			private function doInit():void
 			{		
+                if (_model.callFromPop)
+				{
+					statePopup();
+				}
+
 				addEventListener(KeyboardEvent.KEY_UP,keyboardHandler,false,0,true);
 				BindingUtils.bindSetter(changeState,_model,"editView");
 				setFocus();
-			}
+        	}
 			
 			override public function setFocus():void
 			{
@@ -83,7 +86,20 @@ def props = FSU.getPropertiesWithoutIdentity(domainClass,true)%>
 					${builders.getAt(0).getID()}.setFocus();
 			}
 			
-			
+			private function statePopup():void
+			{
+				formContainer.styleName = "";
+				formContainer.removeChild(lb${className});
+				form.setStyle("paddingTop",0);
+				form.setStyle("paddingBottom",10);
+				form.setStyle("paddingLeft",0);
+				form.setStyle("paddingRight",0);
+				setStyle("paddingTop",2);
+				setStyle("paddingBottom",10);
+				setStyle("paddingLeft",10);
+				setStyle("paddingRight",10);
+			}
+
 			private function keyboardHandler(e:KeyboardEvent):void
 			{
 				if (e.keyCode == Keyboard.ESCAPE)
@@ -131,9 +147,9 @@ def props = FSU.getPropertiesWithoutIdentity(domainClass,true)%>
 		}
 %>	</mx:Array>
 	
-	<mx:VBox styleName="formContainer">
-		<mx:Label text="{MultipleRM.getString(MultipleRM.localePrefix,'${domainClass.propertyName}.label')}" styleName="titleForm" width="100%"/>
-		<mx:Form width="100%">
+	<mx:VBox id="formContainer" styleName="formContainer">
+		<mx:Label text="{MultipleRM.getString(MultipleRM.localePrefix,'${domainClass.propertyName}.label')}" styleName="titleForm" width="100%" id="lb${className}"/>
+		<mx:Form width="100%" id="form">
 <%	
 			builders.each { buildFormItem ->
 					print "${buildFormItem.build("_model.selected.${buildFormItem.property.name}")}"
