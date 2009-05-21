@@ -25,16 +25,6 @@ package vo.${domainClass.propertyName}
 <%//Generate Import
 import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
 
-def alias
-if(domainClass.packageName || domainClass.packageName != "")
-{
-    alias = domainClass.fullName
-}
-else
-{
-    alias = domainClass.propertyName
-}
-
 def props = FSU.getPropertiesWithoutIdentity(domainClass,false,false)
 props.each
 {
@@ -51,7 +41,7 @@ if (superClassName)
 }
 %>
 	[Bindable]	
-	[RemoteClass(alias='${alias}')]
+	[RemoteClass(alias='${domainClass.fullName}')]
 <%	if (!superClassName)
 			print "	public class ${className}VO " 
 		else
