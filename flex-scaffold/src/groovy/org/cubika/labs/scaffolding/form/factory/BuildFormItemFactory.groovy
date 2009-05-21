@@ -57,7 +57,7 @@ class BuildFormItemFactory
 		def constraint = property.domainClass.getConstrainedProperties()[property.name]
 		
 		if (!CVU.display(property))
-			return
+        return
 		
 		if (constraint.widget == FIC.IMAGE_UPLOAD)
 		{
@@ -78,10 +78,10 @@ class BuildFormItemFactory
 		}
 		
 		if (constraint.widget == FIC.TEXT_INPUT)
-			return new TextInputBuildFormItem(property)
+        return new TextInputBuildFormItem(property)
 		
 		if (constraint.widget == FIC.TEXT_AREA)
-			return new TextAreaBuildFormItem(property)
+        return new TextAreaBuildFormItem(property)
 		
 		if (CVU.richtext(property))
 		{
@@ -106,44 +106,43 @@ class BuildFormItemFactory
 		}
 		
 		if (property.type == String.class && !constraint.inList)
-			return new TextInputBuildFormItem(property)
+        return new TextInputBuildFormItem(property)
 		
 		if (constraint.inList && constraint.widget != FIC.AUTO_COMPLETE)
-			return new ComboBuildFormItem(property)
+        return new ComboBuildFormItem(property)
 
 		if (constraint.inList && constraint.widget == FIC.AUTO_COMPLETE)
-			return new AutoCompleteBuildFormItem(property)
+        return new AutoCompleteBuildFormItem(property)
 		
 		if (property.type == Integer.class || property.type == Long.class || property.type == Float.class 
-				|| property.type == Double.class)
-			return new NumericStepperBuildFormItem(property)
+            || property.type == Double.class)
+        return new NumericStepperBuildFormItem(property)
 			
 		if (property.type == Boolean.class)
-			return new CheckBoxBuildFormItem(property)	
+        return new CheckBoxBuildFormItem(property)
 			
 		if (property.type == Date.class)
-			return new DateFieldBuildFormItem(property)
+        return new DateFieldBuildFormItem(property)
 		
 		if (property.isManyToMany())
-			return
+        return
 		
 		def inPlace = CVU.getInPlace(constraint)
 		
 		if (property.isManyToOne())
-			//if (!inPlace)
-				if (constraint.widget == FIC.COMBO_BOX)
-					return new ExternalManyToOneBuildFormItem(property)
-				else
-					return new ExternalDataGridManyToOneBuildFormItem(property)
-			//else
-				//return new ManyToOneBuildFormItem(property)
+            if (constraint.widget == FIC.COMBO_BOX)
+                return new ExternalManyToOneBuildFormItem(property)
+            else
+                return new ExternalDataGridManyToOneBuildFormItem(property)
+        //else
+        //return new ManyToOneBuildFormItem(property)
 		
 		if (property.isOneToMany())
         {
 			if (inPlace)
-				return new OneToManyBuildFormItem(property)
+                return new OneToManyBuildFormItem(property)
 			else
-				return new ExternalOneToManyBuildFormItem(property) 
+                return new ExternalOneToManyBuildFormItem(property)
         }
 
 		if (property.isOneToOne())
@@ -169,6 +168,6 @@ class BuildFormItemFactory
 	static private void validateWidget(type,clazz,widget)
 	{
 		if (type != clazz)
-			throw new Exception("Property must be ${clazz} to use \"${widget}\"")
+        throw new Exception("Property must be ${clazz} to use \"${widget}\"")
 	}
 }

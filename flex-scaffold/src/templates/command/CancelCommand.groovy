@@ -17,46 +17,44 @@ package command.${domainClass.propertyName}
 {
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
-	
+
 	import mx.controls.Alert;
 	import mx.rpc.IResponder;
-		
-	import service.${domainClass.propertyName}.${className}BusinessDelegate;
-	
-	import event.${domainClass.propertyName}.${className}${typeName}GetPaginationEvent;
-	
+
+	import event.DefaultNavigationEvent;
+	import event.${domainClass.propertyName}.${className}CRUDEvent;
+
 	import model.ApplicationModelLocator;
 	import model.${domainClass.propertyName}.${className}Model;
 
+    import mx.core.Application;
+	import mx.core.IFlexDisplayObject;
+	import mx.managers.PopUpManager;
+
+
 	/**
-	 * @author Ezequiel Martin Apfel
-	 * @since 23-Feb-2009
+	 * @author Gonzalo Javier Clavell
+	 * @since 20-May-2009
 	 */
-	public class ${className}${typeName}GetPaginationListCommand implements ICommand, IResponder
+	public class ${className}CancelCommand implements ICommand
 	{
 		private var _model:${className}Model = ApplicationModelLocator.instance.${domainClass.propertyName}Model;
 
 		public function execute(event:CairngormEvent):void
 		{
-			var getEvent:${className}${typeName}GetPaginationEvent = ${className}${typeName}GetPaginationEvent(event);
-						
-			new ${className}BusinessDelegate(this).paginateList(getEvent.page);
-		}
-		
-		public function result(data:Object):void
-		{
-			_model.editView = false;
-			_model.${typeName.toLowerCase()}page = data.result;
-		}
-		
-		public function fault(info:Object):void
-		{
-			_model.editView = false;
-			
-			if(info.fault.rootCause)
-				Alert.show(info.fault.rootCause.message,"Error");
+            if (!_model.callFromPop)
+            {
+                new DefaultNavigationEvent("${domainClass.propertyName}.edit").dispatch();
+            }
 			else
-				Alert.show(info.fault.faultDetail,"Error");
+			{
+				var obj:Object = Application.application.systemManager.topLevelSystemManager.getChildByName(_model.callFromPop);
+				PopUpManager.removePopUp(IFlexDisplayObject(obj));
+				_model.callFromPop = null;
+			}
+            //No es una buena practica, pero me resulta de mas generar un evento/comando para nullear el selected en el model
+			_model.selected = null;
 		}
+
 	}
 }

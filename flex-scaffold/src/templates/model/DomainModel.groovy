@@ -34,9 +34,10 @@ package model.${domainClass.propertyName}
 		public const CREATE:String = "createView";
 	
 		public var editView:Boolean = false;
-		
+		public var callFromPop:String;
+
 		public var page:PageFilter = new PageFilter();
-		public var externalpage:PageFilter = new PageFilter(10);
+		public var externalpage:PageFilter = new PageFilter();
 		public var selected:${className}VO;
 		public var selectedIndexView:int = LIST_VIEW;
 		public var listNoPaged:ArrayCollection;
@@ -79,10 +80,32 @@ package model.${domainClass.propertyName}
 			}
 			
 			list.addItem(vo);
-			
+
+            updateExternalList(vo);
 			updateListNoPaged(vo);
 		}
-		
+
+        public function updateExternalList(vo:${className}VO):void
+		{
+			var i:int=0;
+
+			if (!externallist)
+				externallist = new ArrayCollection();
+
+			for each (var item:${className}VO in externallist)
+			{
+				if (item.id == vo.id)
+				{
+					externallist.setItemAt(vo,i);
+					return
+				}
+				i++;
+			}
+
+			externallist.addItem(vo);
+		}
+
+
 		private function updateListNoPaged(vo:${className}VO):void
 		{
 			var i:int=0;

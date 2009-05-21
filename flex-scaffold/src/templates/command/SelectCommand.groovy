@@ -33,7 +33,6 @@ package command.${domainClass.propertyName}
 	 */
 	public class ${className}SelectCommand implements ICommand
 	{
-		
 		private var _model:${className}Model = ApplicationModelLocator.instance.${domainClass.propertyName}Model;
 
 		public function execute(event:CairngormEvent):void
@@ -42,7 +41,11 @@ package command.${domainClass.propertyName}
 			
 			_model.selected = crudEvent.vo;
 			_model.editView = true;
-			new DefaultNavigationEvent("${domainClass.propertyName}.list").dispatch();
+
+            _model.callFromPop = crudEvent.popUpName;
+
+            if (!_model.callFromPop)
+                new DefaultNavigationEvent("${domainClass.propertyName}.list").dispatch();
 		}
 		
 	}

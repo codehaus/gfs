@@ -34,15 +34,13 @@ package command.${domainClass.propertyName}
 	 */
 	public class ${className}ListCommand implements ICommand, IResponder
 	{
-		
-		private var _model:${className}Model = ApplicationModelLocator.instance.${domainClass.propertyName}Model;
-
+        private var _model:${className}Model = ApplicationModelLocator.instance.${domainClass.propertyName}Model;
+        
 		public function execute(event:CairngormEvent):void
 		{
 			var e:${className}CRUDEvent = ${className}CRUDEvent(event); 
-						
+			
 			new ${className}BusinessDelegate(this).list();
-
 		}
 		
 		public function result(data:Object):void
@@ -60,6 +58,5 @@ package command.${domainClass.propertyName}
 			else
 				Alert.show(info.fault.faultDetail,"Error");
 		}
-		
 	}
 }

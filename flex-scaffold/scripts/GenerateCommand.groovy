@@ -66,6 +66,10 @@ generateCRUDCommands =
 	classNameFile = "${nameDir}/${domainClass.shortName}SelectCommand.as"
 	templateFile = "${flexScaffoldPluginDir}"+antProp.'command.selectfile'
 	generateCommand(domainClass,templateFile,classNameFile)
+
+    classNameFile = "${nameDir}/${domainClass.shortName}CancelCommand.as"
+	templateFile = "${flexScaffoldPluginDir}"+antProp.'command.cancelfile'
+	generateCommand(domainClass,templateFile,classNameFile)
 }
 
 private void generateCommand(domainClass,templateFile,classNameFile,typeName="")

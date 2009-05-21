@@ -65,6 +65,13 @@ void generateNavigation()
 	
 	Ant.copy(file:templateDir, tofile:classNameDir)
 	println "${classNameDir} Done!"
+
+    nameDir = antProp.'command.destdir'
+	classNameDir = "${nameDir}/gfs/AbstractNavigationCommand.as";
+	templateDir = "${flexScaffoldPluginDir}"+antProp.'command.abstractnavigationfile'
+
+	Ant.copy(file:templateDir, tofile:classNameDir)
+	println "${classNameDir} Done!"
 }
 
 void generateLocales()

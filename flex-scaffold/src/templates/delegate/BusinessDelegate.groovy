@@ -27,7 +27,7 @@ package service
 	public class BusinessDelegate
 	{
 		
-		private var _responder:IResponder;
+		protected var _responder:IResponder;
 		
 		public function BusinessDelegate(responder:IResponder)
 		{
