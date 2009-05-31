@@ -36,12 +36,19 @@ class FileUploadController
     
 		if(!file.empty) 
 		{
+			try 
+			{
 				def filename = "${path}${request.getParameter('Filename')}".trim()
         file.transferTo(new File(filename))
 				
 				def output = response.getOutputStream();
 				output.println(filename)
 				output.flush()		
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace()
+			}
     }
     else 
 		{
@@ -55,18 +62,25 @@ class FileUploadController
 		
 		String filename = "${path}${params.name}".trim()
 
-		def image = Base64.base64ToByteArray(params.image)
+		try 
+		{
+			def image = Base64.base64ToByteArray(params.image)
 
-		File f = new File(filename)
-		FileOutputStream fos = new FileOutputStream(f)
+			File f = new File(filename)
+			FileOutputStream fos = new FileOutputStream(f)
 		
-		fos.write(image)
-		fos.flush()
-		fos.close()
+			fos.write(image)
+			fos.flush()
+			fos.close()
 
-		def output = response.getOutputStream();
-		output.println(filename)
-		output.flush()
+			def output = response.getOutputStream();
+			output.println(filename)
+			output.flush()
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace()
+		}
 	}
 	
 	def get = 
@@ -77,24 +91,37 @@ class FileUploadController
 		
 		if (file.exists())
 		{
-			def input = new FileInputStream(file)
-			def output = response.getOutputStream()
+			try 
+			{
+				def input = new FileInputStream(file)
+				def output = response.getOutputStream()
 			
-			IOUtils.copy(input,output)
+				IOUtils.copy(input,output)
 			
-			input.close()
-			output.flush()
-			output.close()
+				input.close()
+				output.flush()
+				output.close()
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace()
+			}
 		}
 	}
 	
 	def delete = 
 	{
 		String filePath = params.filePath.trim()
-		
-		if (new File(filePath).delete())
+		try
 		{
-			response.sendError(200,"Done!")
+			if (new File(filePath).delete())
+			{
+				response.sendError(200,"Done!")
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace()
 		}
 	}
 }
