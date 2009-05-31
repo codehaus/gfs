@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:cubikalabs="http://cubikalabs.cub2k.com/2009/commons"
+	xmlns:utils="com.cubika.labs.utils.*"
+	showCloseButton="true"
+	close="cancel()"
+	paddingTop="15"
+	paddingBottom="15"
+	creationComplete="doInit()" 
+	title="{resourceManager.getString(appModel.localePrefix,'address.label')}"
+     >
+
+	
+	<mx:Script>
+		<![CDATA[
+				
+			import mx.events.FlexEvent;	
+			import mx.validators.Validator;
+			
+			import com.cubika.labs.utils.MultipleRM;
+			
+			import model.ApplicationModelLocator;
+
+			import vo.address.AddressVO;	
+
+			[Bindable]
+			public var valueObject:AddressVO;
+			
+			[Bindable]
+			public var appModel:ApplicationModelLocator = ApplicationModelLocator.instance;
+			
+			public var clickOk:Function;
+			public var cancel:Function;
+			
+			private function saveOrUpdate():void
+			{
+				if (validators.length >= 0 && Validator.validateAll(validators).length == 0)
+				{
+					clickOk.call();
+				}
+			}
+				
+			public function getVO():AddressVO
+			{
+				var _vo:AddressVO = valueObject;
+
+					_vo.street = String(txtStreet.text);
+					_vo.zip = String(txtZip.text);
+
+				return _vo;
+			}
+				
+			private function doInit():void
+			{
+				txtStreet.setFocus();
+				
+				removeEventListener(FlexEvent.CREATION_COMPLETE,doInit);
+				addEventListener(KeyboardEvent.KEY_UP,keyboardHandler,false,0,true);
+			}
+			
+			private function keyboardHandler(e:KeyboardEvent):void
+			{
+				if (e.keyCode == Keyboard.ESCAPE)
+					cancel();
+					
+				if (e.keyCode == Keyboard.ENTER)
+					saveOrUpdate();
+			}
+				
+		]]>
+	</mx:Script>
+	
+	<mx:Array id="validators">
+	</mx:Array>
+	
+	
+	<mx:Form width="100%">
+	 		<mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'address.street')}" id="fiStreet" width="100%">
+				<mx:TextArea id="txtStreet" text="{valueObject.street}" width="217"/>
+	 		</mx:FormItem>
+	 		<mx:FormItem label="{MultipleRM.getString(MultipleRM.localePrefix,'address.zip')}" id="fiZip" width="100%">
+				<mx:TextInput id="txtZip" text="{valueObject.zip}" width="217"/>
+	 		</mx:FormItem>
+	</mx:Form>
+				
+	<mx:HBox width="100%" horizontalAlign="right" paddingRight="15">
+		<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.accept')}" click="saveOrUpdate()"/>
+		<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.cancel')} (ESC)" click="cancel()"/>
+	</mx:HBox>
+	
+</mx:TitleWindow>
