@@ -29,7 +29,7 @@ args = System.getProperty("grails.cli.args")
 
 target('default':'Can choose to create gsp wrapper file or compile flex to swf or run both')
 {
-	if (!FLEX_HOME)
+	if (FLEX_HOME == null)
 	{
 		println ""
 		println "//////////////// ERROR ///////////////////////////"
