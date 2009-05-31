@@ -44,7 +44,7 @@ class I18nBuilder
 	//Properties' map loaded 
 	private Map mapProperties = [:]
 
-	I18nBuilder(defaultLocale)
+	I18nBuilder(def defaultLocale)
 	{
 		this.defaultLocale = defaultLocale
 	}
@@ -64,7 +64,7 @@ class I18nBuilder
 	 * Builds properties' map, then It's stored in the .properites file
 	 * @param domainClass - a DomainClass
 	 */
-	void build(domainClass)
+	void build(def domainClass)
 	{
 		if (!locale)
 			throw new Exception("Locale must be setted, Use i18nBuilder.changeLocale(locale) to generated message")
@@ -211,7 +211,7 @@ class I18nBuilder
 	/**
 	 * Fills default message
 	 */
-	private def fillDefaultMessages(existMessage=true)
+	private def fillDefaultMessages(def existMessage=true)
 	{
 			def suffix
 			
@@ -265,7 +265,7 @@ class I18nBuilder
 	 * @param properties - DomainClassProperites
 	 * @param message - String representing the value of property
 	 */
-	private String marshallProperty(property,message)
+	private String marshallProperty(def property, def message)
 	{
 		def key = "${property.domainClass.propertyName}.${property.name}"
 		def value = "${message}"
@@ -277,7 +277,7 @@ class I18nBuilder
 	 * Marshalls property that will be sent to google
 	 * @param properties - DomainClassProperites
 	 */
-	private String marshallProperty(property)
+	private String marshallProperty(def property)
 	{
 		def key = "${property.domainClass.propertyName}.${property.name}"
 		def value = "${property.naturalName}"
@@ -289,7 +289,7 @@ class I18nBuilder
 	 * Marshalls properties' map
 	 * @param map - Map
 	 */
-	private def marshallMap(map)
+	private def marshallMap(def map)
 	{
 		def aux = []
 		
@@ -304,7 +304,7 @@ class I18nBuilder
 	 * Unmarshalls message recived from google translator
 	 * @param properites - String of properties translated
 	 */
-	private def unmarshallGoogle(properties)
+	private def unmarshallGoogle(def properties)
 	{
 	  
 	  def unmarshalProperties = [:]
@@ -349,7 +349,7 @@ class I18nBuilder
 	 * Translates via google translator
 	 * @param message - String[] will be sent to google to translate
 	 */
-	private String translate(message)
+	private String translate(def message)
 	{
 		String result = ""
 		String bufferMessage = ""
@@ -366,14 +366,14 @@ class I18nBuilder
 				else
 				{
 					bufferMessage += it.toString()
-					result += I18nUtils.getTranslateWord (bufferMessage, defaultLocale, locale)
+					result += I18nUtils.getTranslateWord(bufferMessage, defaultLocale, locale)
 					bufferMessage = ""
 					j += 9
 				}
 			}
 			if (bufferMessage != "")
 			{
-				result += I18nUtils.getTranslateWord (bufferMessage, defaultLocale, locale)
+				result += I18nUtils.getTranslateWord(bufferMessage, defaultLocale, locale)
 			}
 		}
 		catch(Exception e)
@@ -389,11 +389,11 @@ class I18nBuilder
 	 * Replace tag domainClass of the properites' file
 	 * @param message - String 
 	 */
-  private def replaceDomainClassProperty(message)
+  private def replaceDomainClassProperty(def message)
   {
 		def aux = [:]
 
-        String domainClassToTranslate = domainClass.naturalName
+    String domainClassToTranslate = domainClass.naturalName
 		String domainClassTranslated
 
 
