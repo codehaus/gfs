@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	<mx:Script>
+		<![CDATA[
+			import com.cubika.labs.utils.MultipleRM;
+			
+			[Bindable]private var _data:ReportingColumnDescriptor;
+			
+			override protected function commitProperties():void
+			{
+				super.commitProperties();
+				addedColumn.selected = _data.selected;
+				//addedColumn.label = _data.naturalName;
+				addedColumn.label = MultipleRM.getSuppliedString(MultipleRM.localePrefix, String(_data.className).toLowerCase() + '.' + _data.name, String(_data.className));
+				addedColumn.selected = _data.selected;
+				columnTitleInput.text = _data.title;
+			}
+			
+			private function onFocusOut(property:String,value:*):void
+			{
+				_data[property] = value;
+			}
+			
+			[Bindable]
+			override public function set data(value:Object):void
+			{
+				_data = value as ReportingColumnDescriptor;
+			}
+			
+			override public function get data():Object
+			{
+				return _data;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:CheckBox id="addedColumn" label="{MultipleRM.getSuppliedString(MultipleRM.localePrefix, String(data.className).toLowerCase() + '.' + data.name, String(data.className))}" labelPlacement="right"
+		focusOut="onFocusOut('selected',event.target.selected)" width="110"/>
+	<mx:TextInput id="columnTitleInput" text="Column Title" focusOut="onFocusOut('title',event.target.text)"/>
+</mx:HBox>
