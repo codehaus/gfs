@@ -26,3 +26,4 @@ src.java.org.cubika.labs.scaffolding.annotation
 src.java.org.cubika.labs.scaffolding.response
 src.templates.controller
 test.unit
+web-app.WEB-INF.classes
