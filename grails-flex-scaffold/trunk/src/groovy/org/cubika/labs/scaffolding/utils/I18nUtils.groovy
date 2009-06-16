@@ -93,16 +93,14 @@ class I18nUtils
 	{
 		def locales = getTags(getLocalesProperties('locale.default')+", "+getLocalesProperties('locale.locales'))
 
-		def result = "<!-- Lang resources -->\n"
-		result += "	<mx:Metadata>\n"
-		
+		def result = ""
 		locales.each
 		{
 			def suffix = suffix(it.trim())
 			
 			result += "		[ResourceBundle(\"messages$suffix\")]\n"
 		}
-		result += "	</mx:Metadata>\n"
+		result
 	}
 
 	/**
@@ -113,9 +111,7 @@ class I18nUtils
 	 */
 	static String getLocalesCollection()
 	{
-		String collection = "import mx.collections.ArrayCollection;\n\n"
-		collection += "			[Bindable]\n"
-		collection += "			private var localesCollection:ArrayCollection = new ArrayCollection("
+		String collection = "private var localesCollection:ArrayCollection = new ArrayCollection("
 
 		def locales = getTags(getLocalesProperties('locale.default')+", "+getLocalesProperties('locale.locales'))
 
