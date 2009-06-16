@@ -1,0 +1,218 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package org.codehaus.groovy.grails.plugins.flex;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import org.springframework.context.ApplicationContext;<a name="line.3"></a>
+<FONT color="green">004</FONT>    import org.springframework.web.context.support.WebApplicationContextUtils;<a name="line.4"></a>
+<FONT color="green">005</FONT>    import org.springframework.beans.BeansException;<a name="line.5"></a>
+<FONT color="green">006</FONT>    import org.springframework.beans.factory.NoSuchBeanDefinitionException;<a name="line.6"></a>
+<FONT color="green">007</FONT>    <a name="line.7"></a>
+<FONT color="green">008</FONT>    import flex.messaging.FactoryInstance;<a name="line.8"></a>
+<FONT color="green">009</FONT>    import flex.messaging.FlexFactory;<a name="line.9"></a>
+<FONT color="green">010</FONT>    import flex.messaging.config.ConfigMap;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import flex.messaging.services.ServiceException;<a name="line.11"></a>
+<FONT color="green">012</FONT>    <a name="line.12"></a>
+<FONT color="green">013</FONT>    /**<a name="line.13"></a>
+<FONT color="green">014</FONT>     * This interface is implemented by factory components which provide<a name="line.14"></a>
+<FONT color="green">015</FONT>     * instances to the flex messaging framework.  To configure flex data services<a name="line.15"></a>
+<FONT color="green">016</FONT>     * to use this factory, add the following lines to your services-config.xml<a name="line.16"></a>
+<FONT color="green">017</FONT>     * file (located in the WEB-INF/flex directory of your web application).<a name="line.17"></a>
+<FONT color="green">018</FONT>     *<a name="line.18"></a>
+<FONT color="green">019</FONT>     *      &amp;lt;factories&amp;gt;<a name="line.19"></a>
+<FONT color="green">020</FONT>     *     &amp;lt;factory id="spring" class="flex.samples.factories.SpringFactory" /&amp;gt;<a name="line.20"></a>
+<FONT color="green">021</FONT>     *  &amp;lt;/factories&amp;gt;<a name="line.21"></a>
+<FONT color="green">022</FONT>     *<a name="line.22"></a>
+<FONT color="green">023</FONT>     * You also must configure the web application to use spring and must copy the spring.jar<a name="line.23"></a>
+<FONT color="green">024</FONT>     * file into your WEB-INF/lib directory.  To configure your app server to use spring,<a name="line.24"></a>
+<FONT color="green">025</FONT>     * you add the following lines to your WEB-INF/web.xml file:<a name="line.25"></a>
+<FONT color="green">026</FONT>     *<a name="line.26"></a>
+<FONT color="green">027</FONT>     *   &amp;lt;context-param&amp;gt;<a name="line.27"></a>
+<FONT color="green">028</FONT>     *        &amp;lt;param-name&amp;gt;contextConfigLocation&amp;lt;/param-name&amp;gt;<a name="line.28"></a>
+<FONT color="green">029</FONT>     *        &amp;lt;param-value&amp;gt;/WEB-INF/applicationContext.xml&amp;lt;/param-value&amp;gt;<a name="line.29"></a>
+<FONT color="green">030</FONT>     *   &amp;lt;/context-param&amp;gt;<a name="line.30"></a>
+<FONT color="green">031</FONT>     *<a name="line.31"></a>
+<FONT color="green">032</FONT>     *   &amp;lt;listener&amp;gt;<a name="line.32"></a>
+<FONT color="green">033</FONT>     *       &amp;lt;listener-class&amp;gt;org.springframework.web.context.ContextLoaderListener&amp;lt;/listener-class&amp;gt;<a name="line.33"></a>
+<FONT color="green">034</FONT>     *   &amp;lt;/listener&amp;gt;<a name="line.34"></a>
+<FONT color="green">035</FONT>     * <a name="line.35"></a>
+<FONT color="green">036</FONT>     * Then you put your spring bean configuration in WEB-INF/applicationContext.xml (as per the<a name="line.36"></a>
+<FONT color="green">037</FONT>     * line above).  For example:<a name="line.37"></a>
+<FONT color="green">038</FONT>     * <a name="line.38"></a>
+<FONT color="green">039</FONT>     *  &amp;lt;?xml version="1.0" encoding="UTF-8"?&amp;gt;<a name="line.39"></a>
+<FONT color="green">040</FONT>     *  &amp;lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"&amp;gt;<a name="line.40"></a>
+<FONT color="green">041</FONT>     *   <a name="line.41"></a>
+<FONT color="green">042</FONT>     *  &amp;lt;beans&amp;gt;<a name="line.42"></a>
+<FONT color="green">043</FONT>     *    &amp;lt;bean name="weatherBean" class="dev.weather.WeatherService" singleton="true"/&amp;gt;<a name="line.43"></a>
+<FONT color="green">044</FONT>     *  &amp;lt;/beans&amp;gt;<a name="line.44"></a>
+<FONT color="green">045</FONT>     *  <a name="line.45"></a>
+<FONT color="green">046</FONT>     * Now you are ready to define a destination in flex that maps to this existing service. <a name="line.46"></a>
+<FONT color="green">047</FONT>     * To do this you'd add this to your WEB-INF/flex/remoting-config.xml:<a name="line.47"></a>
+<FONT color="green">048</FONT>     *<a name="line.48"></a>
+<FONT color="green">049</FONT>     *  &amp;lt;destination id="WeatherService"&amp;gt;<a name="line.49"></a>
+<FONT color="green">050</FONT>     *      &amp;lt;properties&amp;gt;<a name="line.50"></a>
+<FONT color="green">051</FONT>     *          &amp;lt;factory&amp;gt;spring&amp;lt;/factory&amp;gt;<a name="line.51"></a>
+<FONT color="green">052</FONT>     *          &amp;lt;source&amp;gt;weatherBean&amp;lt;/source&amp;gt;<a name="line.52"></a>
+<FONT color="green">053</FONT>     *      &amp;lt;/properties&amp;gt;<a name="line.53"></a>
+<FONT color="green">054</FONT>     *  &amp;lt;/destination&amp;gt;<a name="line.54"></a>
+<FONT color="green">055</FONT>     *<a name="line.55"></a>
+<FONT color="green">056</FONT>     * @author Jeff Vroom<a name="line.56"></a>
+<FONT color="green">057</FONT>     */<a name="line.57"></a>
+<FONT color="green">058</FONT>    public class SpringFactory implements FlexFactory<a name="line.58"></a>
+<FONT color="green">059</FONT>    {<a name="line.59"></a>
+<FONT color="green">060</FONT>        private static final String SOURCE = "source";<a name="line.60"></a>
+<FONT color="green">061</FONT>    <a name="line.61"></a>
+<FONT color="green">062</FONT>        /**<a name="line.62"></a>
+<FONT color="green">063</FONT>         * This method can be used to initialize the factory itself.  It is called with configuration<a name="line.63"></a>
+<FONT color="green">064</FONT>         * parameters from the factory tag which defines the id of the factory.  <a name="line.64"></a>
+<FONT color="green">065</FONT>         */<a name="line.65"></a>
+<FONT color="green">066</FONT>        public void initialize(String id, ConfigMap configMap) {}<a name="line.66"></a>
+<FONT color="green">067</FONT>    <a name="line.67"></a>
+<FONT color="green">068</FONT>        /**<a name="line.68"></a>
+<FONT color="green">069</FONT>         * This method is called when we initialize the definition of an instance <a name="line.69"></a>
+<FONT color="green">070</FONT>         * which will be looked up by this factory.  It should validate that<a name="line.70"></a>
+<FONT color="green">071</FONT>         * the properties supplied are valid to define an instance.<a name="line.71"></a>
+<FONT color="green">072</FONT>         * Any valid properties used for this configuration must be accessed to <a name="line.72"></a>
+<FONT color="green">073</FONT>         * avoid warnings about unused configuration elements.  If your factory <a name="line.73"></a>
+<FONT color="green">074</FONT>         * is only used for application scoped components, this method can simply<a name="line.74"></a>
+<FONT color="green">075</FONT>         * return a factory instance which delegates the creation of the component<a name="line.75"></a>
+<FONT color="green">076</FONT>         * to the FactoryInstance's lookup method.<a name="line.76"></a>
+<FONT color="green">077</FONT>         */<a name="line.77"></a>
+<FONT color="green">078</FONT>        public FactoryInstance createFactoryInstance(String id, ConfigMap properties)<a name="line.78"></a>
+<FONT color="green">079</FONT>        {<a name="line.79"></a>
+<FONT color="green">080</FONT>            SpringFactoryInstance instance = new SpringFactoryInstance(this, id, properties);<a name="line.80"></a>
+<FONT color="green">081</FONT>            instance.setSource(properties.getPropertyAsString(SOURCE, instance.getId()));<a name="line.81"></a>
+<FONT color="green">082</FONT>            return instance;<a name="line.82"></a>
+<FONT color="green">083</FONT>        } // end method createFactoryInstance()<a name="line.83"></a>
+<FONT color="green">084</FONT>    <a name="line.84"></a>
+<FONT color="green">085</FONT>        /**<a name="line.85"></a>
+<FONT color="green">086</FONT>         * Returns the instance specified by the source<a name="line.86"></a>
+<FONT color="green">087</FONT>         * and properties arguments.  For the factory, this may mean<a name="line.87"></a>
+<FONT color="green">088</FONT>         * constructing a new instance, optionally registering it in some other<a name="line.88"></a>
+<FONT color="green">089</FONT>         * name space such as the session or JNDI, and then returning it<a name="line.89"></a>
+<FONT color="green">090</FONT>         * or it may mean creating a new instance and returning it.<a name="line.90"></a>
+<FONT color="green">091</FONT>         * This method is called for each request to operate on the<a name="line.91"></a>
+<FONT color="green">092</FONT>         * given item by the system so it should be relatively efficient.<a name="line.92"></a>
+<FONT color="green">093</FONT>         * &lt;p&gt;<a name="line.93"></a>
+<FONT color="green">094</FONT>         * If your factory does not support the scope property, it<a name="line.94"></a>
+<FONT color="green">095</FONT>         * report an error if scope is supplied in the properties<a name="line.95"></a>
+<FONT color="green">096</FONT>         * for this instance.<a name="line.96"></a>
+<FONT color="green">097</FONT>         */<a name="line.97"></a>
+<FONT color="green">098</FONT>        public Object lookup(FactoryInstance inst)<a name="line.98"></a>
+<FONT color="green">099</FONT>        {<a name="line.99"></a>
+<FONT color="green">100</FONT>            SpringFactoryInstance factoryInstance = (SpringFactoryInstance) inst;<a name="line.100"></a>
+<FONT color="green">101</FONT>            return factoryInstance.lookup();<a name="line.101"></a>
+<FONT color="green">102</FONT>        } <a name="line.102"></a>
+<FONT color="green">103</FONT>    <a name="line.103"></a>
+<FONT color="green">104</FONT>    <a name="line.104"></a>
+<FONT color="green">105</FONT>        static class SpringFactoryInstance extends FactoryInstance<a name="line.105"></a>
+<FONT color="green">106</FONT>        {<a name="line.106"></a>
+<FONT color="green">107</FONT>            SpringFactoryInstance(SpringFactory factory, String id, ConfigMap properties)<a name="line.107"></a>
+<FONT color="green">108</FONT>            {<a name="line.108"></a>
+<FONT color="green">109</FONT>                super(factory, id, properties);<a name="line.109"></a>
+<FONT color="green">110</FONT>            }<a name="line.110"></a>
+<FONT color="green">111</FONT>    <a name="line.111"></a>
+<FONT color="green">112</FONT>    <a name="line.112"></a>
+<FONT color="green">113</FONT>            public String toString()<a name="line.113"></a>
+<FONT color="green">114</FONT>            {<a name="line.114"></a>
+<FONT color="green">115</FONT>                return "SpringFactory instance for id=" + getId() + " source=" + getSource() + " scope=" + getScope();<a name="line.115"></a>
+<FONT color="green">116</FONT>            }<a name="line.116"></a>
+<FONT color="green">117</FONT>    <a name="line.117"></a>
+<FONT color="green">118</FONT>            public Object lookup() <a name="line.118"></a>
+<FONT color="green">119</FONT>            {<a name="line.119"></a>
+<FONT color="green">120</FONT>                ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(flex.messaging.FlexContext.getServletConfig().getServletContext());<a name="line.120"></a>
+<FONT color="green">121</FONT>                String beanName = getSource();<a name="line.121"></a>
+<FONT color="green">122</FONT>    <a name="line.122"></a>
+<FONT color="green">123</FONT>                try<a name="line.123"></a>
+<FONT color="green">124</FONT>                {<a name="line.124"></a>
+<FONT color="green">125</FONT>                    return appContext.getBean(beanName);<a name="line.125"></a>
+<FONT color="green">126</FONT>                }<a name="line.126"></a>
+<FONT color="green">127</FONT>                catch (NoSuchBeanDefinitionException nexc)<a name="line.127"></a>
+<FONT color="green">128</FONT>                {<a name="line.128"></a>
+<FONT color="green">129</FONT>                    ServiceException e = new ServiceException();<a name="line.129"></a>
+<FONT color="green">130</FONT>                    String msg = "Spring service named '" + beanName + "' does not exist.";<a name="line.130"></a>
+<FONT color="green">131</FONT>                    e.setMessage(msg);<a name="line.131"></a>
+<FONT color="green">132</FONT>                    e.setRootCause(nexc);<a name="line.132"></a>
+<FONT color="green">133</FONT>                    e.setDetails(msg);<a name="line.133"></a>
+<FONT color="green">134</FONT>                    e.setCode("Server.Processing");<a name="line.134"></a>
+<FONT color="green">135</FONT>                    throw e;<a name="line.135"></a>
+<FONT color="green">136</FONT>                }<a name="line.136"></a>
+<FONT color="green">137</FONT>                catch (BeansException bexc)<a name="line.137"></a>
+<FONT color="green">138</FONT>                {<a name="line.138"></a>
+<FONT color="green">139</FONT>                    ServiceException e = new ServiceException();<a name="line.139"></a>
+<FONT color="green">140</FONT>                    String msg = "Unable to create Spring service named '" + beanName + "' ";<a name="line.140"></a>
+<FONT color="green">141</FONT>                    e.setMessage(msg);<a name="line.141"></a>
+<FONT color="green">142</FONT>                    e.setRootCause(bexc);<a name="line.142"></a>
+<FONT color="green">143</FONT>                    e.setDetails(msg);<a name="line.143"></a>
+<FONT color="green">144</FONT>                    e.setCode("Server.Processing");<a name="line.144"></a>
+<FONT color="green">145</FONT>                    throw e;<a name="line.145"></a>
+<FONT color="green">146</FONT>                } <a name="line.146"></a>
+<FONT color="green">147</FONT>            }<a name="line.147"></a>
+<FONT color="green">148</FONT>            <a name="line.148"></a>
+<FONT color="green">149</FONT>        } <a name="line.149"></a>
+<FONT color="green">150</FONT>    <a name="line.150"></a>
+<FONT color="green">151</FONT>    } <a name="line.151"></a>
+<FONT color="green">152</FONT>    <a name="line.152"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
