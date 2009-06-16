@@ -91,6 +91,7 @@ void generateAllFlex(name)
 			generateI18nMessages(name:it.fullName,runHierarchy:true)
 			addToNavigationModel(it)
 			addToMain(it)
+			addToMainLocale(it)
 			
 			println "-------------------------------------"
 		}
@@ -132,21 +133,44 @@ void addToMain(domainClass)
 	          			contains(text: "<view${domainClass.shortName}:${domainClass.shortName}CRUDView", casesensitive: false)
 						 		}
 				
-	if (file.size() > 0)
-			return
-	
-	Ant.replace(file: antProp.'main.destdir',
-          token: "><!--NS-->", value: "\n	xmlns:view${domainClass.shortName}=\"view.${domainClass.propertyName}.*\" "+
-								 "xmlns:control${domainClass.shortName}=\"control.${domainClass.propertyName}.*\"><!--NS-->")
-	Ant.replace(file: antProp.'main.destdir',
-				          token: "<!--CRUDVIEWS-->", value: "<!--CRUDVIEWS-->\n		"+
+	if (!(file.size() > 0))
+	{
+		Ant.replace(file: antProp.'main.destdir',
+          			token: "><!--NS-->", value: "\n	xmlns:view${domainClass.shortName}=\"view.${domainClass.propertyName}.*\"><!--NS-->")
+	  Ant.replace(file: antProp.'main.destdir',
+				        token: "<!--CRUDVIEWS-->", value: "<!--CRUDVIEWS-->\n		"+
 									"<view${domainClass.shortName}:${domainClass.shortName}CRUDView height=\"100%\" "+
 									"label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${domainClass.propertyName}.label')}\" name=\"${domainClass.propertyName}CRUDView\"/>")
+	}
 									
-	Ant.replace(file: antProp.'main.destdir',
-          		token: "<!--RB-->", 
-          		value: "${I18nUtils.getMetaTags()}")
-  Ant.replace(file: antProp.'main.destdir',
-          		token: "// RB", 
-          		value: "${I18nUtils.getLocalesCollection()}")
+	Ant.replaceregexp(file: antProp.'main.destdir',
+          		match: ".*Resource.*\n*", 
+          		replace: "@metadata@")
+
+	Ant.replaceregexp(file: antProp.'main.destdir',
+          		match: "@metadata@", 
+          		replace: "${I18nUtils.getMetaTags()}")						
+	
+
+  Ant.replaceregexp(file: antProp.'main.destdir',
+          		match: "private var localesCollection:ArrayCollection.*", 
+          		replace: "${I18nUtils.getLocalesCollection()}",byline: "false", flags:"m")
+}
+
+void addToMainLocale(domainClass)
+{
+	String stringFile = new File(antProp.'main.destdir').text
+	
+	stringFile = stringFile.replaceAll(".*Resource.*\n*","##")
+	stringFile = stringFile.replaceAll("##.*#",I18nUtils.getMetaTags())						
+	stringFile = stringFile.replaceAll("private var localesCollection:ArrayCollection.*","${I18nUtils.getLocalesCollection()}")
+	
+	def file = new File(antProp.'main.destdir')
+	
+	def writer = file.newWriter()
+	
+	writer << stringFile
+	
+	writer.flush()
+	writer.close()
 }

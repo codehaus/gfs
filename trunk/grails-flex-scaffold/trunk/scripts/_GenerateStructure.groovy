@@ -7,8 +7,6 @@ def antProp = Ant.project.properties
 
 generateFlexDefaultStructure =
 { Map args = [:] ->
-	if (new File(antProp.'vo.destdir').exists())
-		return
 	
 	if (!new File(antProp.'flex.basedir').exists())
 		Ant.mkdir(dir:antProp.'flex.basedir')
@@ -42,7 +40,10 @@ generateFlexDefaultStructure =
 			Ant.mkdir(dir:antProp.'controller.destdir')				
 		
 	if (!new File(antProp.'command.destdir').exists())
+	{
+			Ant.mkdir(dir:antProp.'command.destdir'+"/gfs")
 			Ant.mkdir(dir:antProp.'command.destdir')
+	}
 			
 	if (!new File(antProp.'assets.destdir').exists())
 	{
