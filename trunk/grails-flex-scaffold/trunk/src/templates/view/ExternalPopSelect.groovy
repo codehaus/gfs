@@ -110,7 +110,7 @@
 		<mx:HBox width="100%" horizontalAlign="right" paddingTop="10">
 			<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.new')} (F2)" click="newHandler()" enabled="{allowCreation}"/>
 			<mx:Spacer width="100%"/>
-			<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.accept')} (F8)" click="okHandler()" enabled="{dg.selectedItems != null}"/>
+			<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.accept')} (F8)" click="okHandler()" enabled="{dg.selectedItems.length > 0}"/>
 			<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.cancel')} (ESC)" click="cancelHandler()"/>
 		</mx:HBox>	
 	</mx:VBox>
