@@ -27,6 +27,7 @@ def antProp = Ant.project.properties
 
 generateDefaults =
 { Map args = [:] ->
+	
 	generateNavigation()
 	generateLocales()
 	generateBusinessDelegate()
@@ -38,9 +39,6 @@ void generateNavigation()
 	def nameDir = antProp.'event.destdir'
 	def classNameDir = "${nameDir}/DefaultNavigationEvent.as";
 	def templateDir = "${flexScaffoldPluginDir}"+antProp.'event.defaultnavigationfile'
-	
-	if (new File(classNameDir).exists())
-		return
 	
 	Ant.copy(file:templateDir, tofile:classNameDir)
 	println "${classNameDir} Done!"
@@ -66,7 +64,11 @@ void generateNavigation()
 	Ant.copy(file:templateDir, tofile:classNameDir)
 	println "${classNameDir} Done!"
 
-    nameDir = antProp.'command.destdir'
+  nameDir = antProp.'command.destdir'
+
+	if (!new File("${nameDir}/gfs").exists())
+		Ant.mkdir(dir:"${nameDir}/gfs")
+
 	classNameDir = "${nameDir}/gfs/AbstractNavigationCommand.as";
 	templateDir = "${flexScaffoldPluginDir}"+antProp.'command.abstractnavigationfile'
 
