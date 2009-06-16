@@ -5,19 +5,24 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	backgroundColor="#e2e2e2" creationComplete="doInit()"><!--NS-->
 	
-	<!--RB-->
+	<mx:Metadata>
+		[ResourceBundle("messages")]
+	</mx:Metadata>
 	
 	<mx:Script>
 		<![CDATA[
 			
 			import mx.core.Container;
 			import mx.containers.Box;
+			import mx.collections.ArrayCollection;
+			
 			import event.LocaleEvent;
 			import model.ApplicationModelLocator;
 			
 			import com.cubika.labs.utils.MultipleRM;
 			
-			// RB
+			[Bindable]
+			private var localesCollection:ArrayCollection = new ArrayCollection();
 			
 			private var asianCharacters:Object = {};
 			
@@ -101,21 +106,23 @@
 				
 				asianCharacters = {messages_ja:'messages_ja', messages_ru:'messages_ru', messages_zh:'messages_zh', messages_th:'messages_th', messages_zh_CN:'messages_zh_CN'};
 				
-				locale = locale.split("-")[0]
-				
-				for each (var item:Object in localesCollection)
+				if (locale)
 				{
-					if (item.locale == locale)
+					locale = locale.split("-")[0]
+				
+					for each (var item:Object in localesCollection)
 					{
-						new LocaleEvent(item.data).dispatch();
-						cbChangeLocale.selectedItem = item;
-						return	
+						if (item.locale == locale)
+						{
+							new LocaleEvent(item.data).dispatch();
+							cbChangeLocale.selectedItem = item;
+							return	
+						}
 					}
 				}
 				
 				new LocaleEvent("messages").dispatch();
-				cbChangeLocale.selectedItem = item;
-				return
+				cbChangeLocale.selectedIndex = 0;
 			}
 			
 			// Only for layout purpose
