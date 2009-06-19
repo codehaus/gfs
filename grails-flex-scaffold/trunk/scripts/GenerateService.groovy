@@ -34,8 +34,8 @@ generateService =
 	classNameFile = "./grails-app/services/${domainClass.shortName}Service.groovy"
 	templateFile = "${flexScaffoldPluginDir}"+antProp.'service.file'
 	
-	if (new File(classNameFile).exists())
-		return
+	//if (new File(classNameFile).exists())
+	//	return
 	
 	dftg.generateTemplate(domainClass,templateFile,classNameFile)
 	println "${classNameFile} Done!"
