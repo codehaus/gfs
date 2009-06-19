@@ -28,7 +28,7 @@ package command.${domainClass.propertyName}
 	
 	import model.ApplicationModelLocator;
 
-    import command.gfs.AbstractNavigationCommand;
+  import command.gfs.AbstractNavigationCommand;
 
 	/**
 	 * @author Ezequiel Martin Apfel
