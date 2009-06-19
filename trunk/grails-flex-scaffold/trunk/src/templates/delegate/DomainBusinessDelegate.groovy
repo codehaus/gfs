@@ -43,6 +43,17 @@ package service.${domainClass.propertyName}
 			
 			return _service;
 		}
-		
+		<% import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
+			def actions = CVU.actions(domainClass)
+
+			actions.each
+			{
+				println "		public function ${it.toLowerCase()}(vo:Object):void"
+				println "		{"
+				println "			getService().${it.toLowerCase()}(vo).addResponder(_responder);"
+					print	"		}"
+			}
+				
+		%>
 	}
 }
