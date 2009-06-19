@@ -190,6 +190,13 @@ class I18nBuilder
 						propertiesToTranslate.add("${it.domainClass.propertyName}.${it.name}.${item}$PROPERTY_SEPARATOR${item}$END_LINE_PROPERTIES")
 					}
 				}
+				
+				def actions = CVU.actions(domainClass)
+				
+				actions.each
+				{
+					propertiesToTranslate.add("${domainClass.propertyName}.${it.toLowerCase()}$PROPERTY_SEPARATOR${it}$END_LINE_PROPERTIES")
+				}
 			}
 		}
 
