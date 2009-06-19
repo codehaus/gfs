@@ -48,6 +48,20 @@ generateViews =
 	templateFile = "${flexScaffoldPluginDir}"+antProp.'view.crudfile'
 	generateView(domainClass,templateFile,classNameFile)
 	
+	//generate ItemRenderers Actions
+	def actions = CVU.actions(domainClass)
+	
+	actions.each
+	{
+		if (!new File("${nameDir}/renderers").exists())
+			Ant.mkdir(dir:"${nameDir}/renderers")
+			
+		classNameFile = "${nameDir}/renderers/${domainClass.shortName}${it}ItemRenderer.mxml"
+		templateFile = "${flexScaffoldPluginDir}"+antProp.'view.actionitemrenderer'
+		dftg.generateTemplate(domainClass,templateFile,classNameFile,it)
+	}
+	//end generate ItemRenderers Actions
+	
 	//generate ReportingView
 	if (CVU.isReportable(domainClass))
 	{
