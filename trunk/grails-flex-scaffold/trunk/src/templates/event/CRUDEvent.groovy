@@ -41,11 +41,13 @@ package event.${domainClass.propertyName}
 		static public var SELECT_EVENT:String 				= "select${className}Event";
 		static public var CREATE_EVENT:String 				= "create${className}Event";
 		static public var DELETE_EVENT:String 				= "delete${className}Event";
-        static public var CANCEL_EVENT:String 				= "cancel${className}Event";
+    static public var CANCEL_EVENT:String 				= "cancel${className}Event";
 		
 		public var vo:${className}VO;
 
-        public var popUpName:String;
+		public var vos:Array;
+
+    public var popUpName:String;
 
 
 		public function ${className}CRUDEvent(eventType:String,value:${className}VO=null,popName:String = null)
