@@ -1,5 +1,6 @@
 import org.codehaus.groovy.grails.commons.GrailsClassUtils as GCU
 import org.cubika.labs.scaffolding.generator.DefaultFlexTemplateGenerator
+import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
 
 grailsHome = Ant.project.properties."environment.GRAILS_HOME"
 
@@ -70,6 +71,17 @@ generateCRUDCommands =
     classNameFile = "${nameDir}/${domainClass.shortName}CancelCommand.as"
 	templateFile = "${flexScaffoldPluginDir}"+antProp.'command.cancelfile'
 	generateCommand(domainClass,templateFile,classNameFile)
+	
+	//generate Command Actions
+	def actions = CVU.actions(domainClass)
+	
+	actions.each
+	{
+		classNameFile = "${nameDir}/${domainClass.shortName}${it}Command.as"
+		templateFile = "${flexScaffoldPluginDir}"+antProp.'command.actioncommand'
+		dftg.generateTemplate(domainClass,templateFile,classNameFile,it)
+	}
+	//end generate Command Actions
 }
 
 private void generateCommand(domainClass,templateFile,classNameFile,typeName="")
