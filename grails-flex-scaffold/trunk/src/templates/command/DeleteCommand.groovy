@@ -46,14 +46,14 @@ package command.${domainClass.propertyName}
 		{
 			var crudEvent:${className}CRUDEvent = ${className}CRUDEvent(event); 
 			
-			new ${className}BusinessDelegate(this).destroy(crudEvent.vo);
+			new ${className}BusinessDelegate(this).destroy(crudEvent.vos);
 
 		}
 		
 		override protected function doResult(data:Object):void
 		{
 			_model.editView = false;
-			_model.removeItem(data.result);
+			_model.removeItems(data.result);
 		}
 		
 		override protected function doFault(info:Object):void
