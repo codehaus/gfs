@@ -18,6 +18,7 @@ package org.cubika.labs.scaffolding.utils
 
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClassProperty
 import org.cubika.labs.scaffolding.form.FormItemConstants as FIC
+import org.codehaus.groovy.grails.commons.GrailsClassUtils
 
 /**
  * ConstraintValueUtils is used to give support constraint values or metaconstraint
@@ -213,5 +214,26 @@ class ConstraintValueUtils
 			result = annotation.generate() == "true" ? true : false
 
 		result
+	}
+	
+	static def multiselection(def domainClass)
+	{
+		def action = GrailsClassUtils.getStaticPropertyValue(domainClass.clazz,"action")
+
+    if (action?.datagrid?.multiselection)
+      return true
+
+    false
+	}
+	
+	static def actions(def domainClass)
+	{
+		def actions = []
+		def action = GrailsClassUtils.getStaticPropertyValue(domainClass.clazz,"action")
+		
+		if (action?.datagrid?.action)
+			actions = action.datagrid.action
+		
+		actions
 	}
 }
