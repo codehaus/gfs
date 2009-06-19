@@ -39,11 +39,34 @@
 			{
 				new ${className}CRUDEvent(${className}CRUDEvent.CREATE_EVENT).dispatch()
 			}
-			
+<% import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU %>			
 			private function destroy():void
 			{
-				if (dg.selectedItem)
-					new ${className}CRUDEvent(${className}CRUDEvent.DELETE_EVENT,dg.selectedItem as ${className}VO).dispatch();
+				var aux:Array = [];
+				<%	if (CVU.multiselection(domainClass))
+						{
+							println "for each (var item:${className}VO in dg.dataProvider)"
+							println	"				{"
+							println	"					if (item.selectedCheck)"
+							println	"					{"
+							println	"						aux.push(item)"
+							println "					}"
+							println	"				}"
+						}
+						else
+						{
+							println "if (dg.selectedItem)"
+							println "					aux.push(dg.selectedItem)"
+						}
+				%>
+				if (aux.length > 0)
+				{
+					var e:${className}CRUDEvent = new ${className}CRUDEvent(${className}CRUDEvent.DELETE_EVENT);
+				
+					e.vos = aux;
+				
+					e.dispatch();
+				}
 			}
 			
 			private function edit():void
@@ -87,13 +110,25 @@
 			<mx:columns>
 <%		
 			import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
-
+			
+			if (CVU.multiselection(domainClass))
+			{
+				println "				<mx:DataGridColumn itemRenderer=\"com.cubika.labs.renders.CheckItemRender\" width=\"20\" headerRenderer=\"com.cubika.labs.renders.CheckGridHeader\" sortable=\"false\" dataField=\"selectedCheck\"/>"
+			}
+			
 			def props = FSU.getPropertiesWithoutIdentity(domainClass,true)
 			props.each 
 			{
 					def gridcolumn = FSU.getDataGridColumn(it)
 					if (gridcolumn)
 						print "				$gridcolumn"
+			}
+			
+			def actions = CVU.actions(domainClass)
+			
+			actions.each
+			{
+				println "				<mx:DataGridColumn headerText=\"{MultipleRM.getString(MultipleRM.localePrefix,'${domainClass.propertyName}.${it.toLowerCase()}')}\" sortable=\"false\" itemRenderer=\"view.${domainClass.propertyName}.renderers.${className}${it}ItemRenderer\"/>"
 			}
 			%>			</mx:columns>
 			
@@ -105,7 +140,7 @@
 		styleName="listContainerButtons"
 		y="-2">
 		<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.create')} (F2)" click="create()" styleName="orangeButton"/>
-		<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.delete')} (F4)" enabled="{dg.selectedItem}" click="destroy()" styleName="orangeButton"/>
+		<mx:Button label="{MultipleRM.getString(MultipleRM.localePrefix,'generic.delete')} (F4)" click="destroy()" styleName="orangeButton"/>
 	</mx:HBox>
 	
 </mx:Canvas>

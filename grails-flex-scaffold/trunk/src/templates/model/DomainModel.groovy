@@ -126,36 +126,43 @@ package model.${domainClass.propertyName}
 		}
 		
 		
-		public function removeItem(vo:${className}VO):void
+		public function removeItems(vos:Array):void
 		{
-			var i:int=0;
+			var i:int;
 			
-			for each (var item:${className}VO in list)
+			for each (var itemDeleted:${className}VO in vos)
 			{
-				if (item.id == vo.id)
+				i = 0;
+				for each (var item:${className}VO in list)
 				{
-					list.removeItemAt(i);
-					return
+					if (item.id == itemDeleted.id)
+					{
+						list.removeItemAt(i);
+						break;
+					}
+					i++;
 				}
-				i++;
 			}
-			removeItem4ListNoPaged(vo);
+			removeItem4ListNoPaged(vos);
 		}
 		
-		private function removeItem4ListNoPaged(vo:${className}VO):void
+		private function removeItem4ListNoPaged(vos:Array):void
 		{
-			var i:int=0;
+			var i:int;
 			
-			for each (var item:${className}VO in listNoPaged)
+			for each (var itemDeleted:${className}VO in vos)
 			{
-				if (item.id == vo.id)
+				i = 0;
+				for each (var item:${className}VO in listNoPaged)
 				{
-					listNoPaged.removeItemAt(i);
-					return
+					if (item.id == itemDeleted.id)
+					{
+						listNoPaged.removeItemAt(i);
+						break;
+					}
+					i++;
 				}
-				i++;
 			}
-			
 		}
 		
 		public function get state():String

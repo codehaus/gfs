@@ -24,6 +24,7 @@ package vo.${domainClass.propertyName}
 {
 <%//Generate Import
 import org.cubika.labs.scaffolding.utils.FlexScaffoldingUtils as FSU
+import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
 
 def props = FSU.getPropertiesWithoutIdentity(domainClass,false,false)
 props.each
@@ -66,5 +67,13 @@ props.each
 		if (property)
 			println "		public var ${it.name}:${property};"
 	}
-}%>	}
+}
+
+if (CVU.multiselection(domainClass))
+{
+	println "		//Transient Properties"
+	println	"		[Transient]"
+	println "		public var selectedCheck:Boolean;"
+}
+%>	}
 }
