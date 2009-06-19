@@ -1,5 +1,6 @@
 import org.codehaus.groovy.grails.commons.GrailsClassUtils as GCU
 import org.cubika.labs.scaffolding.generator.DefaultFlexTemplateGenerator
+import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
 
 grailsHome = Ant.project.properties."environment.GRAILS_HOME"
 
@@ -47,6 +48,17 @@ generateEvents =
 	classNameFile = "${nameDir}/${domainClass.shortName}ExternalGetPaginationEvent.as"
 	templateFile = "${flexScaffoldPluginDir}"+antProp.'event.paginationfile'
 	generateEvent(domainClass,templateFile,classNameFile,"External")	
+	
+	//generate Event Actions
+	def actions = CVU.actions(domainClass)
+	
+	actions.each
+	{
+		classNameFile = "${nameDir}/${domainClass.shortName}${it}Event.as"
+		templateFile = "${flexScaffoldPluginDir}"+antProp.'event.actionevent'
+		dftg.generateTemplate(domainClass,templateFile,classNameFile,it)
+	}
+	//end generate Event Actions
 }
 
 private void generateEvent(domainClass,templateFile,classNameFile,typeName="")
