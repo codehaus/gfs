@@ -77,6 +77,52 @@ generateViews =
 		}
 	}
 	//end generate reporting view
+	
+	//GROUP VIEW
+	addToGroup(domainClass)
+	//GROUP VIEW END 
+}
+
+private void addToGroup(domainClass)
+{
+	def groupName =  CVU.groupName(domainClass)
+	if (!groupName)
+		return 
+	
+	groupName = groupName.replaceAll(" ","")
+	def nameDir = antProp.'view.destdir'+"/${groupName.toLowerCase()}"
+	def classNameFile = "${nameDir}/${groupName}GroupView.mxml"
+	def templateFile
+		
+	if (!(new File(nameDir).exists()))
+	{
+		Ant.mkdir(dir:nameDir)
+	}
+		
+	
+	if (!(new File(classNameFile).exists()))
+	{
+		templateFile = "${flexScaffoldPluginDir}"+antProp.'view.groupfile'
+		generateView(domainClass,templateFile,classNameFile)
+	}
+	
+	def file =  Ant.fileset(dir: nameDir) 
+	{
+		include(name:classNameFile)
+		contains(text: "<view${domainClass.shortName}:${domainClass.shortName}CRUDView", casesensitive: false)
+	}
+	
+	
+	if (!(file.size() > 0))
+	{
+		Ant.replace(file: classNameFile,
+          			token: "><!--NS-->", value: "\n	xmlns:view${domainClass.shortName}=\"view.${domainClass.propertyName}.*\"><!--NS-->")
+        Ant.replace(file: classNameFile,
+				    token: "<!--CRUDVIEWS-->", value: "<!--CRUDVIEWS-->\n"+
+					"		<view${domainClass.shortName}:${domainClass.shortName}CRUDView height=\"100%\" "+
+					"label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${domainClass.propertyName}.label')}\" name=\"${domainClass.propertyName}CRUDView\"/>")
+	}
+	
 }
 
 private void generateView(domainClass,templateFile,classNameFile)
