@@ -86,10 +86,28 @@
 				tn.selectedChild.setFocus();
 			}
 			
-			public function getView(view:String):Object
+			public function getView(v:String):Object
 			{
-				tn.selectedChild = Container(tn.getChildByName(view));
-				return tn.getChildByName(view);
+				var nav:Array = v.split("#");
+			
+				trace("ahhh")
+				
+				if (nav.length == 1)
+				{
+					tn.selectedChild = Container(tn.getChildByName(v));
+					return tn.getChildByName(v);	
+				}
+				else
+				{
+					tn.selectedChild = Container(tn.getChildByName(nav[0]));
+					return Object(tn.selectedChild).getView(nav[1]);
+				}
+					
+				nav.length == 1
+				
+				/*contenido original
+				 * tn.selectedChild = Container(tn.getChildByName(view));
+				return tn.getChildByName(view);*/
 			}
 			
 			override protected function createChildren():void
