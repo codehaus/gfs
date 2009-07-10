@@ -200,10 +200,17 @@ class I18nBuilder
 			}
 		}
 
+                def groupName = CVU.groupName(domainClass)
+
+                if (groupName)
+                {
+                    propertiesToTranslate.add("${groupName.toLowerCase().replaceAll(" ","")}.label$PROPERTY_SEPARATOR${groupName}$END_LINE_PROPERTIES")
+                }
+
 		def propertiesTranslate = "" 
 		if (defaultLocale != locale)
 		{
-      propertiesTranslate = translate(propertiesToTranslate)
+                    propertiesTranslate = translate(propertiesToTranslate)
 		}
 		else
 		{
