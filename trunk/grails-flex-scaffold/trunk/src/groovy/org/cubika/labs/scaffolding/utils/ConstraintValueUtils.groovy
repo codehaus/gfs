@@ -236,4 +236,11 @@ class ConstraintValueUtils
 		
 		actions
 	}
+	
+	static def groupName(def domainClass)
+	{	
+		String groupName = GrailsClassUtils.getStaticPropertyValue(domainClass.clazz,"groupName")
+		
+		groupName
+	}
 }
