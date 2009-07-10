@@ -114,12 +114,23 @@ void addToNavigationModel(domainClass)
 				return
 
 		def propertyName = domainClass.propertyName;
-				
+		def groupName = CVU.groupName(domainClass)
+		
+		if (groupName)
+		{
+			groupName = groupName.replaceAll(" ","")
+			groupName = "${groupName.toLowerCase()}GroupView#"
+			println "seteando el groupName " + groupName;
+		}
+		
+		else
+			groupName = ""
+		
 		Ant.replace(file: antProp.'model.destfile',
 	          token: "//DefaultNavigationMap - Not Remove", value: "//DefaultNavigationMap - Not Remove\n	"+
 										"		defaultNavigationMap[\"${propertyName}\"] = "+
-										"{name:\"${propertyName}CRUDView\",list:\"${propertyName}List\","+
-										"edit:\"${propertyName}Edit\",nav:{list:\"edit\",edit:\"list\"}};")
+										"{name:\"${groupName}${propertyName}CRUDView\",list:\"${groupName}${propertyName}List\","+
+										"edit:\"${groupName}${propertyName}Edit\",nav:{list:\"edit\",edit:\"list\"}};")
 }
 
 void addToMain(domainClass)
@@ -128,19 +139,42 @@ void addToMain(domainClass)
 		Ant.copy(file: "${flexScaffoldPluginDir}"+antProp.'main.file', tofile: antProp.'main.destdir', overwrite: true)
 	
 	
+	def groupName = CVU.groupName(domainClass)
+	def tabName // name to be showed in the upper tab
+	def propertyName
+	def name
+	
+	if (!groupName)
+	{
+		groupName = "${domainClass.shortName}CRUDView"
+		propertyName = domainClass.propertyName
+		name = "${propertyName}CRUDView"
+		tabName = propertyName
+	}
+	else
+	{
+		groupName = groupName.replaceAll(" ", "")
+		propertyName = groupName.toLowerCase()
+		groupName = "${groupName}GroupView"
+		name = "${propertyName}GroupView"
+		tabName = CVU.groupName(domainClass) 
+	}
+	
+	
+	
 	file =  Ant.fileset(	dir: antProp.'flex.srcdir') {
 									include(name:"Main.mxml")
-	          			contains(text: "<view${domainClass.shortName}:${domainClass.shortName}CRUDView", casesensitive: false)
+	          			contains(text: "<view${groupName}:${groupName}", casesensitive: false)
 						 		}
 				
 	if (!(file.size() > 0))
 	{
 		Ant.replace(file: antProp.'main.destdir',
-          			token: "><!--NS-->", value: "\n	xmlns:view${domainClass.shortName}=\"view.${domainClass.propertyName}.*\"><!--NS-->")
+          			token: "><!--NS-->", value: "\n	xmlns:view${groupName}=\"view.${propertyName}.*\"><!--NS-->")
 	  Ant.replace(file: antProp.'main.destdir',
 				        token: "<!--CRUDVIEWS-->", value: "<!--CRUDVIEWS-->\n		"+
-									"<view${domainClass.shortName}:${domainClass.shortName}CRUDView height=\"100%\" "+
-									"label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${domainClass.propertyName}.label')}\" name=\"${domainClass.propertyName}CRUDView\"/>")
+									"<view${groupName}:${groupName} height=\"100%\" "+
+									"label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${propertyName}.label')}\" name=\"${name}\"/>")
 	}
 									
 	Ant.replaceregexp(file: antProp.'main.destdir',
