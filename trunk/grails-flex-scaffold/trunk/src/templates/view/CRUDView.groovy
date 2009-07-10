@@ -2,6 +2,7 @@
 <%
 import org.cubika.labs.scaffolding.buttonbar.ButtonBarBuilder as BBBuilder
 import org.cubika.labs.scaffolding.reporting.filter.ReportingFilterBuilder as RepBuilder
+import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
 %>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:view="view.${domainClass.propertyName}.*"
 	creationComplete="doInit()">
@@ -41,10 +42,29 @@ import org.cubika.labs.scaffolding.reporting.filter.ReportingFilterBuilder as Re
 			
 			public function set selectedView(value:String):void
 			{
-				if (vs)
+				<%
+				def groupName = CVU.groupName(domainClass)
+				if(groupName)
+				{
+					println "if (vs)\n"+
+					 "           vs.selectedChild = Container(vs.getChildByName(value.split(\"#\")[1]));\n"+
+					 "       else\n"+
+					 "           _selectedChildBeforeInit = value.split(\"#\")[1];"
+				}
+				else
+				{
+					println "if (vs)\n"+
+					 "           vs.selectedChild = Container(vs.getChildByName(value));\n"+
+					 "       else\n"+
+					 "           _selectedChildBeforeInit = value;"
+				}
+				%>
+				/*
+				 * contenido original
+				 * if (vs)
 					vs.selectedChild = Container(vs.getChildByName(value));
 				else
-					_selectedChildBeforeInit = value;
+					_selectedChildBeforeInit = value;*/
 			}
 			
 		]]>
