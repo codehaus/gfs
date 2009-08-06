@@ -49,7 +49,7 @@
 	<mx:HBox verticalAlign="middle" horizontalGap="2"
 		id="paginatorContainer"
 		y="3"
-		x="{this.width / 2 - paginatorContainer.width / 2}">
+		x="{this.width / 2 - paginatorContainer.width / 3 + 25}">
 		<mx:Text text="{MultipleRM.getSuppliedString(MultipleRM.localePrefix, 'paginator.show', 'Show')}"/>
 		<mx:ComboBox id="cbItems" change="{execute()}">
 			<mx:dataProvider>
