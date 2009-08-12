@@ -69,7 +69,7 @@ package com.cubika.labs.controls
 		
 		public function set fileFilters(value:String):void
 		{
-			if (!_fileFilters)
+			//if (!_fileFilters)
 				_fileFilters = new FileFilter("Files Allowed",value);
 		}
 		
