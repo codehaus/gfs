@@ -19,8 +19,6 @@ package com.cubika.labs.controls
 	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
-	import flash.events.MouseEvent;
-	import flash.geom.Point;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
@@ -38,6 +36,10 @@ package com.cubika.labs.controls
 	public class CBKImageUpload extends CBKUploadBase
 	{
 		protected var image:Image;
+		
+		private var _imageWidht:Number;
+		
+		private var _imageHeight:Number
 		
 		public function CBKImageUpload()
 		{
@@ -86,6 +88,10 @@ package com.cubika.labs.controls
 			trace("imageCompleteHandler");
 			image.source = event.currentTarget.bytes
 			image.alpha = 1;
+			
+			_imageWidht = event.target.width;
+			_imageHeight = event.target.height;
+			
 			
 			load = true;
 			changeButton(load);
@@ -161,6 +167,22 @@ package com.cubika.labs.controls
 				load = false;
 				changeButton(load);
 			}
+		}
+		
+		public function get imageHeight():Number
+		{
+			if (!image)
+				return NaN;
+				
+			return _imageWidht;			
+		}
+		
+		public function get imageWidth():Number
+		{
+			if (!image)
+				return NaN;
+				
+			return _imageHeight;
 		}
 	}
 }
