@@ -30,7 +30,6 @@ package com.cubika.labs.controls
 	import flash.net.URLVariables;
 	
 	import mx.containers.Canvas;
-	import mx.controls.Alert;
 	import mx.controls.Button;
 	import mx.controls.ProgressBar;
 	import mx.controls.ProgressBarLabelPlacement;
@@ -42,6 +41,7 @@ package com.cubika.labs.controls
  	* @author Ezequiel Martin Apfel
  	* @since 28-Apr-2009
  	*/
+ 	[Event(name="maxFileExceed")]
 	public class CBKUploadBase extends Canvas
 	{
 		public var button:Button;
@@ -51,6 +51,9 @@ package com.cubika.labs.controls
 		public var url:String;
 		
 		public var autoload:Boolean = false;
+		
+		//Max File Size to upload
+		public var maxFileSize:Number;
 		
 		protected var _fileFilters:FileFilter;
 		
@@ -185,7 +188,19 @@ package com.cubika.labs.controls
 		private function selectFileHandler(event:Event):void
 		{
 			trace("selectFileHandler")
-			upload();
+			if (isNaN(maxFileSize))
+			{
+				upload();
+				return
+			}
+			
+			if ((_fileReference.size/1024) <= maxFileSize)
+			{
+				upload();
+				return
+			}
+			
+			dispatchEvent(new Event("maxFileExceed"))
 		}
 		
 		private function deleteHandler(event:MouseEvent):void
@@ -208,6 +223,18 @@ package com.cubika.labs.controls
 			deleteButton.enabled = false;
 		}
 		
+		/**
+		 * Return the file size	 
+		 * @return 
+		 * 
+		 */		
+		public function get size():Number
+		{
+			if (!_fileReference)
+				return NaN;
+				
+			return _fileReference.size;
+		} 
 		
 		protected function deleteCompleteHandler(event:Event):void
 		{
