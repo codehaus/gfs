@@ -2,8 +2,8 @@
 <!-- CubikaLabsManifest.xml -->
 <componentPackage>
 	<component id="CBKComboBox" class="com.cubika.labs.controls.CBKComboBox"/>
-    <component id="CBKDateField" class="com.cubika.labs.date.CBKDateField"/>
-    <component id="PaginationView" class="com.cubika.labs.pagination.PaginationView"/>
+  <component id="CBKDateField" class="com.cubika.labs.date.CBKDateField"/>
+  <component id="PaginationView" class="com.cubika.labs.pagination.PaginationView"/>
 	<component id="PaginationLightView" class="com.cubika.labs.pagination.PaginationLightView"/>
 	<component id="PageFilter" class="com.cubika.labs.pagination.PageFilter"/>
 	<component id="AutoComplete" class="com.adobe.flex.extras.controls.AutoComplete"/>
@@ -16,6 +16,7 @@
 	<component id="CBKImageUpload" class="com.cubika.labs.controls.CBKImageUpload"/>
 	<component id="CBKCameraSnapshot" class="com.cubika.labs.controls.CBKCameraSnapshot"/>
 	<component id="CBKSnapshotUpload" class="com.cubika.labs.controls.CBKSnapshotUpload"/>
+	<component id="CBKSecurityButton" class="com.cubika.labs.controls.security.CBKSecurityButton"/>
 	
 	
 	<!-- Containers Components -->

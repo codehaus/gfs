@@ -231,7 +231,7 @@ package com.cubika.labs.controls
 		public function get size():Number
 		{
 			if (!_fileReference)
-				return NaN;
+				return 0;
 				
 			return _fileReference.size;
 		} 
