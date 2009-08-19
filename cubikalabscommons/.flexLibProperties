@@ -29,6 +29,7 @@
 <classEntry path="com.cubika.labs.controls.reporting.filter.impl.NumberFilterControl"/>
 <classEntry path="com.cubika.labs.controls.reporting.filter.impl.StringFilterControl"/>
 <classEntry path="com.cubika.labs.controls.security.CBKSecurityButton"/>
+<classEntry path="com.cubika.labs.controls.security.CBKSecurityTabNavigator"/>
 <classEntry path="com.cubika.labs.date.CBKDateField"/>
 <classEntry path="com.cubika.labs.date.DateUtils"/>
 <classEntry path="com.cubika.labs.event.AddClickEvent"/>
