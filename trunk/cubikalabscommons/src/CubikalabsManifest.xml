@@ -17,6 +17,7 @@
 	<component id="CBKCameraSnapshot" class="com.cubika.labs.controls.CBKCameraSnapshot"/>
 	<component id="CBKSnapshotUpload" class="com.cubika.labs.controls.CBKSnapshotUpload"/>
 	<component id="CBKSecurityButton" class="com.cubika.labs.controls.security.CBKSecurityButton"/>
+	<component id="CBKSecurityTabNavigator" class="com.cubika.labs.controls.security.CBKSecurityTabNavigator"/>
 	
 	
 	<!-- Containers Components -->
