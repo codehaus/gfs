@@ -3,6 +3,7 @@ package com.cubika.labs.controls.security
 	import com.cubika.labs.utils.SecurityManager;
 	
 	import mx.controls.Button;
+	import mx.events.FlexEvent;
 
 	public class CBKSecurityButton extends Button
 	{
@@ -13,8 +14,18 @@ package com.cubika.labs.controls.security
 		public function CBKSecurityButton()
 		{
 			super();
+			addEventListener(FlexEvent.CREATION_COMPLETE,initComp,false,0, true);
 		}
 		
+		
+		//en el creation complete  habilitamos el boton segun corresponda
+		private function initComp(event: FlexEvent):void
+		{
+			if (_key && _entity)
+				this.enabled = SecurityManager.instance.authorizedTo(_key+"#"+_entity);
+			else
+				this.enabled = false;
+		}
 		
 		public function set key(value:String):void
 		{
@@ -26,12 +37,5 @@ package com.cubika.labs.controls.security
 			_entity = value;	
 		}
 		
-		override public function get enabled():Boolean
-		{
-			if (_key && _entity)
-				return SecurityManager.instance.authorizedTo(_key+"#"+_entity);
-			else
-				return super.enabled;
-		}
 	}
 }
