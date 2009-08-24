@@ -11,6 +11,13 @@ package com.cubika.labs.controls.security
 		
 		private var _entity:String;
 		
+		/**
+		 * esta variable se agrega para que el boton no pueda ser habilitado
+		 * en caso de que los permisos no lo permitan pero el workflow de Link
+		 * si lo haga
+		 * */
+		public var inmutable: Boolean = false;
+		
 		public function CBKSecurityButton()
 		{
 			super();
@@ -21,6 +28,7 @@ package com.cubika.labs.controls.security
 		//en el creation complete  habilitamos el boton segun corresponda
 		private function initComp(event: FlexEvent):void
 		{
+			this.inmutable = true;//significa que el workflow de link no podra cambiar este btn
 			if (_key && _entity)
 				this.enabled = SecurityManager.instance.authorizedTo(_key+"#"+_entity);
 			else
