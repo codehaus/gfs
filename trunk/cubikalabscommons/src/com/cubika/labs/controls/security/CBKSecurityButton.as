@@ -28,11 +28,17 @@ package com.cubika.labs.controls.security
 		//en el creation complete  habilitamos el boton segun corresponda
 		private function initComp(event: FlexEvent):void
 		{
-			this.inmutable = true;//significa que el workflow de link no podra cambiar este btn
 			if (_key && _entity)
+			{
 				this.enabled = SecurityManager.instance.authorizedTo(_key+"#"+_entity);
+				this.inmutable = false;			
+			}
 			else
+			{
+				
+				this.inmutable = true;//significa que el workflow de link no podra cambiar este btn
 				this.enabled = false;
+			}
 		}
 		
 		public function set key(value:String):void
