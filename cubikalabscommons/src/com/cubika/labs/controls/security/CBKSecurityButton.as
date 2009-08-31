@@ -12,11 +12,9 @@ package com.cubika.labs.controls.security
 		private var _entity:String;
 		
 		/**
-		 * esta variable se agrega para que el boton no pueda ser habilitado
-		 * en caso de que los permisos no lo permitan pero el workflow de Link
-		 * si lo haga
-		 * */
-		public var inmutable: Boolean = false;
+		 *	Allows enable button from external business logic
+		 **/
+		private var _inmutable: Boolean = false;
 		
 		public function CBKSecurityButton()
 		{
@@ -25,20 +23,30 @@ package com.cubika.labs.controls.security
 		}
 		
 		
-		//en el creation complete  habilitamos el boton segun corresponda
+		
 		private function initComp(event: FlexEvent):void
 		{
 			if (_key && _entity)
 			{
+				//Include user permissions. This button will be may enabled by external business logic
 				this.enabled = SecurityManager.instance.authorizedTo(_key+"#"+_entity);
-				this.inmutable = false;			
+				_inmutable = false;			
 			}
 			else
 			{
-				
-				this.inmutable = true;//significa que el workflow de link no podra cambiar este btn
+				//Not include user permissions. This button will not be enabled by external business logic
 				this.enabled = false;
+				_inmutable = true;
 			}
+		}
+		
+		override public function set enabled(value:Boolean):void
+		{
+			//If inmutable is true, allows external setter, otherwise set enabled property in false
+		 	if (!_inmutable)
+		 		super.enabled = value;
+		 	else
+		 		super.enabled = false;
 		}
 		
 		public function set key(value:String):void
