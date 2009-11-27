@@ -695,3 +695,25 @@ CBKDateField
 	border-style: solid; 
 	border-thickness: 1
 }
+
+.loginTitle
+{
+	font-weight: normal;
+	font-size: 10;
+	color: #ffffff;
+	textAlign: right;
+}
+
+Alert
+{
+      background-color: #666666;
+      border-color: #666666;
+      corner-radius: 0;
+      title-style-name: "headerAlertStyle";         
+}
+ 
+.headerAlertStyle
+{
+      color:#eeeeee;   
+      font-weight:bold;
+}
