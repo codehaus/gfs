@@ -4,6 +4,10 @@ import flex.messaging.services.remoting.RemotingDestination
 import grails.util.GrailsUtil
 import org.codehaus.groovy.grails.plugins.flex.FlexUtils
 import org.codehaus.groovy.grails.plugins.support.GrailsPluginUtils
+import org.cubika.labs.scaffolding.security.GFSMethodSecurityInterceptor
+import org.cubika.labs.scaffolding.security.SecurityAnnotationAttributes
+import org.springframework.security.intercept.method.MethodDefinitionAttributes
+
 
 class FlexScaffoldGrailsPlugin {
     // the plugin version
@@ -11,25 +15,31 @@ class FlexScaffoldGrailsPlugin {
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.1 > *"
     // the other plugins this plugin depends on
-    def dependsOn = [:]
+    def dependsOn = ['starkSecurity':'0.4.3']
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/error.gsp"
     ]
 
-		def observe = ["services"]
+	def observe = ["services"]
+	def loadAfter = ['services']
 
-    // TODO Fill in these fields
     def author = "Ezequiel Martin Apfel"
     def authorEmail = "eapfel@cubika.com"
     def title = "Grails Flex Scaffold (GFS)"
-    def description = "Provide scaffolding with flex"
+    def description = '''\
+        Grails Flex Scaffold (GFS) is a plugin that deals Flex code generation by
+        scaffolding methodology, including support for presentation and service (integration with BlazeDS)
+        layers by providing embeded data in your domain classes as original Grails Scaffolding does with Ajax and HTML'''
 
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/flex-scaffold"
 
     def doWithSpring = {
-        // TODO Implement runtime spring config (optional)
+
+        //Config Spring Security
+        configureSecurity.delegate = delegate
+        configureSecurity()
     }
 
     def doWithApplicationContext = { applicationContext ->
@@ -52,8 +62,9 @@ class FlexScaffoldGrailsPlugin {
       def servlets = xml.servlet
       servlets[servlets.size() - 1] + {
 				servlet {
-            'servlet-name'("MessageBrokerServlet")
             'display-name'("MessageBrokerServlet")
+            'servlet-name'("MessageBrokerServlet")
+
             'servlet-class'("flex.messaging.MessageBrokerServlet")
             'init-param' {
                 'param-name'("services.configuration.file")
@@ -101,5 +112,43 @@ class FlexScaffoldGrailsPlugin {
     def onConfigChange = { event ->
         // TODO Implement code that is executed when the project configuration changes.
         // The event is the same as for 'onChange'.
+    }
+
+    //Config GFS Security via Spring Security
+    def configureSecurity = {
+
+      //TODO: Eliminar el println y poner log
+      println "Loading GFS Security"
+
+      //Declare NameSpace
+      //xmlns security:"http://www.springframework.org/schema/security"
+
+      //Declate authentication manager
+      //security.'authentication-manager'('alias':"authenticationManager")
+
+      //De donde voy a sacar la seguridad
+      //serviceSecureAnnotation(GFSSecurityDBAttributes)
+
+      //
+      //serviceSecureAnnotationODS(GFSMethodDefinitionAttribute) {
+      //  attributes = serviceSecureAnnotation
+      //}
+
+      serviceSecureAnnotation(SecurityAnnotationAttributes)
+
+      serviceSecureAnnotationODS(MethodDefinitionAttributes) {
+          attributes = serviceSecureAnnotation
+      }
+
+      //Security Interceptor
+      securityInteceptor(GFSMethodSecurityInterceptor) {
+
+        validateConfigAttributes = false
+        authenticationManager = ref('authenticationManagerAnonymous')
+        accessDecisionManager = ref('accessDecisionManager')
+        objectDefinitionSource = serviceSecureAnnotationODS
+        throwException = true
+      }
+
     }
 }
