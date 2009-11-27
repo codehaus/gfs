@@ -115,7 +115,10 @@ void generatesAllI18n(domainClasses, locales)
 
 void generateProperties(domainClass, runHierarchy=true)
 {
-	print " ${domainClass.shortName}"
+    if (!domainClass)
+      return
+
+	print " ${domainClass?.shortName}"
 	i18nBuilder.build(domainClass)
 	
 	if (runHierarchy)

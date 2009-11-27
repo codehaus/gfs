@@ -125,7 +125,7 @@ package model
 		 */		
 		private function goTo(rootView:String, viewTo:String):void
 		{		
-			var root:Object = Application.application.getView(defaultNavigationMap[rootView].name)	
+			var root:Object = Application.application.principalView.getView(defaultNavigationMap[rootView].name)	
 			root.selectedView = defaultNavigationMap[rootView][viewTo];
 		}
 		

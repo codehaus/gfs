@@ -231,9 +231,14 @@ class ConstraintValueUtils
 		def actions = []
 		def action = GrailsClassUtils.getStaticPropertyValue(domainClass.clazz,"action")
 		
-		if (action?.datagrid?.action)
-			actions = action.datagrid.action
-		
+		if (action?.datagrid?.actions)
+        {
+            if (!(action?.datagrid?.actions instanceof List))
+              throw new Exception("Property actions into datagrid must be List")
+
+			actions = action.datagrid.actions
+        }
+
 		actions
 	}
 	
@@ -242,5 +247,17 @@ class ConstraintValueUtils
 		String groupName = GrailsClassUtils.getStaticPropertyValue(domainClass.clazz,"groupName")
 		
 		groupName
+	}
+
+    static def password(def DefaultGrailsDomainClassProperty property)
+	{
+		def constraint = property.domainClass.getConstrainedProperties()[property.name]
+
+		def isPassword = false
+
+		if (constraint?.widget == FIC.PASSWORD)
+			isPassword = true
+
+		isPassword
 	}
 }

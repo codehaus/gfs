@@ -1,5 +1,4 @@
 package org.cubika.labs.scaffolding.validator.impl
-
 ////////////////////////////////////////////////////////////////////
 // Copyright 2009 the original author or authors.
 //
@@ -16,30 +15,27 @@ package org.cubika.labs.scaffolding.validator.impl
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////
 
-import org.cubika.labs.scaffolding.validator.BuildValidator
 
 /**
- * String validator builder class
- *
- * @author Ezequiel Martin Apfel
- * @since  3-Feb-2009
+ * Equals String validator builder class
+ * User: Ezequiel Martin Apfel
+ * @since: 26-11-2009
+ * 
  */
-class StringBuildValidator extends AbstractBuildValidator
-{	
+
+public class PasswordBuildValidator extends AbstractBuildValidator {
+
+
 	/**
 	 * @see org.cubika.labs.scaffolding.validator.BuildValidator
 	 */
 	def build(id, value, constraint)
 	{
-		def validator = "<mx:StringValidator source=\"{${id}}\" "+
-			"property=\"${value}\" required=\"${!constraint.isBlank()}\""
-		
-		if (constraint.minSize)
-			validator += " minLength=\"${constraint.minSize}\""
-		
-		if (constraint.maxSize)
-			validator += " maxLength=\"${constraint.maxSize}\"" 
-		
-		validator += "/>"
+		def validator = "<cubikalabs:EqualsStringValidator source=\"{${id}}\" "+
+			"property=\"${value}\" anotherSource=\"{txtRePassword}\" required=\"${!constraint.isBlank()}\" />"
+
+
+		validator
 	}
+
 }

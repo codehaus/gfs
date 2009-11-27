@@ -155,13 +155,27 @@ class FlexScaffoldingUtils
 					"headerText=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}')}\">\n"+
 					"					<mx:itemRenderer>\n"+
 					"						<mx:Component>\n"+
-					"							<mx:Label htmlText=\"{data.description}\"/>\n"+
+					"							<mx:Label htmlText=\"{data.${property.name}}\"/>\n"+
 					"						</mx:Component>\n"+
 					"					</mx:itemRenderer>\n"+
 					"</mx:DataGridColumn>"
 				return sw.toString()
 			}
-			
+
+            if (CVU.password(property))
+			{
+				pw.println "<mx:DataGridColumn dataField=\"${property.name}\" "+
+					"headerText=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}')}\">\n"+
+					"					<mx:itemRenderer>\n"+
+					"						<mx:Component>\n"+
+					"							<mx:TextInput displayAsPassword=\"true\" text=\"{data.${property.name}}\" enabled=\"false\" borderThickness=\"0\" borderStyle=\"none\" backgroundAlpha=\"0\"/>"+
+					"						</mx:Component>\n"+
+					"					</mx:itemRenderer>\n"+
+					"</mx:DataGridColumn>"
+				return sw.toString()
+			}
+
+
 			pw.println "<mx:DataGridColumn dataField=\"${property.name}\" "+
 			"headerText=\"{MultipleRM.getString(MultipleRM.localePrefix,'${property.domainClass.propertyName}.${property.name}')}\" />"
 			

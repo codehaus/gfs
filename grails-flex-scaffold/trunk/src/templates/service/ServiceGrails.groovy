@@ -133,6 +133,7 @@ class ${className}Service
 			
 			errorString
 		}
+		
 <%	import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
 			def actions = CVU.actions(domainClass)
 			

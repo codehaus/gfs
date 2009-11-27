@@ -86,6 +86,7 @@ generateViews =
 private void addToGroup(domainClass)
 {
 	def groupName =  CVU.groupName(domainClass)
+
 	if (!groupName)
 		return 
 	
@@ -105,14 +106,13 @@ private void addToGroup(domainClass)
 		templateFile = "${flexScaffoldPluginDir}"+antProp.'view.groupfile'
 		generateView(domainClass,templateFile,classNameFile)
 	}
-	
-	def file =  Ant.fileset(dir: nameDir) 
-	{
-		include(name:classNameFile)
-		contains(text: "<view${domainClass.shortName}:${domainClass.shortName}CRUDView", casesensitive: false)
-	}
-	
-	
+
+
+	file =  Ant.fileset(dir: nameDir) {
+		      include(name:"${groupName}GroupView.mxml")
+		      contains(text:"${domainClass.shortName}CRUDView")
+	        }
+
 	if (!(file.size() > 0))
 	{
 		Ant.replace(file: classNameFile,

@@ -1,5 +1,3 @@
-package org.cubika.labs.scaffolding.validator.impl
-
 ////////////////////////////////////////////////////////////////////
 // Copyright 2009 the original author or authors.
 //
@@ -16,30 +14,30 @@ package org.cubika.labs.scaffolding.validator.impl
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////
 
-import org.cubika.labs.scaffolding.validator.BuildValidator
+package event.gfs
+{
+	import com.adobe.cairngorm.control.CairngormEvent;
 
-/**
- * String validator builder class
- *
- * @author Ezequiel Martin Apfel
- * @since  3-Feb-2009
- */
-class StringBuildValidator extends AbstractBuildValidator
-{	
-	/**
-	 * @see org.cubika.labs.scaffolding.validator.BuildValidator
-	 */
-	def build(id, value, constraint)
+	import command.gfs.LoginCommand;
+
+	import control.ApplicationController;
+
+	public class LoginEvent extends CairngormEvent
 	{
-		def validator = "<mx:StringValidator source=\"{${id}}\" "+
-			"property=\"${value}\" required=\"${!constraint.isBlank()}\""
-		
-		if (constraint.minSize)
-			validator += " minLength=\"${constraint.minSize}\""
-		
-		if (constraint.maxSize)
-			validator += " maxLength=\"${constraint.maxSize}\"" 
-		
-		validator += "/>"
+		public static const EVENT_NAME:String = "loginEvent";
+
+		public var username:String
+
+		public var password:String
+
+		public function LoginEvent(username:String,password:String)
+		{
+			super(EVENT_NAME);
+
+			this.username = username;
+			this.password = password;
+
+			ApplicationController.instance.registerCommand(EVENT_NAME,LoginCommand);
+		}
 	}
 }

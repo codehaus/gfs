@@ -407,7 +407,7 @@ class I18nBuilder
   {
 		def aux = [:]
 
-    String domainClassToTranslate = domainClass.naturalName
+        String domainClassToTranslate = domainClass.naturalName
 		String domainClassTranslated
 
 
