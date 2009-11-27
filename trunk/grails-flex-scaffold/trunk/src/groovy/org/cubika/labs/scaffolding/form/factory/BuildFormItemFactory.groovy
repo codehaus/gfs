@@ -27,7 +27,6 @@ import org.cubika.labs.scaffolding.form.impl.CheckBoxBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.DateFieldBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.OneToManyBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.OneToOneBuildFormItem
-import org.cubika.labs.scaffolding.form.impl.ExternalOneToOneBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.ExternalOneToManyBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.ExternalManyToOneBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.ExternalDataGridManyToOneBuildFormItem
@@ -36,6 +35,7 @@ import org.cubika.labs.scaffolding.form.impl.SliderBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.FileUploadBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.ImageUploadBuildFormItem
 import org.cubika.labs.scaffolding.form.impl.SnapshotUploadBuildFormItem
+import org.cubika.labs.scaffolding.form.impl.PasswordTextInputBuildFormItem
 
 import org.cubika.labs.scaffolding.form.FormItemConstants as FIC
 import org.cubika.labs.scaffolding.utils.ConstraintValueUtils as CVU
@@ -58,7 +58,13 @@ class BuildFormItemFactory
 		
 		if (!CVU.display(property))
         return
-		
+
+        if (constraint.widget == FIC.PASSWORD)
+        {
+            validateWidget(property.type,String.class,constraint.widget)
+            return new PasswordTextInputBuildFormItem(property)
+        }
+
 		if (constraint.widget == FIC.IMAGE_UPLOAD)
 		{
 			validateWidget(property.type,String.class,constraint.widget)
@@ -78,7 +84,7 @@ class BuildFormItemFactory
 		}
 		
 		if (constraint.widget == FIC.TEXT_INPUT)
-        return new TextInputBuildFormItem(property)
+          return new TextInputBuildFormItem(property)
 		
 		if (constraint.widget == FIC.TEXT_AREA)
         return new TextAreaBuildFormItem(property)
@@ -106,26 +112,26 @@ class BuildFormItemFactory
 		}
 		
 		if (property.type == String.class && !constraint.inList)
-        return new TextInputBuildFormItem(property)
+          return new TextInputBuildFormItem(property)
 		
 		if (constraint.inList && constraint.widget != FIC.AUTO_COMPLETE)
-        return new ComboBuildFormItem(property)
+          return new ComboBuildFormItem(property)
 
 		if (constraint.inList && constraint.widget == FIC.AUTO_COMPLETE)
-        return new AutoCompleteBuildFormItem(property)
+          return new AutoCompleteBuildFormItem(property)
 		
 		if (property.type == Integer.class || property.type == Long.class || property.type == Float.class 
             || property.type == Double.class)
-        return new NumericStepperBuildFormItem(property)
+          return new NumericStepperBuildFormItem(property)
 			
 		if (property.type == Boolean.class)
-        return new CheckBoxBuildFormItem(property)
+          return new CheckBoxBuildFormItem(property)
 			
 		if (property.type == Date.class)
-        return new DateFieldBuildFormItem(property)
+          return new DateFieldBuildFormItem(property)
 		
 		if (property.isManyToMany())
-        return
+          return
 		
 		def inPlace = CVU.getInPlace(constraint)
 		
@@ -168,6 +174,6 @@ class BuildFormItemFactory
 	static private void validateWidget(type,clazz,widget)
 	{
 		if (type != clazz)
-        throw new Exception("Property must be ${clazz} to use \"${widget}\"")
+          throw new Exception("Property must be ${clazz} to use \"${widget}\"")
 	}
 }

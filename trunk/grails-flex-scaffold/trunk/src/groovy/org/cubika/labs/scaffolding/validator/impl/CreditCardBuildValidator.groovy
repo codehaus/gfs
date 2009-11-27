@@ -25,7 +25,7 @@ package org.cubika.labs.scaffolding.validator.impl
 class CreditCardBuildValidator extends AbstractBuildValidator
 {	
 	/**
-	 * @see org.cubika.labs.scaffolding.validator.BuildValidator.build()
+	 * @see org.cubika.labs.scaffolding.validator.BuildValidator
 	 */
 	def build(id, value, constraint)
 	{

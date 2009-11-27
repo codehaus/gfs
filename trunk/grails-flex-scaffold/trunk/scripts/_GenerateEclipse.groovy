@@ -85,5 +85,7 @@ generateFlexBuilder =
 			tofile: "$basedir/flex_libs/cubikalabscommons.swc", overwrite: true)
 		copy(file: "$flexScaffoldPluginDir/src/flex/libs/Cairngorm.swc", 
 			tofile: "$basedir/flex_libs/Cairngorm.swc", overwrite: true)
+		copy(file: "$flexScaffoldPluginDir/src/flex/libs/as3corelib.swc",
+			tofile: "$basedir/flex_libs/as3corelib.swc", overwrite: true)
 	}
 }

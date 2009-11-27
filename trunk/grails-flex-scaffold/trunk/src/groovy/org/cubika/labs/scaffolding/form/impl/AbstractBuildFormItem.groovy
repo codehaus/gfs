@@ -79,7 +79,7 @@ abstract class AbstractBuildFormItem implements BuildFormItem
 	}
 	
 	/**
-	 * @see #BuildFormItem
+	 * @see org.cubika.labs.scaffolding.form.BuildFormItem
 	 */
 	String getFormItemID()
 	{
@@ -87,7 +87,7 @@ abstract class AbstractBuildFormItem implements BuildFormItem
 	}
 	
 	/**
-	 * @see #BuildFormItem
+	 * @see org.cubika.labs.scaffolding.form.BuildFormItem
 	 */
 	String getRemoveChildEditView()
 	{
@@ -96,7 +96,7 @@ abstract class AbstractBuildFormItem implements BuildFormItem
 	}
 	
 	/**
-	 * @see #BuildFormItem
+	 * @see org.cubika.labs.scaffolding.form.BuildFormItem
 	 */
 	String getRemoveChildCreateView()
 	{

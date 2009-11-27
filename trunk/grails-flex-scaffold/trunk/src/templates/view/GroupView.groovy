@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:usuarioExterno="view.usuarioExterno.*" 
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 	creationComplete="doInit()" ><!--NS-->
 	
 	<mx:Script>

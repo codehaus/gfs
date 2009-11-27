@@ -10,6 +10,9 @@ def props = FSU.getPropertiesWithoutIdentity(domainClass,true)%>
 	
 	<mx:Script>
 		<![CDATA[
+		    import com.adobe.crypto.SHA256;
+		    import mx.events.ValidationResultEvent;
+			import mx.controls.Alert;
 			
 			import mx.binding.utils.BindingUtils;
 			
@@ -40,7 +43,12 @@ def props = FSU.getPropertiesWithoutIdentity(domainClass,true)%>
 				
 			private function saveOrUpdate():void
 			{
-				if (validators.length >= 0 && Validator.validateAll(validators).length == 0)
+			    var messageResult:Array = [];
+				var err:ValidationResultEvent;
+				var errField:String;
+				var errorResult:Array = Validator.validateAll(validators)
+
+				if (validators.length >= 0 && errorResult.length == 0)
 				{
 					var _vo:${className}VO = _model.selected;	
 					
@@ -60,6 +68,16 @@ def props = FSU.getPropertiesWithoutIdentity(domainClass,true)%>
 								}
 %>
 					new ${className}CRUDEvent(${className}CRUDEvent.SAVE_OR_UPDATE_EVENT,_vo).dispatch();
+				}
+				else
+				{
+				    for each (err in errorResult)
+				    {
+                        errField = FormItem(err.currentTarget.source.parent).label
+                        messageResult.push(errField + ": " + err.message);
+                    }
+
+					Alert.show(messageResult.join("\\n\\n"), "Invalid form...", Alert.OK);
 				}
 			}
 			

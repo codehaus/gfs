@@ -20,9 +20,13 @@ import org.codehaus.groovy.grails.commons.GrailsClass;
 import org.codehaus.groovy.grails.commons.GrailsServiceClass;
 import org.codehaus.groovy.grails.commons.ServiceArtefactHandler;
 import org.codehaus.groovy.grails.web.util.WebUtils;
+import org.cubika.labs.scaffolding.security.GFSLoginManager;
+import org.cubika.labs.scaffolding.security.GFSLoginCommand;
 
 import flex.messaging.MessageBroker;
+import flex.messaging.security.LoginCommand;
 import flex.messaging.config.ConfigMap;
+import flex.messaging.config.SecurityConstraint;
 import flex.messaging.services.AbstractBootstrapService;
 
 public class GrailsBootstrapService extends AbstractBootstrapService {
@@ -37,16 +41,44 @@ public class GrailsBootstrapService extends AbstractBootstrapService {
         GrailsApplication application = WebUtils.lookupApplication(messageBroker.getInitServletContext());
         GrailsClass[] grailsClasses = application.getArtefacts(ServiceArtefactHandler.TYPE);
 
+        GFSLoginManager lm = null;
+        SecurityConstraint sc = null;
+
+        lm = createSecurity();
+
+        sc = new SecurityConstraint();
+
+        sc.setMethod(SecurityConstraint.CUSTOM_AUTH_METHOD);
+
         for (int i = 0; i < grailsClasses.length; i++) {
             GrailsServiceClass serviceClass = (GrailsServiceClass) grailsClasses[i];
             if (FlexUtils.hasFlexRemotingConvention(serviceClass)) {
                 FlexUtils.createRemotingDestination(messageBroker, serviceClass);
             }
         }
+
+        messageBroker.setLoginManager(lm);
     }
     
     public void start() {}
 
-    public void stop() {}     
+    public void stop() {}
+
+    private GFSLoginManager createSecurity()
+    {
+
+      GFSLoginManager lm = new GFSLoginManager();
+
+      LoginCommand lc = new GFSLoginCommand();
+
+      lm.setPerClientAuthentication(false);
+
+      lm.setLoginCommand(lc);
+
+      lm.start();
+
+      return lm;
+	}
+
     
 }

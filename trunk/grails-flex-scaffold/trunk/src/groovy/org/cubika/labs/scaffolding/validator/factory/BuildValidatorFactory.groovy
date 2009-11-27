@@ -27,6 +27,8 @@ import org.cubika.labs.scaffolding.validator.impl.NumberBuildValidator
 import org.cubika.labs.scaffolding.validator.impl.EmailBuildValidator 
 import org.cubika.labs.scaffolding.validator.impl.URLBuildValidator
 import org.cubika.labs.scaffolding.validator.impl.CreditCardBuildValidator
+import org.cubika.labs.scaffolding.validator.impl.PasswordBuildValidator
+import org.cubika.labs.scaffolding.form.FormItemConstants as FIC
 
 /**
  * Create validator builders
@@ -66,5 +68,10 @@ class BuildValidatorFactory
 		
 		if (!constraint.blank)
 			return new StringBuildValidator()
+
+        if (constraint?.widget == FIC.PASSWORD) {
+          return new PasswordBuildValidator()
+        }
+
 	}
 }

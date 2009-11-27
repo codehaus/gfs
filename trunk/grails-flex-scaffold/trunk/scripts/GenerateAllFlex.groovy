@@ -103,42 +103,48 @@ void generateAllFlex(name)
 void addToNavigationModel(domainClass)
 {
 	if (!new File(antProp.'model.destfile').exists())
-		Ant.copy(file: "${flexScaffoldPluginDir}"+antProp.'model.navigationfile', tofile: antProp.'model.destfile', overwrite: true)
-	
-		file =  Ant.fileset(	dir: antProp.'flex.srcdir') {
-										include(name:antProp.'model.destfile')
-		          			contains(text: "defaultNavigationMap[\"${domainClass.propertyName}\"]", casesensitive: false)
-							 		}
+		Ant.copy(file:"${flexScaffoldPluginDir}"+antProp.'model.navigationfile', tofile: antProp.'model.destfile', overwrite: true)
 
-		if (file.size() > 0)
-				return
 
-		def propertyName = domainClass.propertyName;
-		def groupName = CVU.groupName(domainClass)
-		
-		if (groupName)
-		{
-			groupName = groupName.replaceAll(" ","")
-			groupName = "${groupName.toLowerCase()}GroupView#"
-			println "seteando el groupName " + groupName;
-		}
-		
-		else
-			groupName = ""
-		
-		Ant.replace(file: antProp.'model.destfile',
-	          token: "//DefaultNavigationMap - Not Remove", value: "//DefaultNavigationMap - Not Remove\n	"+
-										"		defaultNavigationMap[\"${propertyName}\"] = "+
-										"{name:\"${groupName}${propertyName}CRUDView\",list:\"${groupName}${propertyName}List\","+
-										"edit:\"${groupName}${propertyName}Edit\",nav:{list:\"edit\",edit:\"list\"}};")
+    file =  Ant.fileset(dir: antProp.'model.destdir') {
+                        include(name:antProp.'model.navigation')
+                        contains(text:"${domainClass.propertyName}", casesensitive: false)
+            }
+
+    if (file.size() > 0)
+            return
+
+    def propertyName = domainClass.propertyName;
+    def groupName = CVU.groupName(domainClass)
+
+    if (groupName)
+    {
+        groupName = groupName.replaceAll(" ","")
+        groupName = "${groupName.toLowerCase()}GroupView#"
+        println "Setting groupName " + groupName;
+    }
+
+    else
+        groupName = ""
+
+    Ant.replace(file: antProp.'model.destfile',
+          token: "//DefaultNavigationMap - Not Remove", value: "//DefaultNavigationMap - Not Remove\n	"+
+                                    "		defaultNavigationMap[\"${propertyName}\"] = "+
+                                    "{name:\"${groupName}${propertyName}CRUDView\",list:\"${groupName}${propertyName}List\","+
+                                    "edit:\"${groupName}${propertyName}Edit\",nav:{list:\"edit\",edit:\"list\"}};")
 }
 
 void addToMain(domainClass)
 {
 	if (!new File(antProp.'main.destdir').exists())
-		Ant.copy(file: "${flexScaffoldPluginDir}"+antProp.'main.file', tofile: antProp.'main.destdir', overwrite: true)
+	  Ant.copy(file: "${flexScaffoldPluginDir}"+antProp.'main.file', tofile: antProp.'main.destdir', overwrite: true)
 	
-	
+	if (!new File(antProp.'login.destdir').exists())
+	  Ant.copy(file: "${flexScaffoldPluginDir}"+antProp.'view.login', tofile: antProp.'login.destdir', overwrite: true)
+
+	if (!new File(antProp.'principal.destdir').exists())
+	  Ant.copy(file: "${flexScaffoldPluginDir}"+antProp.'view.principal', tofile: antProp.'principal.destdir', overwrite: true)
+
 	def groupName = CVU.groupName(domainClass)
 	def tabName // name to be showed in the upper tab
 	def propertyName
@@ -162,44 +168,45 @@ void addToMain(domainClass)
 	
 	
 	
-	file =  Ant.fileset(	dir: antProp.'flex.srcdir') {
-									include(name:"Main.mxml")
-	          			contains(text: "<view${groupName}:${groupName}", casesensitive: false)
-						 		}
+	file =  Ant.fileset(dir: antProp.'view.destdir') {
+		      include(name:"PrincipalView.mxml")
+	          contains(text:"<view${groupName}:${groupName}", casesensitive: false)
+	}
 				
 	if (!(file.size() > 0))
 	{
-		Ant.replace(file: antProp.'main.destdir',
+		Ant.replace(file: antProp.'principal.destdir',
           			token: "><!--NS-->", value: "\n	xmlns:view${groupName}=\"view.${propertyName}.*\"><!--NS-->")
-	  Ant.replace(file: antProp.'main.destdir',
-				        token: "<!--CRUDVIEWS-->", value: "<!--CRUDVIEWS-->\n		"+
-									"<view${groupName}:${groupName} height=\"100%\" "+
-									"label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${propertyName}.label')}\" name=\"${name}\"/>")
+
+	    Ant.replace(file: antProp.'principal.destdir',
+				    token: "<!--CRUDVIEWS-->", value: "<!--CRUDVIEWS-->\n		"+
+					"<view${groupName}:${groupName} height=\"100%\" "+
+					"label=\"{MultipleRM.getString(MultipleRM.localePrefix,'${propertyName}.label')}\" name=\"${name}\"/>")
 	}
 									
-	Ant.replaceregexp(file: antProp.'main.destdir',
+	Ant.replaceregexp(file: antProp.'principal.destdir',
           		match: ".*Resource.*\n*", 
           		replace: "@metadata@")
 
-	Ant.replaceregexp(file: antProp.'main.destdir',
+	Ant.replaceregexp(file: antProp.'principal.destdir',
           		match: "@metadata@", 
           		replace: "${I18nUtils.getMetaTags()}")						
 	
 
-  Ant.replaceregexp(file: antProp.'main.destdir',
+    Ant.replaceregexp(file: antProp.'principal.destdir',
           		match: "private var localesCollection:ArrayCollection.*", 
           		replace: "${I18nUtils.getLocalesCollection()}",byline: "false", flags:"m")
 }
 
 void addToMainLocale(domainClass)
 {
-	String stringFile = new File(antProp.'main.destdir').text
+	String stringFile = new File(antProp.'principal.destdir').text
 	
 	stringFile = stringFile.replaceAll(".*Resource.*\n*","##")
 	stringFile = stringFile.replaceAll("##.*#",I18nUtils.getMetaTags())						
 	stringFile = stringFile.replaceAll("private var localesCollection:ArrayCollection.*","${I18nUtils.getLocalesCollection()}")
 	
-	def file = new File(antProp.'main.destdir')
+	def file = new File(antProp.'principal.destdir')
 	
 	def writer = file.newWriter()
 	

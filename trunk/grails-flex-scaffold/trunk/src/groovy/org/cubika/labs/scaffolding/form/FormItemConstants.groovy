@@ -36,6 +36,7 @@ class FormItemConstants
 	static final String IMAGE_UPLOAD = "imageupload"
 	static final String FILE_UPLOAD = "fileupload"
 	static final String SNAP_UPLOAD = "snapshotupload"
+    static final String PASSWORD = "password"
 	
 	//constraints
 	static final String IN_PLACE = "inPlace"

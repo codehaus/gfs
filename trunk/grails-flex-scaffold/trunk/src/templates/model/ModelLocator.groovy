@@ -29,7 +29,12 @@ package model
 		// Locale var
 		[Bindable]
 		public var localePrefix:String = 'message';
-		
+
+		public var popup:*;
+
+		[Bindable]
+		public var currentView:int = 0;
+
 		/*PROPERTIES*/
 		
 		public function ApplicationModelLocator(enforcer:SingletonEnforcer)
