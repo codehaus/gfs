@@ -55,8 +55,6 @@ public class GrailsBootstrapService extends AbstractBootstrapService {
 
         grailsClasses.each { serviceClass ->
 
-            //GrailsServiceClass serviceClass = (GrailsServiceClass) grailsClasses[i];
-
             if (FlexUtils.hasFlexRemotingConvention(serviceClass)) {
 
                 FlexUtils.createRemotingDestination(messageBroker, serviceClass);
