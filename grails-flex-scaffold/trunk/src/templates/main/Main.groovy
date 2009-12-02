@@ -14,10 +14,33 @@
 			public var appModel:ApplicationModelLocator = ApplicationModelLocator.instance;
 
 
-			public function doInit(): void {
-				var url:Object = Application.application.parameters;
-				appModel.popup = PopUpManager.createPopUp(DisplayObject(Application.application),LoginView,true) as LoginView;
-				PopUpManager.centerPopUp(appModel.popup);
+			public function doInit(): void
+			{
+			    //Check if security is enabled
+			    GFS::security {
+                  var url:Object = Application.application.parameters;
+                  appModel.popup = PopUpManager.createPopUp(DisplayObject(Application.application),LoginView,true) as LoginView;
+                  PopUpManager.centerPopUp(appModel.popup);
+                }
+			}
+
+
+			override protected function createChildren():void
+			{
+				super.createChildren();
+
+				//Check if security is enabled
+				GFS::security {
+
+                	stack.addChild(new Box());
+                }
+
+                principalView = new PrincipalView();
+                principalView.percentWidth = 100;
+                principalView.percentHeight = 100;
+
+                stack.addChild(principalView);
+
 			}
 
 		]]>
@@ -25,9 +48,7 @@
 
 	<mx:Style source="css/styles.css"/>
 
-	<mx:ViewStack id="stack" width="100%" height="100%" selectedIndex="{appModel.currentView}">
-		<mx:Box/>
-		<view:PrincipalView id="principalView" width="100%" height="100%"/>
-	</mx:ViewStack>
-	
+	<mx:ViewStack id="stack" width="100%" height="100%" selectedIndex="{appModel.currentView}"/>
+
+
 </mx:Application>
