@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
-	backgroundColor="#e2e2e2" creationComplete="doInit()" xmlns:view="view.*">
+	backgroundColor="#e2e2e2" creationComplete="doInit()">
 	
 	<mx:Style source="css/styles.css"/>
 
@@ -9,15 +9,19 @@
 			import view.LoginView;
 			import model.ApplicationModelLocator;
 			import mx.managers.PopUpManager;
-
+			import view.PrincipalView;
+			import mx.containers.Box;
+			
 			[Bindable]
 			public var appModel:ApplicationModelLocator = ApplicationModelLocator.instance;
 
+            public var principalView:PrincipalView;
 
 			public function doInit(): void
 			{
-			    //Check if security is enabled
+			    //Check if security is enabled (argument compile variable)
 			    GFS::security {
+			    
                   var url:Object = Application.application.parameters;
                   appModel.popup = PopUpManager.createPopUp(DisplayObject(Application.application),LoginView,true) as LoginView;
                   PopUpManager.centerPopUp(appModel.popup);
@@ -29,7 +33,7 @@
 			{
 				super.createChildren();
 
-				//Check if security is enabled
+				//Check if security is enabled (argument compile variable)
 				GFS::security {
 
                 	stack.addChild(new Box());
