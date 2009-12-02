@@ -7,6 +7,7 @@
  *       $ grails flex-tasks compile - will compile flex code into a swf file for deployment, by default swf file is placed in web-apps
  *       $ grails flex-tasks - will run all of the above tasks
  */
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 Ant.property(environment:"env")   
 grailsHome = Ant.project.properties."env.GRAILS_HOME"
@@ -17,6 +18,8 @@ def antProp = Ant.project.properties
 
 def mxmlFile = antProp.'mxml.file'
 def outputFile = antProp.'output.file'
+//Set security to compile flex
+def security = false
 
 def FLEX_HOME = Ant.project.properties."env.FLEX_HOME"
 //Set FLEX_HOME as property because otherwise mxmlc won't perform
@@ -40,6 +43,15 @@ target('default':'Can choose to create gsp wrapper file or compile flex to swf o
 	}
 		
 	println "Flex Home: $FLEX_HOME"
+
+    def config = new ConfigSlurper().parse(new File('grails-app/conf/Config.groovy').toURL())
+	
+	security = config?.gfs?.security
+
+	if (!security)
+	  security = false
+
+	println "Compile with security in: $security"
 	
 	if(args)
 	{
@@ -89,7 +101,7 @@ target(runAll:"Runs all Flex tasks")
 
 target(clean:"Deletes the previous SWF file")
 {
-		Ant.delete(file:outputFile)
+    Ant.delete(file:outputFile)
 }
 
 target(compile:'Compile Flex project into SWF file')
@@ -98,24 +110,22 @@ target(compile:'Compile Flex project into SWF file')
 	           output:outputFile,
 	           incremental:antProp.incremental,
 	           'actionscript-file-encoding':antProp.encoding,
-						 'show-unused-type-selector-warnings' : false,
-						 services:"web-app/WEB-INF/flex/services-config.xml",
-						 debug:antProp.debug,
-						 'context-root':antProp.'context-root',
-			       'keep-generated-actionscript':false) 
-						 {
-			     		'load-config'(filename:"$FLEX_HOME/frameworks/flex-config.xml")
-			     		'compiler.library-path'(dir:"$FLEX_HOME/frameworks", append:"true")
-							{
-				      	include(name:"libs")
-				        include(name:"../bundles/{locale}")
-				  		}
-							'compiler.library-path'(dir:"$basedir",append:"true")
-							{
-								include(name:'flex_libs')
-							}
-							'source-path'('path-element':"$FLEX_HOME/frameworks")
-							'source-path'('path-element':"$basedir/grails-app/i18n")
+               'show-unused-type-selector-warnings' : false,
+               services:"web-app/WEB-INF/flex/services-config.xml",
+               debug:antProp.debug,
+               'context-root':antProp.'context-root',
+			   'keep-generated-actionscript':false) {
+                  'load-config'(filename:"$FLEX_HOME/frameworks/flex-config.xml")
+                  'compiler.library-path'(dir:"$FLEX_HOME/frameworks", append:"true") {
+                      include(name:"libs")
+                      include(name:"../bundles/{locale}")
+                  }
+                  'compiler.library-path'(dir:"$basedir",append:"true") {
+                      include(name:'flex_libs')
+                  }
+                  'source-path'('path-element':"$FLEX_HOME/frameworks")
+                  'source-path'('path-element':"$basedir/grails-app/i18n")
+                  define(name:"GFS::security",value:"$security")
 	           }
 
 }
