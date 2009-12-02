@@ -30,30 +30,32 @@ public class GrailsBootstrapService extends AbstractBootstrapService {
 
     public void initialize(String id, ConfigMap properties) {
 
-        MessageBroker messageBroker = getMessageBroker();
+        MessageBroker messageBroker = getMessageBroker()
 
         // add spring factory if it's not yet registered
-        FlexUtils.addSpringFactory(messageBroker);
+        FlexUtils.addSpringFactory(messageBroker)
 
-        GrailsApplication application = WebUtils.lookupApplication(messageBroker.getInitServletContext());
-        GrailsClass[] grailsClasses = application.getArtefacts(ServiceArtefactHandler.TYPE);
+        GrailsApplication application = WebUtils.lookupApplication(messageBroker.getInitServletContext())
+        def grailsClasses = application.getArtefacts(ServiceArtefactHandler.TYPE)
 
-        SecurityConstraint sc = null;
+        SecurityConstraint sc
 
-        Boolean allowSecurity = false;//(Boolean) ConfigurationHolder.getConfig().get("gfsSecurity");
+        def config = ConfigurationHolder.config
 
-        if (allowSecurity) {
+        Boolean security = config?.gfs?.security
+
+        if (security) {
 
             initializeSecurity(messageBroker);
 
             //TODO: Implements security context into RemoteDestination
-            sc = new SecurityConstraint();
-            sc.setMethod(SecurityConstraint.CUSTOM_AUTH_METHOD);
+            sc = new SecurityConstraint()
+            sc.setMethod(SecurityConstraint.CUSTOM_AUTH_METHOD)
         }
 
-        for (int i = 0; i < grailsClasses.length; i++) {
+        grailsClasses.each { serviceClass ->
 
-            GrailsServiceClass serviceClass = (GrailsServiceClass) grailsClasses[i];
+            //GrailsServiceClass serviceClass = (GrailsServiceClass) grailsClasses[i];
 
             if (FlexUtils.hasFlexRemotingConvention(serviceClass)) {
 
