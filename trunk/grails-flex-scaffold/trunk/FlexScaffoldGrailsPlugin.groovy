@@ -118,7 +118,13 @@ class FlexScaffoldGrailsPlugin {
     def configureSecurity = {
 
       //TODO: Eliminar el println y poner log
-      println "Loading GFS Security"
+
+      def config = application.config
+
+      if (config?.gfs?.security)
+        println "Loading GFS Security"
+      else
+        println "GFS Security disabled"
 
       //Declare NameSpace
       //xmlns security:"http://www.springframework.org/schema/security"
