@@ -33,7 +33,7 @@ class FlexScaffoldGrailsPlugin {
         layers by providing embeded data in your domain classes as original Grails Scaffolding does with Ajax and HTML'''
 
     // URL to the plugin's documentation
-    def documentation = "http://grails.org/plugin/flex-scaffold"
+    def documentation = "http://docs.codehaus.org/display/GFS/Grails+Flex+Scaffold"
 
     def doWithSpring = {
 
@@ -121,11 +121,6 @@ class FlexScaffoldGrailsPlugin {
 
       def config = application.config
 
-      if (config?.gfs?.security)
-        println "Loading GFS Security"
-      else
-        println "GFS Security disabled"
-
       //Declare NameSpace
       //xmlns security:"http://www.springframework.org/schema/security"
 
@@ -140,21 +135,31 @@ class FlexScaffoldGrailsPlugin {
       //  attributes = serviceSecureAnnotation
       //}
 
-      serviceSecureAnnotation(SecurityAnnotationAttributes)
+      if (config?.gfs?.security) {
 
-      serviceSecureAnnotationODS(MethodDefinitionAttributes) {
-          attributes = serviceSecureAnnotation
+        println "Loading GFS Security"
+
+        serviceSecureAnnotation(SecurityAnnotationAttributes)
+
+        serviceSecureAnnotationODS(MethodDefinitionAttributes) {
+            attributes = serviceSecureAnnotation
+        }
+
+        //Security Interceptor
+        securityInteceptor(GFSMethodSecurityInterceptor) {
+
+          validateConfigAttributes = false
+          authenticationManager = ref('authenticationManagerAnonymous')
+          accessDecisionManager = ref('accessDecisionManager')
+          objectDefinitionSource = serviceSecureAnnotationODS
+          throwException = true
+        }
+      }
+      else {
+
+        println "GFS Security disabled"
       }
 
-      //Security Interceptor
-      securityInteceptor(GFSMethodSecurityInterceptor) {
-
-        validateConfigAttributes = false
-        authenticationManager = ref('authenticationManagerAnonymous')
-        accessDecisionManager = ref('accessDecisionManager')
-        objectDefinitionSource = serviceSecureAnnotationODS
-        throwException = true
-      }
 
     }
 }
