@@ -24,10 +24,10 @@ package command.gfs
 	import model.ApplicationModelLocator;
 
 	import mx.controls.Alert;
+	import mx.managers.CursorManager;
 	import mx.managers.PopUpManager;
 	import mx.messaging.config.ServerConfig;
 	import mx.rpc.IResponder;
-
 
 	public class LoginCommand implements ICommand, IResponder
 	{
@@ -37,20 +37,22 @@ package command.gfs
 		{
 			var loginEvent:LoginEvent = LoginEvent(event);
 
-			//new UsuarioBusinessDelegate(this).login(loginEvent.username,loginEvent.password)
+            CursorManager.setBusyCursor();
+
 			ServerConfig.getChannelSet("grails-amf").login(loginEvent.username,loginEvent.password).addResponder(this);
 		}
 
 		public function result(data:Object):void
 		{
-			//appModel.currentUser = data.result;
-			PopUpManager.removePopUp(appModel.popup);
-			appModel.currentView = 1;
-
+            CursorManager.removeBusyCursor();
+            //appModel.currentUser = data.result;
+            PopUpManager.removePopUp(appModel.popup);
+            appModel.currentView = 1;
 		}
 
 		public function fault(info:Object):void
 		{
+            CursorManager.removeBusyCursor();
             Alert.show(info.fault.faultString,"Error");
 		}
 	}
