@@ -15,10 +15,7 @@
  */
 package org.codehaus.groovy.grails.plugins.flex;
 
-import org.codehaus.groovy.grails.commons.GrailsApplication;
-import org.codehaus.groovy.grails.commons.GrailsClass;
-import org.codehaus.groovy.grails.commons.GrailsServiceClass;
-import org.codehaus.groovy.grails.commons.ServiceArtefactHandler;
+import org.codehaus.groovy.grails.commons.*;
 import org.codehaus.groovy.grails.web.util.WebUtils;
 import org.cubika.labs.scaffolding.security.GFSLoginManager;
 import org.cubika.labs.scaffolding.security.GFSLoginCommand;
@@ -41,30 +38,40 @@ public class GrailsBootstrapService extends AbstractBootstrapService {
         GrailsApplication application = WebUtils.lookupApplication(messageBroker.getInitServletContext());
         GrailsClass[] grailsClasses = application.getArtefacts(ServiceArtefactHandler.TYPE);
 
-        GFSLoginManager lm = null;
         SecurityConstraint sc = null;
 
-        lm = createSecurity();
+        Boolean allowSecurity = false;//(Boolean) ConfigurationHolder.getConfig().get("gfsSecurity");
 
-        sc = new SecurityConstraint();
+        if (allowSecurity) {
 
-        sc.setMethod(SecurityConstraint.CUSTOM_AUTH_METHOD);
+            initializeSecurity(messageBroker);
+
+            //TODO: Implements security context into RemoteDestination
+            sc = new SecurityConstraint();
+            sc.setMethod(SecurityConstraint.CUSTOM_AUTH_METHOD);
+        }
 
         for (int i = 0; i < grailsClasses.length; i++) {
+
             GrailsServiceClass serviceClass = (GrailsServiceClass) grailsClasses[i];
+
             if (FlexUtils.hasFlexRemotingConvention(serviceClass)) {
+
                 FlexUtils.createRemotingDestination(messageBroker, serviceClass);
             }
         }
-
-        messageBroker.setLoginManager(lm);
     }
     
     public void start() {}
 
     public void stop() {}
 
-    private GFSLoginManager createSecurity()
+
+    /**
+     * Initialize security context
+     * @param messageBroker
+     */
+    private void initializeSecurity(MessageBroker messageBroker)
     {
 
       GFSLoginManager lm = new GFSLoginManager();
@@ -77,7 +84,7 @@ public class GrailsBootstrapService extends AbstractBootstrapService {
 
       lm.start();
 
-      return lm;
+      messageBroker.setLoginManager(lm);
 	}
 
     
