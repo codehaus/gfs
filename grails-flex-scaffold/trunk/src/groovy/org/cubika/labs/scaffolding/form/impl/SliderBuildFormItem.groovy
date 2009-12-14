@@ -48,7 +48,8 @@ class SliderBuildFormItem  extends AbstractBuildFormItem
 		def pw = new PrintWriter(sw)
 		
 		pw.println	"				<mx:${direction}Slider id=\"${getID()}\" value=\"{${binding}}\" "+
-		"minimum=\"${constraint.min ? constraint.min : -999999}\" maximum=\"${constraint.max ? constraint.max : 999999}\" />"
+		"minimum=\"${constraint.min ? constraint.min : -999999}\" maximum=\"${constraint.max ? constraint.max : 999999}\""+
+        " labels=\"['min','max']\" tickInterval=\"1\" snapInterval=\"1\"/>"
 		
 		sw.toString()
 	}

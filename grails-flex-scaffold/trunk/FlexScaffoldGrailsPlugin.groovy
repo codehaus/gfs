@@ -18,7 +18,14 @@ class FlexScaffoldGrailsPlugin {
     def dependsOn = ['starkSecurity':'0.4.3']
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-            "grails-app/views/error.gsp"
+            "grails-app/views/error.gsp",
+            "grails-app/layout/main.gsp",
+            "grails-app/conf/UrlMappings.groovy",
+            "grails-app/views/index.gsp",
+            "grails-app/conf/resources.groovy",
+            "grails-app/views/layouts/main.groovy",
+            "web-app/*"
+
     ]
 
 	def observe = ["services"]

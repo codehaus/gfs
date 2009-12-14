@@ -108,7 +108,7 @@ void addToNavigationModel(domainClass)
 
     file =  Ant.fileset(dir: antProp.'model.destdir') {
                         include(name:antProp.'model.navigation')
-                        contains(text:"${domainClass.propertyName}", casesensitive: false)
+                        contains(text:"\"${domainClass.propertyName}\"", casesensitive: false)
             }
 
     if (file.size() > 0)
