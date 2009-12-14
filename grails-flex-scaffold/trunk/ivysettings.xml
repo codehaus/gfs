@@ -9,7 +9,6 @@
       <ibiblio name="codehaus-snapshots" root="http://snapshots.repository.codehaus.org" m2compatible="true" changingPattern=".*SNAPSHOT"/>
       <ibiblio name="codehaus" root="http://repository.codehaus.org" m2compatible="true"/>
       <ibiblio name="javanet" root="http://download.java.net/maven/2/" m2compatible="true"/>
-	  <!--ibiblio name="gfs" root="http://dav.codehaus.org/repository/gfs/" m2compatible="true"/-->	
       <resolver ref="public"/>
     </chain>
   </resolvers>
