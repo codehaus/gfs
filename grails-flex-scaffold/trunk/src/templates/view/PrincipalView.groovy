@@ -19,6 +19,8 @@
 
 			import com.cubika.labs.utils.MultipleRM;
 
+			import mx.binding.utils.BindingUtils;
+
             [Bindable]
 			[Embed(source="/./assets/logo.png")]
 			private var logo:Class
@@ -118,6 +120,14 @@
 
 			private function doInit():void
 			{
+			    GFS::security {
+			      BindingUtils.bindSetter(createTabs,this.appModel,"logged");
+			    }
+
+                if (!GFS::security) {
+			      tn.createComponentsFromDescriptors()
+			    }
+
 				addBg();
 
 				var locale:String = ExternalInterface.call("getLocale");
@@ -141,6 +151,15 @@
 
 				new LocaleEvent("messages").dispatch();
 				cbChangeLocale.selectedIndex = 0;
+			}
+
+			//Creates tabs when User is logged
+			public function createTabs(logged:Boolean):void
+			{
+				if (logged)
+				{
+					tn.createComponentsFromDescriptors()
+				}
 			}
 
 			// Only for layout purpose
@@ -184,7 +203,7 @@
 		</mx:Canvas>
 	</mx:Canvas>
 
-	<mx:TabNavigator id="tn" width="100%" height="100%" paddingTop="5" change="changeTab()">
+	<mx:TabNavigator id="tn" width="100%" height="100%" paddingTop="5" change="changeTab()" creationPolicy="none">
 		<!--CRUDVIEWS-->
 	</mx:TabNavigator>
 	<mx:HBox width="100%" styleName="translateComboContainer">

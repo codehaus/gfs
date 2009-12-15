@@ -44,6 +44,7 @@ package command.gfs
 
 		public function result(data:Object):void
 		{
+            appModel.logged = true;
             CursorManager.removeBusyCursor();
             //appModel.currentUser = data.result;
             PopUpManager.removePopUp(appModel.popup);
