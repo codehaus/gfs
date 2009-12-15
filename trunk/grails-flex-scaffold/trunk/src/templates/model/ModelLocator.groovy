@@ -35,6 +35,9 @@ package model
 		[Bindable]
 		public var currentView:int = 0;
 
+		[Bindable]
+		public var logged:Boolean = false;
+
 		/*PROPERTIES*/
 		
 		public function ApplicationModelLocator(enforcer:SingletonEnforcer)
