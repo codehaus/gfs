@@ -18,6 +18,7 @@
 	<component id="CBKSnapshotUpload" class="com.cubika.labs.controls.CBKSnapshotUpload"/>
 	<component id="CBKSecurityButton" class="com.cubika.labs.controls.security.CBKSecurityButton"/>
 	<component id="CBKSecurityTabNavigator" class="com.cubika.labs.controls.security.CBKSecurityTabNavigator"/>
+	<component id="EqualsStringValidator" class="com.cubika.labs.validator.EqualsStringValidator"/>
 	
 	
 	<!-- Containers Components -->
