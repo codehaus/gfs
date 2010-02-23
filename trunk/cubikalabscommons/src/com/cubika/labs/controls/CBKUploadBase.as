@@ -15,6 +15,8 @@
 ////////////////////////////////////////////////////////////////////
 package com.cubika.labs.controls
 {
+	import com.cubika.labs.event.FileExtensionEvent;
+	
 	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
@@ -29,7 +31,9 @@ package com.cubika.labs.controls
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	
+	import mx.collections.ArrayCollection;
 	import mx.containers.Canvas;
+	import mx.controls.Alert;
 	import mx.controls.Button;
 	import mx.controls.ProgressBar;
 	import mx.controls.ProgressBarLabelPlacement;
@@ -42,6 +46,7 @@ package com.cubika.labs.controls
  	* @since 28-Apr-2009
  	*/
  	[Event(name="maxFileExceed")]
+ 	[Event(name="fileExtensionEvent", type="com.cubika.labs.event.FileExtensionEvent")]
 	public class CBKUploadBase extends Canvas
 	{
 		public var button:Button;
@@ -125,6 +130,7 @@ package com.cubika.labs.controls
 		protected function completeHandler(event:Event):void
 		{
 			trace("complete");
+			populateFileExtension();
 			load = true;
 		}
 		
@@ -200,7 +206,8 @@ package com.cubika.labs.controls
 				return
 			}
 			
-			dispatchEvent(new Event("maxFileExceed"))
+			dispatchEvent(new Event("maxFileExceed"));
+			
 		}
 		
 		private function deleteHandler(event:MouseEvent):void
@@ -287,6 +294,18 @@ package com.cubika.labs.controls
 			_progress.labelPlacement = ProgressBarLabelPlacement.CENTER;
 			_progress.label = "";
 			_progress.percentWidth = 100;
+		}
+		
+		private function populateFileExtension():void
+		{
+			if(_fileReference.name)
+			{
+				var chunks: ArrayCollection = new ArrayCollection(_fileReference.name.split("."));
+				var extValue: String = chunks.getItemAt(chunks.length - 1).toString();
+				var extensionEvent: FileExtensionEvent = new FileExtensionEvent(extValue);
+				dispatchEvent(extensionEvent);
+			}
+			
 		}
 
 	}
